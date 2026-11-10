@@ -511,6 +511,7 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
       start: 'top top',
       end: () => `+=${dist() * 1.6}`, // un poco más de recorrido que de desplazamiento: el scroll "pesa" y se saborea
       pin: true,
+      refreshPriority: 3, // los efectos fijados se calculan primero (en orden de página): lo demás debe medir ya con su espacio añadido
       scrub: 0.6,
       anticipatePin: 1,
       invalidateOnRefresh: true,
@@ -567,6 +568,7 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
     start: 'top top',
     end: () => `+=${len()}`,
     pin: true,
+    refreshPriority: 2, // después del fijado de Proyectos (que está más arriba) y antes de todo lo que viene debajo
     anticipatePin: 1,
     invalidateOnRefresh: true,
     onToggle: (self) => $('[data-chapters]')?.classList.toggle('is-away', self.isActive),
