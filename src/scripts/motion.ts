@@ -197,7 +197,8 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     walk(manifesto);
     gsap.fromTo(
       words,
-      { opacity: 0.42 }, // "apagado" pero legible (contraste ≥ 3:1 en texto grande)
+      // "apagado" pero legible (contraste ≥ 3:1 en texto grande); la palabra lavanda es más clara, necesita partir más alto
+      { opacity: (_i: number, el: Element) => (el.classList.contains('accent') ? 0.72 : 0.42) },
       {
         opacity: 1,
         ease: 'none',

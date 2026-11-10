@@ -600,6 +600,9 @@ a {
   display: inline-block;
   opacity: 0.42;
 }
+.manifesto .accent.w {
+  opacity: 0.72;
+}
 .manifesto .accent {
   display: inline-block;
 }
