@@ -197,7 +197,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     walk(manifesto);
     gsap.fromTo(
       words,
-      { opacity: 0.16 },
+      { opacity: 0.42 }, // "apagado" pero legible (contraste ≥ 3:1 en texto grande)
       {
         opacity: 1,
         ease: 'none',
