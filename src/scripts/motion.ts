@@ -341,6 +341,8 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
       scrub: 0.6,
       anticipatePin: 1,
       invalidateOnRefresh: true,
+      // Mientras la galería ocupa toda la pantalla, el índice lateral se aparta para no cruzarse con las tarjetas
+      onToggle: (self) => $('[data-chapters]')?.classList.toggle('is-away', self.isActive),
       onUpdate: (self) => {
         if (bar) bar.style.transform = `scaleX(${Math.max(0.04, self.progress)})`;
         if (count) count.textContent = String(1 + Math.round(self.progress * (stories.length - 1))).padStart(2, '0');
@@ -358,6 +360,7 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
   requestAnimationFrame(() => ScrollTrigger.refresh());
 
   return () => {
+    $('[data-chapters]')?.classList.remove('is-away');
     stage.classList.remove('is-pinned');
     gsap.set([track, ghost], { clearProps: 'transform' });
     if (bar) bar.style.transform = '';
