@@ -1,0 +1,54 @@
+---
+// Equipo. Datos confirmados: solo los nombres (Alan y Martina). Cargo y línea se muestran únicamente si se completan aquí.
+// Foto: dejar `public/media/equipo/<slug>-720.webp` (retrato 3:4) y `<slug>-480.webp`; sin foto se muestra un monograma de marca.
+import { u } from '../lib/url';
+
+// Detecta las fotos que existan en public/media/equipo (sin depender del directorio de trabajo)
+const photos = Object.keys(import.meta.glob('/public/media/equipo/*-720.webp'));
+const team = [
+  { slug: 'alan', name: 'Alan', role: '', line: '' },
+  { slug: 'martina', name: 'Martina', role: '', line: '' },
+].map((p) => ({
+  ...p,
+  hasPhoto: photos.some((k) => k.endsWith(`/${p.slug}-720.webp`)),
+}));
+---
+
+<section class="section section--cut team" id="equipo" data-atmo-on="violet" data-section="equipo" aria-labelledby="titulo-equipo">
+  <div class="section__inner team__grid">
+    <div class="team__intro">
+      <p class="section__label"><b>06</b> — Equipo</p>
+      <h2 class="team__title" id="titulo-equipo">Detrás de cada proyecto hay <span class="accent">personas.</span></h2>
+      <p class="team__lead" data-reveal>Un mismo equipo para pensar la estrategia y construirla, desde Santiago de Chile.</p>
+    </div>
+
+    <ul class="people">
+      {team.map((p, i) => (
+        <li class="person" data-reveal>
+          <div class="person__frame" data-cut-reveal>
+            {p.hasPhoto ? (
+              <img
+                src={u(`/media/equipo/${p.slug}-720.webp`)}
+                srcset={`${u(`/media/equipo/${p.slug}-480.webp`)} 480w, ${u(`/media/equipo/${p.slug}-720.webp`)} 720w`}
+                sizes="(min-width: 900px) 24vw, 44vw"
+                width="720"
+                height="960"
+                alt={`Retrato de ${p.name}, de Bombvstic`}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div class="person__mono" aria-hidden="true">
+                <img src={u('/brand/emblema-480.webp')} alt="" width="480" height="480" loading="lazy" decoding="async" />
+                <span>{p.name.charAt(0)}</span>
+              </div>
+            )}
+          </div>
+          <h3 class="person__name">{p.name}</h3>
+          {p.role && <p class="person__role">{p.role}</p>}
+          {p.line && <p class="person__line">{p.line}</p>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
