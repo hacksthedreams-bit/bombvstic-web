@@ -2247,6 +2247,37 @@ a {
   padding: 0;
   list-style: none;
 }
+.team {
+  position: relative;
+  overflow-x: clip;
+}
+.team > .section__inner {
+  position: relative;
+  z-index: 1;
+}
+/* Palabra gigante en contorno detrás de todo, que se desliza con el scroll */
+.team__ghost {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  z-index: 0;
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(9rem, 26vw, 28rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(173 139 250 / 0.2);
+  transform: translateY(-50%);
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+.person {
+  perspective: 900px;
+}
 .person__frame {
   position: relative;
   aspect-ratio: 3 / 4;
@@ -2255,11 +2286,35 @@ a {
   border-radius: var(--radius);
   background: linear-gradient(160deg, #1b1922, #0f0f13);
   box-shadow: 0 30px 70px -35px rgb(122 0 255 / 0.5);
-  transition: border-color var(--t-base), transform var(--t-slow) var(--ease-out);
+  transition: border-color var(--t-base), box-shadow var(--t-slow) var(--ease-out);
+  will-change: transform;
+}
+/* Brillo que sigue al cursor sobre la tarjeta */
+.person__frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 0%), rgb(255 255 255 / 0.16), transparent 55%);
+  opacity: 0;
+  transition: opacity var(--t-slow);
+  pointer-events: none;
 }
 .person:hover .person__frame {
   border-color: rgb(173 139 250 / 0.55);
-  transform: translateY(-6px);
+  box-shadow: 0 40px 90px -35px rgb(122 0 255 / 0.75);
+}
+.person:hover .person__frame::after {
+  opacity: 1;
+}
+/* Nombre que sube desde una máscara */
+.person__name {
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.person__name > span {
+  display: block;
+  will-change: transform;
 }
 .person__frame > img {
   width: 100%;

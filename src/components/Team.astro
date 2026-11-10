@@ -15,6 +15,7 @@ const team = [
 ---
 
 <section class="section section--cut team" id="equipo" data-atmo-on="violet" data-section="equipo" aria-labelledby="titulo-equipo">
+  <p class="team__ghost" aria-hidden="true" data-team-ghost>Equipo</p>
   <div class="section__inner team__grid">
     <div class="team__intro">
       <p class="section__label"><b>06</b> — Equipo</p>
@@ -24,7 +25,7 @@ const team = [
 
     <ul class="people">
       {team.map((p, i) => (
-        <li class="person" data-reveal>
+        <li class="person" data-reveal data-person>
           <div class="person__frame" data-cut-reveal>
             {p.hasPhoto ? (
               <img
@@ -44,7 +45,7 @@ const team = [
               </div>
             )}
           </div>
-          <h3 class="person__name">{p.name}</h3>
+          <h3 class="person__name"><span data-person-name>{p.name}</span></h3>
           {p.role && <p class="person__role">{p.role}</p>}
           {p.line && <p class="person__line">{p.line}</p>}
         </li>

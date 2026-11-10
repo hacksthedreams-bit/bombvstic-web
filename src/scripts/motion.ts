@@ -386,6 +386,40 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     );
   });
 
+  // Equipo: palabra gigante que se desliza, tarjetas con parallax opuesto, nombres que suben de su máscara
+  const teamSec = $('#equipo');
+  if (teamSec) {
+    const tGhost = $('[data-team-ghost]', teamSec);
+    const sec = { trigger: teamSec, start: 'top bottom', end: 'bottom top', scrub: true } as const;
+    if (tGhost) gsap.fromTo(tGhost, { xPercent: 6 }, { xPercent: -26, ease: 'none', scrollTrigger: sec });
+    $$('[data-person]', teamSec).forEach((p, i) => {
+      gsap.fromTo(p, { yPercent: i % 2 ? 7 : -5 }, { yPercent: i % 2 ? -7 : 5, ease: 'none', scrollTrigger: sec });
+      const name = $('[data-person-name]', p);
+      if (name) {
+        gsap.fromTo(name, { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: p, start: 'top 80%', once: true } });
+      }
+      // Inclinación 3D suave hacia el cursor (solo puntero fino)
+      const frame = $('.person__frame', p);
+      if (finePointer && frame) {
+        const rx = gsap.quickTo(frame, 'rotationX', { duration: 0.7, ease: 'power3.out' });
+        const ry = gsap.quickTo(frame, 'rotationY', { duration: 0.7, ease: 'power3.out' });
+        p.addEventListener('pointermove', (e) => {
+          const r = frame.getBoundingClientRect();
+          const nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+          const ny = ((e.clientY - r.top) / r.height) * 2 - 1;
+          ry(Math.max(-1, Math.min(1, nx)) * 9);
+          rx(-Math.max(-1, Math.min(1, ny)) * 9);
+          frame.style.setProperty('--gx', `${((e.clientX - r.left) / r.width) * 100}%`);
+          frame.style.setProperty('--gy', `${((e.clientY - r.top) / r.height) * 100}%`);
+        });
+        p.addEventListener('pointerleave', () => {
+          rx(0);
+          ry(0);
+        });
+      }
+    });
+  }
+
   // Cierre: el emblema de fondo gira lento y sube; la línea diagonal se traza; el logotipo del pie se revela
   const closing = $('#contacto');
   const mark = $('[data-closing-mark]');
