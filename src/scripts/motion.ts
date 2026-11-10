@@ -133,6 +133,19 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     });
   }
 
+  // Destello metálico de la palabra clave: una vez cada ~9 s, solo con puntero fino (en táctil queda estático)
+  const mqCleanupEarly: Array<() => void> = [];
+  const accentWord = $('.hero__title .accent');
+  if (accentWord && finePointer) {
+    const flash = () => {
+      accentWord.classList.remove('shine');
+      void accentWord.offsetWidth;
+      accentWord.classList.add('shine');
+    };
+    const shineTl = gsap.timeline({ delay: 3.4, repeat: -1, repeatDelay: 7 }).call(flash);
+    mqCleanupEarly.push(() => shineTl.kill());
+  }
+
   // Salida del hero por capas: cada línea del titular sube a distinta velocidad y el resto se apaga.
   // `immediateRender: false` para no pisar la animación de entrada (los valores iniciales se leen al empezar el scroll).
   const exitST = { trigger: '.hero', start: 'top top', end: '75% top', scrub: 0.5 } as const;
@@ -224,6 +237,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   return () => {
     cleanups.forEach((fn) => fn());
     mqCleanup.forEach((fn) => fn());
+    mqCleanupEarly.forEach((fn) => fn());
     gsap.ticker.remove(tick);
     lenis.destroy();
   };

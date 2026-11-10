@@ -623,24 +623,21 @@ a {
 }
 /* La palabra clave del titular brilla como metal cada tanto */
 .hero__title .accent {
-  background: linear-gradient(100deg, var(--lavender) 38%, #ffffff 50%, var(--lavender) 62%) 100% 0 / 260% 100% no-repeat;
+  background: linear-gradient(100deg, var(--lavender) 38%, #ffffff 50%, var(--lavender) 62%) 0 0 / 260% 100% no-repeat;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: accent-shine 7s var(--ease-cut) 2.6s infinite;
+}
+/* El destello lo dispara motion.ts de vez en cuando (solo escritorio): animar texto con recorte de fondo cuesta
+   pintado en cada fotograma, así que no corre de forma continua. */
+.hero__title .accent.shine {
+  animation: accent-shine 1.8s var(--ease-cut) 1;
 }
 @keyframes accent-shine {
   0% {
     background-position: 100% 0;
   }
-  35%,
   100% {
-    background-position: 0 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero__title .accent {
-    animation: none;
     background-position: 0 0;
   }
 }
