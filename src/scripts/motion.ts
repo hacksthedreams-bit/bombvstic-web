@@ -97,11 +97,13 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   const heroLines = $$('[data-hero-title] .line > span');
   const heroItems = $$('.hero [data-reveal]');
   const stage = $('[data-stage]');
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.15 });
-  tl.fromTo(stage, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 1.6 }, 0)
-    .fromTo(heroItems.slice(0, 1), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8 }, 0.2)
-    .fromTo(heroLines, { yPercent: 115, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 1.2, stagger: 0.12 }, 0.35)
-    .fromTo(heroItems.slice(1), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 }, 1.0);
+  if (stage) {
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.15 });
+    tl.fromTo(stage, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 1.6 }, 0)
+      .fromTo(heroItems.slice(0, 1), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8 }, 0.2)
+      .fromTo(heroLines, { yPercent: 115, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 1.2, stagger: 0.12 }, 0.35)
+      .fromTo(heroItems.slice(1), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 }, 1.0);
+  }
 
   // El emblema responde al scroll: gira y se desvanece hacia la siguiente sección
   const emblem = $('[data-emblem]');

@@ -13,6 +13,19 @@ const canonical = new URL(u(path === '/' ? '/' : path), site).href;
 const ogImage = new URL(u('/brand/share-1200x630.jpg'), site).href;
 // Vista previa en github.io: que los buscadores no la indexen (se quita al publicar en el dominio definitivo)
 const isPreview = site.hostname.endsWith('github.io');
+// Datos estructurados de la agencia: solo información confirmada (sin teléfono, precios ni valoraciones)
+const agency = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Bombvstic',
+  description,
+  url: new URL(u('/'), site).href,
+  logo: new URL(u('/brand/icon-512.png'), site).href,
+  email: 'bombvstic@gmail.com',
+  address: { '@type': 'PostalAddress', addressLocality: 'Santiago', addressCountry: 'CL' },
+  sameAs: ['https://www.instagram.com/bombvstic/'],
+  knowsAbout: ['Marketing digital', 'Branding', 'Creación de contenido', 'Campañas publicitarias en Meta Ads', 'Páginas web', 'Asistentes de IA', 'Software a medida'],
+};
 ---
 
 <!doctype html>
@@ -25,6 +38,7 @@ const isPreview = site.hostname.endsWith('github.io');
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {isPreview && <meta name="robots" content="noindex, nofollow" />}
+    {path === '/' && <script type="application/ld+json" set:html={JSON.stringify(agency)} />}
 
     <link rel="icon" href={u('/brand/favicon.ico')} sizes="any" />
     <link rel="apple-touch-icon" href={u('/brand/icon-180.png')} />
