@@ -413,6 +413,7 @@ a {
   position: relative;
   min-height: 100svh;
   display: grid;
+  grid-template-rows: 1fr auto;
   align-items: center;
   padding: calc(var(--nav-h) + 2rem) var(--gutter) 4rem;
   isolation: isolate;
@@ -503,7 +504,34 @@ a {
   width: 100%;
   height: 100%;
   will-change: transform;
+  perspective: 900px;
   filter: drop-shadow(0 30px 60px rgb(122 0 255 / 0.28));
+}
+.emblem__tilt {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  /* flota lento con la propiedad `translate`, que no choca con las rotaciones de GSAP */
+  animation: float 9s ease-in-out infinite;
+}
+@keyframes float {
+  50% {
+    translate: 0 -0.7rem;
+  }
+}
+/* El corte: una línea diagonal de luz cruza el escenario detrás del emblema */
+.stage__cut {
+  position: absolute;
+  top: 52%;
+  left: -26%;
+  width: 152%;
+  height: 2px;
+  transform: rotate(-31deg);
+  background: linear-gradient(90deg, transparent, rgb(173 139 250 / 0.9) 25%, rgb(245 241 234) 50%, rgb(173 139 250 / 0.9) 75%, transparent);
+  box-shadow: 0 0 22px 2px rgb(139 92 246 / 0.7);
+  opacity: 0.85;
+  pointer-events: none;
 }
 .emblem img {
   width: 100%;
@@ -519,6 +547,95 @@ a {
   -webkit-mask: url('/brand/emblema-720.webp') center / contain no-repeat;
   mask: url('/brand/emblema-720.webp') center / contain no-repeat;
   animation: sweep 7s var(--ease-cut) infinite;
+}
+/* Pie del hero: prueba de trabajo + invitación a bajar */
+.hero__foot {
+  grid-row: 2;
+  align-self: end;
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 2rem auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.hero__proof {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.7rem;
+  padding-block: 0.4rem;
+  text-decoration: none;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.hero__proof-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--silver-dark);
+}
+.hero__proof b {
+  font-weight: 600;
+  color: var(--ivory);
+}
+.hero__proof i {
+  font-style: normal;
+  color: var(--silver-dark);
+}
+.hero__proof-arrow {
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--lavender);
+  transition: transform var(--t-slow) var(--ease-out);
+}
+.hero__proof:hover .hero__proof-arrow,
+.hero__proof:focus-visible .hero__proof-arrow {
+  transform: translateX(4px) rotate(-45deg);
+}
+.hero__proof:hover b,
+.hero__proof:focus-visible b {
+  color: var(--lavender);
+}
+.hero__scroll {
+  display: none;
+  align-items: center;
+  gap: 0.9rem;
+  padding-block: 0.4rem;
+  text-decoration: none;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--silver-dark);
+}
+.hero__scroll-line {
+  position: relative;
+  width: 3rem;
+  height: 1px;
+  overflow: hidden;
+  background: var(--line);
+}
+.hero__scroll-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--lavender);
+  transform: translateX(-100%);
+  animation: scroll-line 2.4s var(--ease-cut) infinite;
+}
+@keyframes scroll-line {
+  60%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+@media (min-width: 900px) {
+  .hero__scroll {
+    display: inline-flex;
+  }
 }
 /* El hero espera a su animación de entrada; el respaldo y "reducir movimiento" lo muestran siempre */
 .js:not(.reveal-fallback) .hero [data-reveal],

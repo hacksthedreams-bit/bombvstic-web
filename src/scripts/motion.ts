@@ -102,7 +102,9 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     tl.fromTo(stage, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 1.6 }, 0)
       .fromTo(heroItems.slice(0, 1), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8 }, 0.2)
       .fromTo(heroLines, { yPercent: 115, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 1.2, stagger: 0.12 }, 0.35)
-      .fromTo(heroItems.slice(1), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 }, 1.0);
+      .fromTo(heroItems.slice(1), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 }, 1.0)
+      // El corte: la línea diagonal de luz se traza detrás del emblema
+      .fromTo('[data-stage-cut]', { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 0.85, duration: 1.6, ease: 'expo.inOut' }, 0.8);
   }
 
   // El emblema responde al scroll: gira y se desvanece hacia la siguiente sección
@@ -116,7 +118,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6 },
     });
     // La opacidad del contenedor la controla la entrada; el desvanecido por scroll va en los hijos
-    gsap.to([emblem, $('.stage__light')], {
+    gsap.to([emblem, $('.stage__light'), $('[data-stage-cut]')], {
       opacity: 0.12,
       ease: 'none',
       scrollTrigger: { trigger: '.hero', start: '55% top', end: 'bottom top', scrub: true },
@@ -138,10 +140,18 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       stage.style.setProperty('--my', `${toBox(cur.y)}%`);
       raf = requestAnimationFrame(loop);
     };
+    // El emblema se inclina suavemente hacia el cursor (±7°), como un objeto sobre un pedestal
+    const tiltEl = $('[data-tilt]');
+    const tiltY = tiltEl ? gsap.quickTo(tiltEl, 'rotationY', { duration: 0.9, ease: 'power3.out' }) : null;
+    const tiltX = tiltEl ? gsap.quickTo(tiltEl, 'rotationX', { duration: 0.9, ease: 'power3.out' }) : null;
     const onMove = (e: PointerEvent) => {
       const r = stage.getBoundingClientRect();
       target.x = ((e.clientX - r.left) / r.width) * 100;
       target.y = ((e.clientY - r.top) / r.height) * 100;
+      const nx = Math.max(-1, Math.min(1, (target.x - 50) / 50));
+      const ny = Math.max(-1, Math.min(1, (target.y - 50) / 50));
+      tiltY?.(nx * 7);
+      tiltX?.(-ny * 7);
     };
     const io = new IntersectionObserver(([entry]) => {
       cancelAnimationFrame(raf);
