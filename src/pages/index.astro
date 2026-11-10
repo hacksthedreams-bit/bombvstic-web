@@ -106,7 +106,7 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
     <section class="section section--cut section--surface" id="manifiesto" data-atmo-on="silver" data-section="manifiesto" aria-labelledby="titulo-manifiesto">
       <div class="section__inner">
         <p class="section__label"><b>01</b> — Manifiesto</p>
-        <h2 class="manifesto" id="titulo-manifiesto" data-manifesto>
+        <h2 class="manifesto" id="titulo-manifiesto" data-manifesto data-scrub-words>
           Cada decisión tiene un propósito. Cada marca merece una <span class="accent">estrategia.</span>
         </h2>
         <p class="manifesto__sub" data-reveal>
@@ -127,7 +127,7 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
 
   <footer class="footer">
     <div class="footer__inner">
-      <img class="footer__wordmark" src={u('/brand/wordmark-web-600.webp')} alt="Bombvstic" width="600" height="240" loading="lazy" decoding="async" />
+      <img class="footer__wordmark" data-wordmark src={u('/brand/wordmark-web-600.webp')} alt="Bombvstic" width="600" height="240" loading="lazy" decoding="async" />
       <div class="footer__cols">
         <div>
           <h2>Escríbenos</h2>
@@ -139,12 +139,13 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
         </div>
         <div>
           <h2>Estamos en</h2>
-          <ul><li>Santiago de Chile</li></ul>
+          <ul><li>Santiago de Chile · <span class="footer__clock" data-clock>--:--</span></li></ul>
         </div>
       </div>
       <div class="footer__legal">
         <span>© 2026 Bombvstic · Marketing digital &amp; AI Solutions</span>
         <a class="footer__link" href={u('/privacidad/')}>Privacidad</a>
+        <a class="footer__link footer__top" href="#inicio">Volver arriba <span aria-hidden="true">↑</span></a>
       </div>
     </div>
   </footer>

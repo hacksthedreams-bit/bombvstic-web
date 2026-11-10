@@ -2483,6 +2483,75 @@ a {
 [hidden] {
   display: none !important;
 }
+.closing {
+  position: relative;
+  overflow-x: clip;
+}
+.closing > .section__inner {
+  position: relative;
+  z-index: 1;
+}
+/* Emblema gigante de fondo, casi apagado, que gira con el scroll */
+.closing__mark {
+  position: absolute;
+  right: -14vw;
+  top: 6%;
+  z-index: 0;
+  width: min(72vw, 62rem);
+  height: auto;
+  opacity: 0.09;
+  pointer-events: none;
+  user-select: none;
+  filter: saturate(0.8);
+  will-change: transform;
+}
+/* El corte: línea diagonal de luz que cruza el cierre */
+.closing__cut {
+  position: absolute;
+  top: 34%;
+  left: -20%;
+  z-index: 0;
+  width: 140%;
+  height: 2px;
+  transform: rotate(-9deg);
+  background: linear-gradient(90deg, transparent, rgb(173 139 250 / 0.85) 30%, rgb(245 241 234) 50%, rgb(173 139 250 / 0.85) 70%, transparent);
+  box-shadow: 0 0 24px 2px rgb(139 92 246 / 0.6);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.closing__title .w {
+  display: inline-block;
+  opacity: 0.42;
+}
+.closing__title .accent.w {
+  opacity: 0.72;
+}
+/* Borde de luz que sigue al cursor sobre el formulario */
+.diag,
+.diag__done {
+  position: relative;
+}
+.diag::before,
+.diag__done::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), rgb(173 139 250 / 0.95), transparent 65%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--t-slow);
+  pointer-events: none;
+}
+.diag:hover::before,
+.diag__done:hover::before,
+.diag:focus-within::before {
+  opacity: 1;
+}
 .closing__label {
   justify-content: center;
 }
@@ -2790,6 +2859,20 @@ a {
 }
 .footer--slim {
   margin-top: 2rem;
+}
+.footer__clock {
+  font-variant-numeric: tabular-nums;
+  color: var(--silver);
+}
+.footer__top span {
+  display: inline-block;
+  transition: transform var(--t-slow) var(--ease-out);
+}
+.footer__top:hover span {
+  transform: translateY(-4px);
+}
+.footer__wordmark {
+  will-change: transform;
 }
 .footer__legal {
   display: flex;

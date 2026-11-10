@@ -56,6 +56,15 @@ $$('[data-section]').forEach((section) => {
   });
 });
 
+// Hora de Santiago en el pie (dato, no animación)
+const clock = $('[data-clock]');
+if (clock) {
+  const fmt = new Intl.DateTimeFormat('es-CL', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Santiago' });
+  const tickClock = () => (clock.textContent = fmt.format(new Date()));
+  tickClock();
+  window.setInterval(tickClock, 20000);
+}
+
 // Reposo → acción en pantallas táctiles: la tarjeta que llega al centro se "enciende"
 if (!finePointer && 'IntersectionObserver' in window) {
   const live = new IntersectionObserver(
@@ -243,8 +252,8 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
 });
 
 mm.add('(prefers-reduced-motion: no-preference)', () => {
-  const manifesto = $('[data-manifesto]');
-  if (manifesto) {
+  // Titulares que se "encienden" palabra por palabra con el scroll (manifiesto y cierre)
+  $$('[data-scrub-words]').forEach((manifesto) => {
     const words: HTMLElement[] = [];
     const walk = (node: Node) => {
       Array.from(node.childNodes).forEach((child) => {
@@ -284,7 +293,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
         scrollTrigger: { trigger: manifesto, start: 'top 78%', end: 'bottom 48%', scrub: 0.4 },
       },
     );
-  }
+  });
 
   // Revelados al entrar en pantalla (todo lo que no es del hero)
   $$('[data-reveal]:not(.hero [data-reveal])').forEach((el) => {
@@ -376,6 +385,36 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       { autoAlpha: 1, y: 0, duration: 0.9, ease: 'expo.out', scrollTrigger: { trigger: row, start: 'top 93%', once: true } },
     );
   });
+
+  // Cierre: el emblema de fondo gira lento y sube; la línea diagonal se traza; el logotipo del pie se revela
+  const closing = $('#contacto');
+  const mark = $('[data-closing-mark]');
+  if (closing && mark) {
+    gsap.fromTo(mark, { rotate: -24, yPercent: 14 }, { rotate: 12, yPercent: -10, ease: 'none', scrollTrigger: { trigger: closing, start: 'top bottom', end: 'bottom top', scrub: true } });
+  }
+  const cutLine = $('[data-closing-cut]');
+  if (closing && cutLine) {
+    gsap.fromTo(cutLine, { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: closing, start: 'top 75%', end: 'top 20%', scrub: true } });
+  }
+  const wordmark = $('[data-wordmark]');
+  if (wordmark) {
+    gsap.fromTo(
+      wordmark,
+      { clipPath: 'inset(100% 0 0 0)', yPercent: 18 },
+      { clipPath: 'inset(0% 0 0 0)', yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top 95%', end: 'top 45%', scrub: true } },
+    );
+  }
+
+  // Borde de luz que sigue al cursor sobre el formulario (solo puntero fino)
+  if (finePointer) {
+    $$('.diag, .diag__done').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        card.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+    });
+  }
 
   // Botón magnético (solo con puntero fino)
   if (finePointer) {
