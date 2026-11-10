@@ -26,7 +26,7 @@ const did = [
 ];
 ---
 
-<section class="section section--cut section--ivory projects" id="proyectos" data-atmo-on="silver" data-section="proyectos" data-theme="light" aria-labelledby="titulo-proyectos">
+<section class="section section--cut projects" id="proyectos" data-atmo-on="violet" data-section="proyectos" aria-labelledby="titulo-proyectos">
   <div class="section__inner">
     <p class="section__label"><b>03</b> — Proyectos</p>
     <h2 class="projects__title" id="titulo-proyectos">Trabajo real para negocios <span class="accent">reales.</span></h2>
@@ -49,9 +49,15 @@ const did = [
         </p>
       </header>
 
+      <div class="stories-stage" data-stories-stage>
+      <p class="stories-stage__ghost" aria-hidden="true" data-ghost>Digital Sneakers Shop</p>
+      <p class="stories-stage__hud" aria-hidden="true">
+        <span class="hud__count"><b data-hud-count>01</b> / 05</span>
+        <span class="hud__bar"><i data-hud-bar></i></span>
+      </p>
       <ol class="stories" data-stories tabindex="0" aria-label="Las cinco historias del caso, desliza para verlas">
         {stories.map((s) => (
-          <li class="story" data-reveal>
+          <li class="story">
             <figure>
               <div class="story__frame">
                 {s.video ? (
@@ -92,6 +98,7 @@ const did = [
           </li>
         ))}
       </ol>
+      </div>
 
       <a class="feature__link" href={mail('Quiero un proyecto como Digital Sneakers Shop')} data-reveal>
         Quiero algo así

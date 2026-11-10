@@ -15,14 +15,21 @@ if (!location.hash) window.scrollTo(0, 0);
 
 /* ───── Siempre activo, con o sin animaciones ───── */
 
-// Navegación compacta al bajar
+// Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
 const nav = $('[data-nav]');
-const syncNav = () => nav?.classList.toggle('is-scrolled', window.scrollY > 24);
+const progress = $('[data-progress]');
+const syncNav = () => {
+  nav?.classList.toggle('is-scrolled', window.scrollY > 24);
+  if (progress) {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+  }
+};
 syncNav();
 window.addEventListener('scroll', syncNav, { passive: true });
+window.addEventListener('resize', syncNav, { passive: true });
 
 // Capítulos y atmósfera: qué sección está en pantalla
-const chaptersEl = $('[data-chapters]');
 const chapterLinks = $$<HTMLAnchorElement>('[data-chapter]');
 const atmoLayers = $$('[data-atmo]');
 const setAtmo = (name: string | undefined) => {
@@ -46,8 +53,6 @@ $$('[data-section]').forEach((section) => {
       if (!self.isActive) return;
       setChapter(section.dataset.section);
       setAtmo(section.dataset.atmoOn);
-      // Sobre una sección clara (marfil) el índice lateral pasa a tinta para seguir leyéndose
-      chaptersEl?.classList.toggle('on-light', section.dataset.theme === 'light');
     },
   });
 });
@@ -246,6 +251,15 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     });
   }
 
+  // Proyectos: parallax suave de la foto dentro de su marco
+  $$('.feature__media img').forEach((img) => {
+    gsap.fromTo(
+      img,
+      { yPercent: -3.5, scale: 1.07 },
+      { yPercent: 3.5, scale: 1.07, ease: 'none', scrollTrigger: { trigger: img.closest('.feature__media'), start: 'top bottom', end: 'bottom top', scrub: true } },
+    );
+  });
+
   // Proyectos: la pieza se revela con el corte diagonal (el gesto de la marca)
   $$('[data-cut-reveal]').forEach((el) => {
     gsap.fromTo(
@@ -300,4 +314,52 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       btn.addEventListener('pointerleave', leave);
     });
   }
+});
+
+// Proyectos (escritorio, con movimiento): la galería se fija y las historias se deslizan mientras bajas.
+// En celular o con "reducir movimiento" queda como carrusel con snap (o rejilla), sin fijar nada.
+mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+  const stage = $('[data-stories-stage]');
+  const track = $('[data-stories]');
+  if (!stage || !track) return;
+  const ghost = $('[data-ghost]');
+  const bar = $('[data-hud-bar]');
+  const count = $('[data-hud-count]');
+  const stories = $$('.story', track);
+
+  stage.classList.add('is-pinned');
+  const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
+  gsap.to(track, {
+    x: () => -dist(),
+    ease: 'none',
+    scrollTrigger: {
+      trigger: stage,
+      start: 'top top',
+      end: () => `+=${dist() * 1.6}`, // un poco más de recorrido que de desplazamiento: el scroll "pesa" y se saborea
+      pin: true,
+      scrub: 0.6,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        if (bar) bar.style.transform = `scaleX(${Math.max(0.04, self.progress)})`;
+        if (count) count.textContent = String(1 + Math.round(self.progress * (stories.length - 1))).padStart(2, '0');
+      },
+    },
+  });
+  if (ghost) {
+    gsap.to(ghost, {
+      x: () => -dist() * 0.4,
+      ease: 'none',
+      scrollTrigger: { trigger: stage, start: 'top top', end: () => `+=${dist() * 1.6}`, scrub: true, invalidateOnRefresh: true },
+    });
+  }
+  // El pin altera las posiciones de lo que viene después: recalcular
+  requestAnimationFrame(() => ScrollTrigger.refresh());
+
+  return () => {
+    stage.classList.remove('is-pinned');
+    gsap.set([track, ghost], { clearProps: 'transform' });
+    if (bar) bar.style.transform = '';
+  };
 });
