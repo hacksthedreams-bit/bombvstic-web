@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+import { u } from '../lib/url';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+}
+const { title, description, path = '/' } = Astro.props;
+const site = Astro.site ?? new URL('https://bombvstic.cl');
+const canonical = new URL(u(path === '/' ? '/' : path), site).href;
+const ogImage = new URL(u('/brand/share-1200x630.jpg'), site).href;
+// Vista previa en github.io: que los buscadores no la indexen (se quita al publicar en el dominio definitivo)
+const isPreview = site.hostname.endsWith('github.io');
+---
+
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0b0e" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {isPreview && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="icon" href={u('/brand/favicon.ico')} sizes="any" />
+    <link rel="apple-touch-icon" href={u('/brand/icon-180.png')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content="Bombvstic" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" href={u('/fonts/instrument-sans-latin.woff2')} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={u('/fonts/bodoni-moda-italic-latin.woff2')} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={u('/brand/emblema-1254.webp')} as="image" fetchpriority="high" />
+
+    <script is:inline>
+      // Oculta el hero hasta que la animación de entrada esté lista.
+      // Si algo falla, a los 3,5 s todo se muestra igual: el contenido nunca queda invisible.
+      document.documentElement.classList.add('js');
+      setTimeout(function () {
+        document.documentElement.classList.add('reveal-fallback');
+      }, 3500);
+    </script>
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <div class="atmo" aria-hidden="true">
+      <div class="atmo__layer atmo__layer--violet is-on" data-atmo="violet"></div>
+      <div class="atmo__layer atmo__layer--silver" data-atmo="silver"></div>
+      <div class="atmo__layer atmo__layer--horizon" data-atmo="horizon"></div>
+      <div class="atmo__grain"></div>
+    </div>
+
+    <slot />
+
+    <script>
+      import '../scripts/motion.ts';
+    </script>
+  </body>
+</html>

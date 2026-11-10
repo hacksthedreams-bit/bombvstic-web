@@ -1,0 +1,131 @@
+---
+import { u } from '../lib/url';
+const mail = (subject: string) => `mailto:bombvstic@gmail.com?subject=${encodeURIComponent(subject)}`;
+const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
+
+const cards = [
+  {
+    n: '01',
+    title: 'Publicidad',
+    accent: 'y campañas',
+    lead: 'Campañas y videos hechos para Meta Ads, pensados para vender y no solo para gustar.',
+    items: ['Gestión de campañas publicitarias', 'Videos publicitarios para Meta Ads', 'Medición y ajustes constantes'],
+    img: 'publicidad',
+    pos: '15% 50%',
+    r: '-2.2deg',
+    alt: 'Imán de titanio con un extremo violeta atrayendo tres esferas negras',
+    subject: 'Consulta de publicidad y campañas',
+  },
+  {
+    n: '02',
+    title: 'Marca',
+    accent: 'y contenido',
+    lead: 'Una identidad clara y contenido constante para que te reconozcan y te elijan.',
+    items: ['Branding e identidad completa', 'Creación de contenido', 'Gestión de redes sociales'],
+    img: 'marca',
+    pos: '68% 50%',
+    origin: '50% 0%', // el diapasón llega casi al borde superior: el zoom crece hacia abajo
+    r: '1.4deg',
+    alt: 'Diapasón de titanio sobre una base de piedra oscura, con luz violeta entre sus brazos',
+    subject: 'Consulta de marca y contenido',
+  },
+  {
+    n: '03',
+    title: 'IA',
+    accent: 'y software',
+    lead: 'Páginas web, dashboards, asistentes de IA y sistemas hechos a la medida de cómo trabaja tu negocio.',
+    items: ['Páginas web', 'Dashboards y apps a medida', 'Asistentes de IA y sistemas para empresas'],
+    img: 'tecnologia',
+    pos: '30% 50%',
+    r: '-1.2deg',
+    alt: 'Dos engranajes de titanio acoplados sobre una base negra, el pequeño con un centro violeta',
+    subject: 'Consulta de IA y software',
+  },
+];
+
+const wall = [
+  {
+    group: 'Growth y Marca',
+    items: [
+      'Estrategia de marketing digital',
+      'Branding e identidad',
+      'Creación de contenido',
+      'Gestión de redes sociales',
+      'Campañas publicitarias',
+      'Videos para Meta Ads',
+      'Asesoría para vender cursos y comunidades',
+    ],
+  },
+  {
+    group: 'IA y Software',
+    items: ['Páginas web', 'Dashboards a medida', 'Asistentes de IA', 'Apps a la medida', 'Sistemas para empresas'],
+  },
+];
+---
+
+<section class="section services" id="servicios" data-atmo-on="violet" data-section="servicios" aria-labelledby="titulo-servicios">
+  <div class="section__inner">
+    <p class="section__label"><b>02</b> — Servicios</p>
+    <h2 class="services__title" id="titulo-servicios">Tres frentes. Un mismo <span class="accent">resultado.</span></h2>
+    <p class="services__lead" data-reveal>
+      Publicidad que trae clientes, una marca que se recuerda y tecnología que ordena la operación. Todo bajo el mismo equipo.
+    </p>
+
+    <div class="svc-grid">
+      {cards.map((c) => (
+        <article class="svc" data-svc>
+          <div class="svc__card" style={`--r:${c.r}`}>
+            <div class="svc__media">
+              <picture data-svc-pic>
+                <img
+                  src={u(`/media/servicios/${c.img}-960.webp`)}
+                  srcset={`${u(`/media/servicios/${c.img}-640.webp`)} 640w, ${u(`/media/servicios/${c.img}-960.webp`)} 960w`}
+                  sizes="(min-width: 900px) 30vw, 92vw"
+                  width="960"
+                  height="720"
+                  alt={c.alt}
+                  loading="lazy"
+                  decoding="async"
+                  style={`object-position:${c.pos};transform-origin:${c.origin ?? '50% 50%'}`}
+                />
+              </picture>
+              <span class="svc__sweep" aria-hidden="true"></span>
+            </div>
+            <div class="svc__body">
+              <p class="svc__num">{c.n}</p>
+              <h3 class="svc__name">{c.title} <span class="accent">{c.accent}</span></h3>
+              <p class="svc__lead">{c.lead}</p>
+              <ul class="svc__list">
+                {c.items.map((i) => <li>{i}</li>)}
+              </ul>
+              <a class="svc__link" href={mail(c.subject)}>
+                Conversemos
+                <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="wall" aria-labelledby="titulo-muro">
+      <h3 class="section__label" id="titulo-muro">Todo lo que hacemos</h3>
+      {wall.map((g, gi) => (
+        <div class="wall__group">
+          <p class="wall__group-name">{String.fromCharCode(65 + gi)} — {g.group}</p>
+          <ul class="wall__list">
+            {g.items.map((item, i) => (
+              <li class="wall__row" data-row>
+                <a href={mail(`Consulta: ${item}`)}>
+                  <span class="wall__idx">{String.fromCharCode(65 + gi)}.{String(i + 1).padStart(2, '0')}</span>
+                  <span class="wall__text">{item}</span>
+                  <span class="wall__go" aria-hidden="true" set:html={arrow} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

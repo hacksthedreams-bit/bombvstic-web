@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro';
+import { u } from '../lib/url';
+import Nav from '../components/Nav.astro';
+import Services from '../components/Services.astro';
+import Projects from '../components/Projects.astro';
+import Method from '../components/Method.astro';
+import Faq from '../components/Faq.astro';
+
+const mail = 'mailto:bombvstic@gmail.com?subject=Diagn%C3%B3stico%20Bombvstic';
+const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
+---
+
+<Base
+  title="Bombvstic · Marketing digital & AI Solutions en Santiago de Chile"
+  description="Marca, contenido, campañas y tecnología a medida en un solo equipo. Agencia de marketing digital y soluciones de IA en Santiago de Chile."
+>
+  <Nav />
+
+  <ol class="chapters" aria-label="Capítulos" data-chapters>
+    <li><a href="#inicio" data-chapter="inicio"><span class="num">00</span><span class="name">Inicio</span></a></li>
+    <li><a href="#manifiesto" data-chapter="manifiesto"><span class="num">01</span><span class="name">Manifiesto</span></a></li>
+    <li><a href="#servicios" data-chapter="servicios"><span class="num">02</span><span class="name">Servicios</span></a></li>
+    <li><a href="#proyectos" data-chapter="proyectos"><span class="num">03</span><span class="name">Proyectos</span></a></li>
+    <li><a href="#metodo" data-chapter="metodo"><span class="num">04</span><span class="name">Método</span></a></li>
+    <li><a href="#preguntas" data-chapter="preguntas"><span class="num">05</span><span class="name">Preguntas</span></a></li>
+    <li><a href="#contacto" data-chapter="contacto"><span class="num">06</span><span class="name">Contacto</span></a></li>
+  </ol>
+
+  <main id="contenido">
+    <section class="hero" id="inicio" data-atmo-on="violet" data-section="inicio" aria-labelledby="titulo-hero">
+      <div class="hero__grid">
+        <div class="hero__copy">
+          <p class="kicker" data-reveal>Marketing digital &amp; AI Solutions</p>
+          <!-- Titular aprobado: opción B -->
+          <h1 class="hero__title" id="titulo-hero" data-hero-title>
+            <span class="line"><span>Marca, contenido</span></span>
+            <span class="line"><span>y tecnología.</span></span>
+            <span class="line"><span>Un solo <span class="accent">equipo.</span></span></span>
+          </h1>
+          <p class="hero__lead" data-reveal>
+            Estrategia, campañas, contenido y software a medida para negocios que quieren crecer en serio. Desde Santiago de Chile.
+          </p>
+          <div class="hero__actions" data-reveal>
+            <a class="btn btn--primary" href={mail}>
+              Agendar diagnóstico
+              <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+            </a>
+            <a class="btn btn--ghost" href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener">Ver Instagram</a>
+          </div>
+        </div>
+
+        <div class="hero__stage" data-stage>
+          <div class="stage__light" aria-hidden="true"></div>
+          <div class="emblem" data-emblem>
+            <img src={u('/brand/emblema-1254.webp')} alt="Emblema de Bombvstic: una B de titanio atravesada por un rayo violeta" width="1254" height="1254" fetchpriority="high" decoding="async" />
+            <div class="emblem__sweep" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--cut section--surface" id="manifiesto" data-atmo-on="silver" data-section="manifiesto" aria-labelledby="titulo-manifiesto">
+      <div class="section__inner">
+        <p class="section__label"><b>01</b> — Manifiesto</p>
+        <h2 class="manifesto" id="titulo-manifiesto" data-manifesto>
+          Cada decisión tiene un propósito. Cada marca merece una <span class="accent">estrategia.</span>
+        </h2>
+        <p class="manifesto__sub" data-reveal>
+          Somos Bombvstic: marketing, contenido y tecnología en un mismo equipo, desde Santiago de Chile. Diseñamos lo que tu negocio necesita para ser elegido y lo construimos hasta que funcione.
+        </p>
+      </div>
+    </section>
+
+    <Services />
+    <Projects />
+    <Method />
+    <Faq />
+
+    <section class="section section--cut closing" id="contacto" data-atmo-on="horizon" data-section="contacto" aria-labelledby="titulo-cierre">
+      <div class="section__inner">
+        <h2 class="closing__title" id="titulo-cierre">¿Qué quieres <span class="accent">mover</span> primero?</h2>
+        <div class="closing__actions">
+          <a class="btn btn--primary btn--lg" href={mail} data-magnetic>
+            Agendar diagnóstico
+            <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <img class="footer__wordmark" src={u('/brand/wordmark-web-600.webp')} alt="Bombvstic" width="600" height="240" loading="lazy" decoding="async" />
+      <div class="footer__cols">
+        <div>
+          <h2>Escríbenos</h2>
+          <ul><li><a href="mailto:bombvstic@gmail.com">bombvstic@gmail.com</a></li></ul>
+        </div>
+        <div>
+          <h2>Síguenos</h2>
+          <ul><li><a href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener">Instagram</a></li></ul>
+        </div>
+        <div>
+          <h2>Estamos en</h2>
+          <ul><li>Santiago de Chile</li></ul>
+        </div>
+      </div>
+      <div class="footer__legal">
+        <span>© 2026 Bombvstic · Marketing digital &amp; AI Solutions</span>
+      </div>
+    </div>
+  </footer>
+</Base>

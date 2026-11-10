@@ -1,0 +1,70 @@
+---
+// OJO — respuestas provisionales que describen cómo trabaja la agencia. Confirmar con Alan y Martina antes de publicar:
+// precio/rango de inversión, si el diagnóstico tiene costo, y si se puede contratar un solo servicio.
+const faqs = [
+  {
+    q: '¿Cuánto cuesta trabajar con Bombvstic?',
+    a: 'Depende del alcance: una campaña, una marca completa o un sistema a medida no se parecen. Después del diagnóstico te enviamos una propuesta por escrito con lo que incluye y su valor, para que decidas con todo claro.',
+  },
+  {
+    q: '¿Con qué tipo de negocios trabajan?',
+    a: 'Principalmente negocios locales (restaurantes, centros de eventos, tiendas online) y creadores que venden cursos o comunidades. También acompañamos a empresas más grandes que necesitan marketing o tecnología a medida.',
+  },
+  {
+    q: '¿Qué pasa en el diagnóstico?',
+    a: 'Conversamos sobre tu negocio, tu objetivo y dónde se está frenando el crecimiento. Con eso te decimos qué haría sentido hacer primero y qué no vale la pena todavía.',
+  },
+  {
+    q: '¿Puedo contratar solo una parte, como la web o las campañas?',
+    a: 'Sí. Puedes empezar por un frente, por ejemplo publicidad, marca o tecnología, y sumar otros cuando tenga sentido. Todo comparte el mismo equipo, así que se conecta sin fricción.',
+  },
+  {
+    q: '¿Me ayudan a vender un curso o una comunidad en Skool?',
+    a: 'Sí. Asesoramos a creadores que quieren vender cursos y comunidades: desde cómo se comunica la oferta hasta los videos y las campañas que llevan gente a ella.',
+  },
+  {
+    q: '¿Para qué sirve la IA en mi negocio?',
+    a: 'Para quitarte trabajo repetitivo y darte visibilidad: asistentes que atienden consultas, dashboards que muestran tus números en un solo lugar y sistemas hechos a la medida de cómo operas. Las decisiones importantes las seguimos tomando personas.',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+const mail = 'mailto:bombvstic@gmail.com?subject=Pregunta%20para%20Bombvstic';
+const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
+---
+
+<section class="section section--cut faq" id="preguntas" data-atmo-on="violet" data-section="preguntas" aria-labelledby="titulo-faq">
+  <div class="section__inner faq__grid">
+    <div class="faq__intro">
+      <p class="section__label"><b>05</b> — Preguntas</p>
+      <h2 class="faq__title" id="titulo-faq">Antes de <span class="accent">escribirnos.</span></h2>
+      <p class="faq__lead" data-reveal>Lo que más nos preguntan, sin rodeos. ¿Falta la tuya?</p>
+      <a class="btn btn--ghost" href={mail} data-reveal>
+        Pregúntanos
+        <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+      </a>
+    </div>
+
+    <div class="faq__list" data-reveal>
+      {faqs.map((f, i) => (
+        <details class="qa" name="faq">
+          <summary>
+            <span class="qa__idx">{String(i + 1).padStart(2, '0')}</span>
+            <span class="qa__q">{f.q}</span>
+            <span class="qa__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="qa__a"><p>{f.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</section>

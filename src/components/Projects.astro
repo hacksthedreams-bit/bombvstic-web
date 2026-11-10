@@ -1,0 +1,67 @@
+---
+// OJO — antes de publicar: permiso de cada cliente para mostrar su nombre y su pieza, y confirmar qué se hizo exactamente.
+// No se publican cifras ni resultados: solo lo que consta en el brief (qué servicios se prestaron a cada cliente).
+import { u } from '../lib/url';
+const mail = (subject: string) => `mailto:bombvstic@gmail.com?subject=${encodeURIComponent(subject)}`;
+const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
+
+const upcoming = [
+  { name: 'ElMostaShop', kind: 'E-commerce', did: 'Marca completa y redes' },
+  { name: 'DigitalSneakerShop', kind: 'E-commerce', did: 'Marca completa y redes' },
+  { name: 'La Terraza de Lupita', kind: 'Restaurante', did: 'Redes y crecimiento' },
+];
+---
+
+<section class="section section--cut section--ivory projects" id="proyectos" data-atmo-on="silver" data-section="proyectos" aria-labelledby="titulo-proyectos">
+  <div class="section__inner">
+    <p class="section__label"><b>03</b> — Proyectos</p>
+    <h2 class="projects__title" id="titulo-proyectos">Trabajo real para negocios <span class="accent">reales.</span></h2>
+    <p class="projects__lead" data-reveal>
+      Vamos sumando cada caso con su permiso y con cifras verificadas, no con adjetivos.
+    </p>
+
+    <article class="feature">
+      <div class="feature__media" data-cut-reveal>
+        <picture>
+          <img
+            src={u('/media/proyectos/calyzzo-940.webp')}
+            srcset={`${u('/media/proyectos/calyzzo-640.webp')} 640w, ${u('/media/proyectos/calyzzo-940.webp')} 940w`}
+            sizes="(min-width: 900px) 56vw, 92vw"
+            width="940"
+            height="700"
+            alt="Fotografía de la piscina de Calyzzo al atardecer junto a su identidad de marca: una placa negra con el logo dorado de Calyzzo Events & Pool"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+      </div>
+      <div class="feature__body">
+        <p class="feature__tag" data-reveal>Proyecto destacado</p>
+        <h3 class="feature__name" data-reveal>Calyzzo</h3>
+        <p class="feature__kind" data-reveal>Centro de eventos</p>
+        <ul class="feature__did" data-reveal>
+          <li>Identidad de marca completa</li>
+          <li>Gestión de redes y crecimiento</li>
+        </ul>
+        <a class="feature__link" href={mail('Quiero un proyecto como Calyzzo')} data-reveal>
+          Quiero algo así
+          <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+        </a>
+      </div>
+    </article>
+
+    <div class="upcoming">
+      <h3 class="upcoming__label">Próximos casos</h3>
+      <ul class="upcoming__list">
+        {upcoming.map((u, i) => (
+          <li class="upcoming__row" data-row>
+            <span class="upcoming__idx">{String(i + 1).padStart(2, '0')}</span>
+            <span class="upcoming__name">{u.name}</span>
+            <span class="upcoming__meta">{u.kind} · {u.did}</span>
+            <span class="upcoming__chip">En preparación</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
