@@ -54,7 +54,16 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
         <div class="hero__stage" data-stage>
           <div class="stage__light" aria-hidden="true"></div>
           <div class="emblem" data-emblem>
-            <img src={u('/brand/emblema-1254.webp')} alt="Emblema de Bombvstic: una B de titanio atravesada por un rayo violeta" width="1254" height="1254" fetchpriority="high" decoding="async" />
+            <img
+              src={u('/brand/emblema-720.webp')}
+              srcset={`${u('/brand/emblema-480.webp')} 480w, ${u('/brand/emblema-720.webp')} 720w, ${u('/brand/emblema-960.webp')} 960w`}
+              sizes="(min-width: 900px) 34rem, (min-width: 520px) min(72vw, 26rem), min(58vw, 15rem)"
+              alt="Emblema de Bombvstic: una B de titanio atravesada por un rayo violeta"
+              width="720"
+              height="720"
+              fetchpriority="high"
+              decoding="async"
+            />
             <div class="emblem__sweep" aria-hidden="true"></div>
           </div>
         </div>

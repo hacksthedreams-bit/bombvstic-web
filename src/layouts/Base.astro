@@ -56,7 +56,14 @@ const agency = {
 
     <link rel="preload" href={u('/fonts/instrument-sans-latin.woff2')} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={u('/fonts/bodoni-moda-italic-latin.woff2')} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={u('/brand/emblema-1254.webp')} as="image" fetchpriority="high" />
+    <link
+      rel="preload"
+      as="image"
+      href={u('/brand/emblema-720.webp')}
+      imagesrcset={`${u('/brand/emblema-480.webp')} 480w, ${u('/brand/emblema-720.webp')} 720w, ${u('/brand/emblema-960.webp')} 960w`}
+      imagesizes="(min-width: 900px) 34rem, (min-width: 520px) min(72vw, 26rem), min(58vw, 15rem)"
+      fetchpriority="high"
+    />
 
     <script is:inline>
       // Oculta el hero hasta que la animación de entrada esté lista.

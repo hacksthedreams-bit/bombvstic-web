@@ -516,8 +516,8 @@ a {
   pointer-events: none;
   mix-blend-mode: overlay;
   background: linear-gradient(115deg, transparent 38%, rgb(255 255 255 / 0.95) 50%, transparent 62%) 0% 0% / 260% 100% no-repeat;
-  -webkit-mask: url('/brand/emblema-1254.webp') center / contain no-repeat;
-  mask: url('/brand/emblema-1254.webp') center / contain no-repeat;
+  -webkit-mask: url('/brand/emblema-720.webp') center / contain no-repeat;
+  mask: url('/brand/emblema-720.webp') center / contain no-repeat;
   animation: sweep 7s var(--ease-cut) infinite;
 }
 /* El hero espera a su animación de entrada; el respaldo y "reducir movimiento" lo muestran siempre */
