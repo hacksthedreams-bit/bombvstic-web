@@ -948,6 +948,88 @@ a {
   }
 }
 
+/* Escritorio con movimiento: las tarjetas se apilan como un mazo (cada una cubre a la anterior) */
+.svc-grid.is-deck {
+  display: block;
+  padding-bottom: 6vh;
+}
+.is-deck .svc,
+.is-deck .svc:nth-child(2) {
+  position: sticky;
+  top: calc(var(--nav-h) + 1rem + var(--i, 0) * 1.1rem);
+  margin: 0 0 10vh;
+}
+.is-deck .svc:last-child {
+  margin-bottom: 0;
+}
+.is-deck .svc__card {
+  flex-direction: row;
+  height: min(66vh, 33rem);
+  transform: none;
+  transform-origin: 50% 0;
+  /* sin transición de transform: GSAP la controla y no debe leer una rotación a medias */
+  transition: border-color var(--t-base), box-shadow var(--t-slow) var(--ease-out);
+  box-shadow: 0 -20px 60px -20px rgb(0 0 0 / 0.7), 0 40px 100px -40px rgb(122 0 255 / 0.35);
+}
+.is-deck .svc:nth-child(2) .svc__card {
+  flex-direction: row-reverse;
+}
+.is-deck .svc__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: #0b0b0e;
+  opacity: var(--dim, 0);
+  pointer-events: none;
+}
+.is-deck .svc__media {
+  width: 48%;
+  height: 100%;
+  aspect-ratio: auto;
+  flex: none;
+}
+.is-deck .svc__media::after {
+  background: linear-gradient(to left, #121216 0%, transparent 45%);
+}
+.is-deck .svc:nth-child(2) .svc__media::after {
+  background: linear-gradient(to right, #121216 0%, transparent 45%);
+}
+.is-deck .svc__body {
+  width: 52%;
+  justify-content: center;
+  gap: 1.1rem;
+  padding: 2rem clamp(2rem, 4vw, 3.5rem);
+}
+.is-deck .svc__name {
+  font-size: clamp(2.6rem, 4.4vw, 4.4rem);
+}
+.is-deck .svc__lead {
+  max-width: 30rem;
+  font-size: 1.1rem;
+}
+.is-deck .svc__list {
+  font-size: 1rem;
+}
+.is-deck .svc__card:hover,
+.is-deck .svc__card:has(.svc__link:focus-visible) {
+  transform: none;
+}
+
+/* Muro tipográfico: la línea que pasa por el centro de la pantalla se enciende */
+.wall.has-spot .wall__text {
+  opacity: 0.26;
+}
+.wall.has-spot .wall__row.is-center .wall__text {
+  opacity: 1;
+}
+.wall.has-spot .wall__row.is-center .wall__idx {
+  color: var(--lavender);
+}
+.wall.has-spot .wall__idx {
+  transition: color var(--t-base);
+}
+
 /* Muro tipográfico */
 .wall {
   margin-top: clamp(5rem, 10vw, 9rem);

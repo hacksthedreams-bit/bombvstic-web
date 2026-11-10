@@ -72,8 +72,8 @@ const wall = [
     </p>
 
     <div class="svc-grid">
-      {cards.map((c) => (
-        <article class="svc" data-svc>
+      {cards.map((c, i) => (
+        <article class="svc" data-svc style={`--i:${i}`}>
           <div class="svc__card" style={`--r:${c.r}`}>
             <div class="svc__media">
               <picture data-svc-pic>

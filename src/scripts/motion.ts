@@ -238,12 +238,15 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   // Servicios: las tarjetas entran en grupo; la imagen tiene un paralaje suave
   const svcCards = $$('[data-svc]');
   if (svcCards.length) {
-    gsap.set(svcCards, { autoAlpha: 0, y: 90 });
-    ScrollTrigger.batch(svcCards, {
-      start: 'top 90%',
-      once: true,
-      onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 1.2, stagger: 0.14, ease: 'expo.out' }),
-    });
+    // En escritorio las tarjetas forman un mazo que se apila (ver más abajo); la entrada en lote es para celular y tableta
+    if (!window.matchMedia('(min-width: 900px)').matches) {
+      gsap.set(svcCards, { autoAlpha: 0, y: 90 });
+      ScrollTrigger.batch(svcCards, {
+        start: 'top 90%',
+        once: true,
+        onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 1.2, stagger: 0.14, ease: 'expo.out' }),
+      });
+    }
     svcCards.forEach((card) => {
       const pic = $('[data-svc-pic]', card);
       if (!pic) return;
@@ -293,6 +296,15 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     );
   });
 
+  // Muro de servicios: la fila que cruza el centro de la pantalla se enciende; el resto baja de volumen
+  const wallEl = $('.wall');
+  if (wallEl) {
+    wallEl.classList.add('has-spot');
+    $$('[data-row]', wallEl).forEach((row) => {
+      ScrollTrigger.create({ trigger: row, start: 'top 57%', end: 'bottom 43%', toggleClass: { targets: row, className: 'is-center' } });
+    });
+  }
+
   // Muro de servicios: cada fila entra al aparecer
   $$('[data-row]').forEach((row) => {
     gsap.fromTo(
@@ -314,6 +326,31 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       btn.addEventListener('pointerleave', leave);
     });
   }
+});
+
+// Servicios (escritorio, con movimiento): mazo de tarjetas. Cada una queda fija arriba y la siguiente la cubre,
+// mientras la anterior se hunde (escala y oscurece). En celular o con "reducir movimiento" son tarjetas normales.
+mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+  const grid = $('.svc-grid');
+  const cards = $$('[data-svc]');
+  if (!grid || cards.length < 2) return;
+  grid.classList.add('is-deck');
+  const faces = cards.map((s) => $('.svc__card', s)!);
+  cards.forEach((_, i) => {
+    const next = cards[i + 1];
+    if (!next) return;
+    gsap.to(faces[i], {
+      scale: 0.93,
+      '--dim': 0.6,
+      ease: 'none',
+      scrollTrigger: { trigger: next, start: 'top 80%', end: 'top 22%', scrub: true },
+    });
+  });
+  requestAnimationFrame(() => ScrollTrigger.refresh());
+  return () => {
+    grid.classList.remove('is-deck');
+    gsap.set(faces, { clearProps: 'transform,--dim' });
+  };
 });
 
 // Proyectos (escritorio, con movimiento): la galería se fija y las historias se deslizan mientras bajas.
