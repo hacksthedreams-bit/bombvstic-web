@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import { u } from '../lib/url';
+
+// Texto base: describe lo que el sitio hace HOY (sin analítica ni cookies propias; el formulario arma un correo).
+// Revisar con asesoría legal antes del lanzamiento en el dominio definitivo y actualizar si se agrega analítica, formulario con servidor, etc.
+const updated = '10 de noviembre de 2026';
+---
+
+<Base
+  title="Política de privacidad · Bombvstic"
+  description="Qué datos trata el sitio de Bombvstic, para qué se usan y cómo ejercer tus derechos."
+  path="/privacidad/"
+>
+  <Nav onHome={false} />
+
+  <main id="contenido" class="legal">
+    <p class="kicker">Privacidad</p>
+    <h1 class="legal__title">Tus datos, <span class="accent">con claridad.</span></h1>
+    <p class="legal__meta">Actualizado el {updated}</p>
+
+    <section class="legal__block">
+      <h2>Qué datos recibimos</h2>
+      <p>
+        Este sitio no tiene cuentas de usuario ni guarda tus datos en una base propia. Solo recibimos información cuando tú nos escribes, por ejemplo al completar el formulario de diagnóstico: eso arma un correo en tu programa de correo, con lo que tú elegiste escribir (qué necesitas, tipo de negocio, nombre, correo y, si quieres, WhatsApp y un mensaje). Los datos nos llegan únicamente si envías ese correo.
+      </p>
+    </section>
+
+    <section class="legal__block">
+      <h2>Para qué los usamos</h2>
+      <p>
+        Para responder tu consulta y evaluar cómo podemos ayudarte. No vendemos tus datos ni los usamos para enviarte publicidad que no pediste.
+      </p>
+    </section>
+
+    <section class="legal__block">
+      <h2>Cookies y analítica</h2>
+      <p>
+        El sitio no instala cookies propias ni herramientas de analítica o publicidad. Las tipografías y las imágenes se cargan desde el mismo sitio. Si más adelante incorporamos analítica, lo informaremos aquí.
+      </p>
+    </section>
+
+    <section class="legal__block">
+      <h2>Enlaces y servicios de terceros</h2>
+      <p>
+        El sitio enlaza a Instagram y usa tu programa de correo para escribirnos; esos servicios tienen sus propias políticas. Además, el sitio se aloja en un proveedor de hosting que puede registrar datos técnicos de la visita (como la dirección IP) para su funcionamiento y seguridad.
+      </p>
+    </section>
+
+    <section class="legal__block">
+      <h2>Tus derechos</h2>
+      <p>
+        Puedes pedirnos acceder a los datos que nos hayas enviado, corregirlos o que los eliminemos. Escríbenos a
+        <a href="mailto:bombvstic@gmail.com?subject=Privacidad">bombvstic@gmail.com</a> y te respondemos.
+      </p>
+    </section>
+
+    <a class="btn btn--ghost" href={u('/')}>Volver al inicio</a>
+  </main>
+
+  <footer class="footer footer--slim">
+    <div class="footer__inner">
+      <div class="footer__legal">
+        <span>© 2026 Bombvstic · Marketing digital &amp; AI Solutions · Santiago de Chile</span>
+      </div>
+    </div>
+  </footer>
+</Base>
+
+<style>
+  .legal {
+    max-width: 52rem;
+    margin-inline: auto;
+    padding: calc(var(--nav-h) + 4rem) var(--gutter) 5rem;
+  }
+  .legal__title {
+    margin: 0;
+    font-weight: 600;
+    font-size: clamp(2.6rem, 7vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+  .legal__meta {
+    margin: 1.25rem 0 3rem;
+    font-size: 0.85rem;
+    color: var(--silver-dark);
+  }
+  .legal__block {
+    padding: 1.75rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .legal__block h2 {
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+    font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.8rem);
+    letter-spacing: -0.02em;
+  }
+  .legal__block p {
+    margin: 0;
+    color: var(--muted);
+    max-width: 44rem;
+  }
+  .legal__block a {
+    color: var(--lavender);
+    text-underline-offset: 3px;
+  }
+  .legal .btn {
+    margin-top: 2.5rem;
+  }
+</style>

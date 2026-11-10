@@ -1,5 +1,12 @@
 ---
 import { u } from '../lib/url';
+
+interface Props {
+  /** false en páginas internas: los anclajes apuntan a la portada */
+  onHome?: boolean;
+}
+const { onHome = true } = Astro.props;
+const prefix = onHome ? '' : u('/');
 const links = [
   { href: '#manifiesto', label: 'Manifiesto' },
   { href: '#servicios', label: 'Servicios' },
@@ -18,10 +25,10 @@ const links = [
     </a>
     <nav aria-label="Principal">
       <ul class="nav__links">
-        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        {links.map((l) => <li><a href={`${prefix}${l.href}`}>{l.label}</a></li>)}
       </ul>
     </nav>
-    <a class="btn btn--primary btn--sm" href="#contacto">
+    <a class="btn btn--primary btn--sm" href={`${prefix}#contacto`}>
       <span>Agendar<span class="nav__cta-long"> diagnóstico</span></span>
       <span class="btn__arrow" aria-hidden="true">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>

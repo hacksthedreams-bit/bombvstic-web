@@ -2365,6 +2365,18 @@ a {
   display: grid;
   gap: 0.4rem;
 }
+.footer__link {
+  display: inline-block;
+  padding-block: 0.3rem;
+  color: var(--muted);
+  text-underline-offset: 3px;
+}
+.footer__link:hover {
+  color: var(--ivory);
+}
+.footer--slim {
+  margin-top: 2rem;
+}
 .footer__legal {
   display: flex;
   flex-wrap: wrap;
@@ -2414,7 +2426,7 @@ a {
   .hero,
   .section,
   .footer {
-    padding-left: calc(var(--gutter) + 4.5rem);
+    padding-left: calc(var(--gutter) + 5.25rem);
   }
 }
 
