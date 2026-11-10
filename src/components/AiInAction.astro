@@ -1,0 +1,86 @@
+---
+// Ejemplo ILUSTRATIVO de cómo se reparte un proceso entre personas y un asistente de IA. Sin cifras ni resultados.
+// Cuando existan capturas o un demo real (dashboard / asistente con datos anonimizados), reemplazar o complementar este bloque.
+const mail = `mailto:bombvstic@gmail.com?subject=${encodeURIComponent('Quiero un asistente de IA para mi negocio')}`;
+const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
+
+const steps = [
+  {
+    title: 'Llega la consulta',
+    off: 'Alguien tiene que estar mirando el teléfono. Fuera de horario, el cliente espera.',
+    on: 'El asistente responde al instante, a cualquier hora, con la información de tu negocio.',
+    onWho: 'Asistente',
+  },
+  {
+    title: 'Entender qué necesita',
+    off: 'Se lee el mensaje, se interpreta y se anota a mano.',
+    on: 'Clasifica el mensaje: pedido, reserva, cotización o reclamo.',
+    onWho: 'Asistente',
+  },
+  {
+    title: 'Revisar disponibilidad',
+    off: 'Se consulta la agenda, el stock o la planilla.',
+    on: 'Consulta la agenda o el catálogo conectado y propone opciones.',
+    onWho: 'Asistente',
+  },
+  {
+    title: 'Decidir lo delicado',
+    off: 'Excepciones, reclamos y precios especiales llegan mezclados con todo lo demás.',
+    on: 'El asistente te avisa y te lo entrega con el contexto completo. Decides tú.',
+    onWho: 'Tu equipo',
+  },
+  {
+    title: 'Cerrar y cuidar al cliente',
+    off: 'Se confirma, se registra a mano y se hace seguimiento cuando hay tiempo.',
+    on: 'Tu equipo confirma con trato humano; el asistente deja todo registrado en un dashboard.',
+    onWho: 'Juntos',
+  },
+];
+---
+
+<section class="section section--cut ai" id="ia" data-atmo-on="violet" data-section="ia" aria-labelledby="titulo-ia">
+  <div class="section__inner">
+    <p class="section__label"><b>04</b> — IA en acción</p>
+    <h2 class="ai__title" id="titulo-ia">La máquina hace lo repetitivo. Tu equipo, lo <span class="accent">importante.</span></h2>
+    <p class="ai__lead" data-reveal>Un mismo proceso, dos formas de resolverlo. Activa el asistente y mira qué cambia.</p>
+
+    <div class="ai__panel" data-reveal>
+      <div class="ai__bar">
+        <label class="switch">
+          <span class="switch__text switch__text--off">Solo personas</span>
+          <input class="switch__input" type="checkbox" role="switch" />
+          <span class="switch__track" aria-hidden="true"><span class="switch__knob"></span></span>
+          <span class="switch__text switch__text--on">Personas + IA</span>
+        </label>
+        <p class="ai__caption">Ejemplo: un negocio que recibe consultas por Instagram y WhatsApp.</p>
+      </div>
+
+      <ol class="flow">
+        {steps.map((s, i) => (
+          <li class="flow__step" data-who={s.onWho === 'Asistente' ? 'ai' : s.onWho === 'Juntos' ? 'both' : 'human'}>
+            <span class="flow__idx">{String(i + 1).padStart(2, '0')}</span>
+            <div class="flow__text">
+              <h3>{s.title}</h3>
+              <div class="flow__desc">
+                <p class="flow__off">{s.off}</p>
+                <p class="flow__on">{s.on}</p>
+              </div>
+            </div>
+            <span class="flow__chip">
+              <span class="flow__chip-off">Tu equipo</span>
+              <span class="flow__chip-on">{s.onWho}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <p class="ai__note">
+      Ejemplo ilustrativo. Cada asistente se diseña a la medida de cómo trabaja tu negocio, y el objetivo no es reemplazar a tu equipo: es liberar su tiempo para lo que pide criterio humano.
+    </p>
+    <a class="btn btn--primary" href={mail} data-reveal>
+      Quiero un asistente así
+      <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+    </a>
+  </div>
+</section>
