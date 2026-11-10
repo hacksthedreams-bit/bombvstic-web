@@ -133,6 +133,52 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     });
   }
 
+  // Salida del hero por capas: cada línea del titular sube a distinta velocidad y el resto se apaga.
+  // `immediateRender: false` para no pisar la animación de entrada (los valores iniciales se leen al empezar el scroll).
+  const exitST = { trigger: '.hero', start: 'top top', end: '75% top', scrub: 0.5 } as const;
+  heroLines.forEach((line, i) => {
+    gsap.fromTo(line, { y: 0 }, { y: -(40 + i * 45), ease: 'none', immediateRender: false, scrollTrigger: exitST });
+  });
+  gsap.fromTo(
+    ['.hero .kicker', '.hero__lead', '.hero__actions'].map((s) => $(s)).filter(Boolean),
+    { opacity: 1, y: 0 },
+    { opacity: 0.1, y: -60, ease: 'none', immediateRender: false, scrollTrigger: exitST },
+  );
+
+  // Cinta gigante: corre sola, se acelera con la velocidad del scroll y cambia de sentido con él
+  const mq = $('[data-marquee]');
+  const mqTrack = $('[data-marquee-track]');
+  const mqCleanup: Array<() => void> = [];
+  if (mq && mqTrack) {
+    const loop = gsap.to(mqTrack, { xPercent: -50, repeat: -1, duration: 40, ease: 'none' });
+    let target = 1;
+    let cur = 1;
+    let dir = 1;
+    const st = ScrollTrigger.create({
+      start: 0,
+      end: 'max',
+      onUpdate: (self) => {
+        dir = self.direction || dir;
+        target = dir * (1 + Math.min(6, Math.abs(self.getVelocity()) / 350));
+      },
+    });
+    const step = () => {
+      target += (dir - target) * 0.04; // vuelve a la velocidad base
+      cur += (target - cur) * 0.08;
+      loop.timeScale(cur);
+    };
+    gsap.ticker.add(step);
+    const io = new IntersectionObserver(([e]) => loop.paused(!e.isIntersecting));
+    io.observe(mq);
+    mqCleanup.push(() => {
+      gsap.ticker.remove(step);
+      io.disconnect();
+      st.kill();
+      loop.kill();
+      gsap.set(mqTrack, { clearProps: 'transform' });
+    });
+  }
+
   // Luz violeta que sigue al cursor sobre el metal
   const cleanups: Array<() => void> = [];
   if (finePointer && stage) {
@@ -177,6 +223,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   // Limpieza si la persona activa "reducir movimiento" mientras navega
   return () => {
     cleanups.forEach((fn) => fn());
+    mqCleanup.forEach((fn) => fn());
     gsap.ticker.remove(tick);
     lenis.destroy();
   };

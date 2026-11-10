@@ -47,7 +47,7 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
             Estrategia, campañas, contenido y software a medida para negocios que quieren crecer en serio. Desde Santiago de Chile.
           </p>
           <div class="hero__actions" data-reveal>
-            <a class="btn btn--primary" href={mail}>
+            <a class="btn btn--primary" href={mail} data-magnetic>
               Agendar diagnóstico
               <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
             </a>
@@ -73,6 +73,18 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
             <div class="emblem__sweep" aria-hidden="true"></div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="marquee" aria-hidden="true" data-marquee data-reveal>
+        <div class="marquee__track" data-marquee-track>
+          {[0, 1].map(() => (
+            <div class="marquee__group">
+              <span class="marquee__word">Estrategia</span><i>/</i>
+              <span class="marquee__word marquee__word--solid">Diseño</span><i>/</i>
+              <span class="marquee__word">Tecnología</span><i>/</i>
+            </div>
+          ))}
         </div>
       </div>
 
