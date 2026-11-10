@@ -1,14 +1,28 @@
 ---
-// OJO — antes de publicar: permiso de cada cliente para mostrar su nombre y su pieza, y confirmar qué se hizo exactamente.
-// No se publican cifras ni resultados: solo lo que consta en el brief (qué servicios se prestaron a cada cliente).
+// OJO — antes de publicar: permiso de cada cliente para mostrar su nombre y su pieza.
+// Solo se publica lo que consta en el material entregado por la agencia (textos de las historias); sin cifras inventadas.
 import { u } from '../lib/url';
 const mail = (subject: string) => `mailto:bombvstic@gmail.com?subject=${encodeURIComponent(subject)}`;
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 
 const upcoming = [
   { name: 'ElMostaShop', kind: 'E-commerce', did: 'Marca completa y redes' },
-  { name: 'DigitalSneakerShop', kind: 'E-commerce', did: 'Marca completa y redes' },
   { name: 'La Terraza de Lupita', kind: 'Restaurante', did: 'Redes y crecimiento' },
+];
+
+// Caso Digital Sneakers Shop: cinco historias de Instagram (la 03 es video)
+const stories = [
+  { n: '01', title: 'Transformación', alt: 'Historia de Instagram: «Un nuevo nombre. Una nueva manera de competir.», con el logo renovado de Digital Sneakers Shop sobre un marco dorado.' },
+  { n: '02', title: 'Identidad', alt: 'Historia de Instagram sobre la identidad: el logo con zapatilla y canasta, versiones horizontales y un sello circular de Digital Sneakers Shop.' },
+  { n: '03', title: 'Catálogo y motion', alt: 'Historia de Instagram con video: el nombre Digital Sneakers Shop animado dentro de un marco horizontal.', video: true },
+  { n: '04', title: 'Experiencia', alt: 'Historia de Instagram sobre la experiencia de compra: mensaje de agradecimiento con el logo y tres íconos de pago, información y seguimiento.' },
+  { n: '05', title: 'Hito', alt: 'Historia de Instagram: «La competencia pasó a ser la nueva dueña», con el logotipo de Digital Sneakers Shop sobre un bloque de piedra.' },
+];
+const did = [
+  'Renovación de marca: de Savage Sneaker 999 a Digital Sneakers Shop',
+  'Identidad visual: logo, símbolo, colores y versiones digitales',
+  'Catálogo visual y piezas animadas',
+  'Comunicación de compra y poscompra',
 ];
 ---
 
@@ -20,7 +34,73 @@ const upcoming = [
       Vamos sumando cada caso con su permiso y con cifras verificadas, no con adjetivos.
     </p>
 
-    <article class="feature">
+    <!-- Caso 01 · Digital Sneakers Shop -->
+    <article class="case" aria-labelledby="caso-dss">
+      <header class="case__head">
+        <p class="feature__tag" data-reveal>Proyecto · E-commerce</p>
+        <h3 class="case__name" id="caso-dss" data-reveal>Digital Sneakers Shop</h3>
+        <p class="case__lead" data-reveal>Un nuevo nombre. Una nueva manera de competir.</p>
+        <ul class="case__did" data-reveal>
+          {did.map((d) => <li>{d}</li>)}
+        </ul>
+        <p class="case__milestone" data-reveal>
+          <b>Hito</b>
+          Tras el crecimiento de Digital Sneakers Shop, su propietario vendió la marca a un competidor del sector.
+        </p>
+      </header>
+
+      <ol class="stories" data-stories tabindex="0" aria-label="Las cinco historias del caso, desliza para verlas">
+        {stories.map((s) => (
+          <li class="story" data-reveal>
+            <figure>
+              <div class="story__frame">
+                {s.video ? (
+                  <>
+                    <video
+                      class="story__video"
+                      data-story-video
+                      muted
+                      loop
+                      playsinline
+                      preload="none"
+                      width="720"
+                      height="1280"
+                      poster={u('/media/proyectos/dss-03-720.webp')}
+                      aria-label={s.alt}
+                    >
+                      <source src={u('/media/proyectos/dss-03-motion.mp4')} type="video/mp4" />
+                    </video>
+                    <button class="story__toggle" type="button" data-story-toggle aria-label="Reproducir video" aria-pressed="false">
+                      <span class="story__icon" aria-hidden="true"></span>
+                    </button>
+                  </>
+                ) : (
+                  <img
+                    src={u(`/media/proyectos/dss-${s.n}-720.webp`)}
+                    srcset={`${u(`/media/proyectos/dss-${s.n}-480.webp`)} 480w, ${u(`/media/proyectos/dss-${s.n}-720.webp`)} 720w`}
+                    sizes="(min-width: 900px) 18vw, 70vw"
+                    width="720"
+                    height="1280"
+                    alt={s.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+              </div>
+              <figcaption><span>{s.n}</span> {s.title}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ol>
+
+      <a class="feature__link" href={mail('Quiero un proyecto como Digital Sneakers Shop')} data-reveal>
+        Quiero algo así
+        <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+      </a>
+    </article>
+
+    <!-- Caso 02 · Calyzzo -->
+    <article class="feature feature--second">
       <div class="feature__media" data-cut-reveal>
         <picture>
           <img
@@ -36,9 +116,8 @@ const upcoming = [
         </picture>
       </div>
       <div class="feature__body">
-        <p class="feature__tag" data-reveal>Proyecto destacado</p>
+        <p class="feature__tag" data-reveal>Proyecto · Centro de eventos</p>
         <h3 class="feature__name" data-reveal>Calyzzo</h3>
-        <p class="feature__kind" data-reveal>Centro de eventos</p>
         <ul class="feature__did" data-reveal>
           <li>Identidad de marca completa</li>
           <li>Gestión de redes y crecimiento</li>
@@ -53,11 +132,11 @@ const upcoming = [
     <div class="upcoming">
       <h3 class="upcoming__label">Próximos casos</h3>
       <ul class="upcoming__list">
-        {upcoming.map((u, i) => (
+        {upcoming.map((c, i) => (
           <li class="upcoming__row" data-row>
-            <span class="upcoming__idx">{String(i + 1).padStart(2, '0')}</span>
-            <span class="upcoming__name">{u.name}</span>
-            <span class="upcoming__meta">{u.kind} · {u.did}</span>
+            <span class="upcoming__idx">{String(i + 3).padStart(2, '0')}</span>
+            <span class="upcoming__name">{c.name}</span>
+            <span class="upcoming__meta">{c.kind} · {c.did}</span>
             <span class="upcoming__chip">En preparación</span>
           </li>
         ))}
@@ -65,3 +144,46 @@ const upcoming = [
     </div>
   </div>
 </section>
+
+<script>
+  // Video del caso: reproduce en silencio solo mientras se ve (y si la persona no pidió menos movimiento); siempre con botón de pausa.
+  const video = document.querySelector<HTMLVideoElement>('[data-story-video]');
+  const btn = document.querySelector<HTMLButtonElement>('[data-story-toggle]');
+  if (video && btn) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let userPaused = reduce.matches;
+    const sync = () => {
+      const playing = !video.paused;
+      btn.setAttribute('aria-pressed', String(playing));
+      btn.setAttribute('aria-label', playing ? 'Pausar video' : 'Reproducir video');
+      btn.classList.toggle('is-playing', playing);
+    };
+    const play = () => video.play().then(sync).catch(sync);
+    btn.addEventListener('click', () => {
+      if (video.paused) {
+        userPaused = false;
+        play();
+      } else {
+        userPaused = true;
+        video.pause();
+        sync();
+      }
+    });
+    video.addEventListener('play', sync);
+    video.addEventListener('pause', sync);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        ([e]) => {
+          if (e.isIntersecting && !userPaused) {
+            video.preload = 'auto';
+            play();
+          } else if (!e.isIntersecting) {
+            video.pause();
+          }
+        },
+        { threshold: 0.55 },
+      ).observe(video);
+    }
+    sync();
+  }
+</script>
