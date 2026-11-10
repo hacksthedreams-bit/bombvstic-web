@@ -38,6 +38,8 @@ const steps = [
     <h2 class="method__title" id="titulo-metodo">Cuatro movimientos. <span class="accent">Cero</span> improvisación.</h2>
     <p class="method__lead" data-reveal>Así trabajamos, de la primera conversación a los resultados.</p>
 
+    <div class="method__stage" data-method-stage>
+    <p class="method__ghost" aria-hidden="true" data-method-ghost>01</p>
     <ol class="method__list" data-method>
       <li class="method__rail" aria-hidden="true"><span class="method__fill" data-method-fill></span></li>
       {steps.map((s) => (
@@ -46,27 +48,27 @@ const steps = [
           <svg class="step__icon" viewBox="0 0 96 68" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             {s.icon === 'descubrir' && (
               <>
-                <path d="M18 34H78M48 4V64" stroke="#75707F" stroke-width="1.5" />
-                <circle cx="48" cy="34" r="21" stroke="#d8d9e3" stroke-width="2" />
-                <circle cx="48" cy="34" r="4" fill="#ad8bfa" />
+                <path pathLength="1" d="M18 34H78M48 4V64" stroke="#75707F" stroke-width="1.5" />
+                <circle pathLength="1" cx="48" cy="34" r="21" stroke="#d8d9e3" stroke-width="2" />
+                <circle cx="48" cy="34" r="4" fill="#ad8bfa" class="step__fill" />
               </>
             )}
             {s.icon === 'definir' && (
               <>
-                <path d="M20 12L76 12L62 56L34 56Z" stroke="#d8d9e3" stroke-width="2" />
-                <path d="M34 34H62" stroke="#ad8bfa" stroke-width="2" />
+                <path pathLength="1" d="M20 12L76 12L62 56L34 56Z" stroke="#d8d9e3" stroke-width="2" />
+                <path pathLength="1" d="M34 34H62" stroke="#ad8bfa" stroke-width="2" />
               </>
             )}
             {s.icon === 'construir' && (
               <>
-                <rect x="20" y="12" width="36" height="36" rx="2" stroke="#d8d9e3" stroke-width="2" />
-                <rect x="40" y="30" width="36" height="28" rx="2" fill="#20182e" stroke="#ad8bfa" stroke-width="2" />
+                <rect pathLength="1" x="20" y="12" width="36" height="36" rx="2" stroke="#d8d9e3" stroke-width="2" />
+                <rect pathLength="1" x="40" y="30" width="36" height="28" rx="2" fill="#20182e" stroke="#ad8bfa" stroke-width="2" />
               </>
             )}
             {s.icon === 'evolucionar' && (
               <>
-                <path d="M18 54L36 36L52 44L78 16" stroke="#d8d9e3" stroke-width="2" />
-                <path d="M59 16H78V35" stroke="#ad8bfa" stroke-width="2" />
+                <path pathLength="1" d="M18 54L36 36L52 44L78 16" stroke="#d8d9e3" stroke-width="2" />
+                <path pathLength="1" d="M59 16H78V35" stroke="#ad8bfa" stroke-width="2" />
               </>
             )}
           </svg>
@@ -83,5 +85,9 @@ const steps = [
         </li>
       ))}
     </ol>
+    <ol class="method__ticks" aria-hidden="true" data-method-ticks>
+      {steps.map((s) => <li><b>{s.n}</b> {s.name}</li>)}
+    </ol>
+    </div>
   </div>
 </section>

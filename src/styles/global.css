@@ -2068,6 +2068,156 @@ a {
   }
 }
 
+/* Método, escritorio con movimiento: la sección se fija y los pasos se suceden uno a uno */
+.method__ghost,
+.method__ticks {
+  display: none;
+}
+.method__stage.is-pinned {
+  position: relative;
+  height: 100svh;
+  margin: 0 calc(var(--gutter) * -1) 0 calc((var(--gutter) + 5.25rem) * -1);
+  padding: 4.5rem var(--gutter) 6.5rem calc(var(--gutter) + 5.25rem);
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+}
+.is-pinned .method__list {
+  margin: 0;
+  display: grid;
+  position: relative;
+  z-index: 1;
+}
+.is-pinned .method__rail,
+.is-pinned .step__dot {
+  display: none;
+}
+.is-pinned .step {
+  grid-area: 1 / 1;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 1.25rem;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(40px);
+  transition: opacity 0.7s var(--ease-out), transform 0.9s var(--ease-out), visibility 0s linear 0.7s;
+}
+.is-pinned .step.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+.is-pinned .step__icon {
+  width: 5.5rem;
+  opacity: 1;
+  transform: none;
+}
+.is-pinned .step__name {
+  font-size: min(11vw, 10.5rem);
+  line-height: 0.9;
+}
+.is-pinned .step__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 1.5rem clamp(2rem, 5vw, 5rem);
+  align-items: start;
+  padding-top: 0;
+  max-width: 62rem;
+}
+.is-pinned .step__line {
+  max-width: 26rem;
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.7rem);
+}
+.is-pinned .step__items {
+  margin: 0.3rem 0 0;
+  font-size: 1.05rem;
+}
+/* Los íconos se dibujan solos al entrar su paso */
+.is-pinned .step__icon :is(path, circle, rect):not(.step__fill) {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.3s var(--ease-out) 0.25s;
+}
+.is-pinned .step.is-active .step__icon :is(path, circle, rect):not(.step__fill) {
+  stroke-dashoffset: 0;
+}
+.is-pinned .step__fill {
+  opacity: 0;
+  transition: opacity 0.6s ease 1.1s;
+}
+.is-pinned .step.is-active .step__fill {
+  opacity: 1;
+}
+.method__stage.is-pinned .method__ghost {
+  display: block;
+  position: absolute;
+  right: calc(var(--gutter) - 2vw);
+  top: 50%;
+  z-index: 0;
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(16rem, 42vw, 44rem);
+  line-height: 0.75;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(173 139 250 / 0.22);
+  transform: translateY(-50%);
+  pointer-events: none;
+  user-select: none;
+}
+.method__stage.is-pinned .method__ticks {
+  position: absolute;
+  left: calc(var(--gutter) + 5.25rem);
+  right: var(--gutter);
+  bottom: 2.25rem;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 0;
+  padding: 1.1rem 0 0;
+  list-style: none;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--silver-dark);
+}
+.method__stage.is-pinned .method__ticks::before,
+.method__stage.is-pinned .method__ticks::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+}
+.method__stage.is-pinned .method__ticks::before {
+  right: 0;
+  background: var(--line);
+}
+.method__stage.is-pinned .method__ticks::after {
+  width: 100%;
+  background: linear-gradient(90deg, var(--lavender), var(--violet));
+  box-shadow: 0 0 12px rgb(122 0 255 / 0.8);
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+}
+.method__ticks li {
+  transition: color var(--t-base);
+}
+.method__ticks li b {
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+.method__ticks li.is-on {
+  color: var(--ivory);
+}
+.method__ticks li.is-on b {
+  color: var(--lavender);
+}
+
 /* ───── Equipo ───── */
 .team__grid {
   display: grid;

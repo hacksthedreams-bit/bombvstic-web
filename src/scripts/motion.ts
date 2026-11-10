@@ -3,7 +3,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
-
 const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel);
 const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
 
@@ -342,20 +341,23 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   // Método: la línea violeta se dibuja con el scroll; cada paso entra al aparecer
   const methodList = $('[data-method]');
   const methodFill = $('[data-method-fill]');
-  if (methodList && methodFill) {
+  const desktopMotion = window.matchMedia('(min-width: 900px)').matches; // ahí el Método se fija (ver más abajo)
+  if (methodList && methodFill && !desktopMotion) {
     gsap.to(methodFill, {
       scaleY: 1,
       ease: 'none',
       scrollTrigger: { trigger: methodList, start: 'top 60%', end: 'bottom 60%', scrub: 0.3 },
     });
   }
-  $$('[data-step]').forEach((step) => {
-    gsap.fromTo(
-      $$('.step__icon, .step__head, .step__body', step),
-      { autoAlpha: 0, y: 36 },
-      { autoAlpha: 1, y: 0, duration: 1.1, stagger: 0.1, ease: 'expo.out', scrollTrigger: { trigger: step, start: 'top 85%', once: true } },
-    );
-  });
+  if (!desktopMotion) {
+    $$('[data-step]').forEach((step) => {
+      gsap.fromTo(
+        $$('.step__icon, .step__head, .step__body', step),
+        { autoAlpha: 0, y: 36 },
+        { autoAlpha: 1, y: 0, duration: 1.1, stagger: 0.1, ease: 'expo.out', scrollTrigger: { trigger: step, start: 'top 85%', once: true } },
+      );
+    });
+  }
 
   // Muro de servicios: la fila que cruza el centro de la pantalla se enciende; el resto baja de volumen
   const wallEl = $('.wall');
@@ -462,5 +464,51 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
     stage.classList.remove('is-pinned');
     gsap.set([track, ghost], { clearProps: 'transform' });
     if (bar) bar.style.transform = '';
+  };
+});
+
+// Método (escritorio, con movimiento): la sección se fija y los cuatro pasos se suceden uno a uno con el scroll.
+// En celular o con "reducir movimiento" queda la lista vertical con su línea de progreso.
+mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+  const stage = $('[data-method-stage]');
+  if (!stage) return;
+  const steps = $$('.step', stage);
+  const ticks = $$('li', $('[data-method-ticks]', stage) ?? stage);
+  const ghost = $('[data-method-ghost]', stage);
+  if (steps.length < 2) return;
+
+  stage.classList.add('is-pinned');
+  let active = -1;
+  const setActive = (i: number) => {
+    if (i === active) return;
+    active = i;
+    steps.forEach((s, idx) => s.classList.toggle('is-active', idx === i));
+    ticks.forEach((t, idx) => t.classList.toggle('is-on', idx <= i));
+    if (ghost) ghost.textContent = String(i + 1).padStart(2, '0');
+  };
+  setActive(0);
+
+  const len = () => window.innerHeight * 0.85 * (steps.length - 1) + window.innerHeight * 0.3;
+  ScrollTrigger.create({
+    trigger: stage,
+    start: 'top top',
+    end: () => `+=${len()}`,
+    pin: true,
+    anticipatePin: 1,
+    invalidateOnRefresh: true,
+    onToggle: (self) => $('[data-chapters]')?.classList.toggle('is-away', self.isActive),
+    onUpdate: (self) => {
+      stage.style.setProperty('--p', String(Math.max(0.04, self.progress)));
+      setActive(Math.min(steps.length - 1, Math.floor(self.progress * steps.length)));
+    },
+  });
+  requestAnimationFrame(() => ScrollTrigger.refresh());
+
+  return () => {
+    $('[data-chapters]')?.classList.remove('is-away');
+    stage.classList.remove('is-pinned');
+    stage.style.removeProperty('--p');
+    steps.forEach((s) => s.classList.remove('is-active'));
+    ticks.forEach((t) => t.classList.remove('is-on'));
   };
 });
