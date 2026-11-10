@@ -1,0 +1,114 @@
+---
+// Formulario de diagnóstico en 3 pasos. No hay servidor: al enviar se abre el correo del visitante con el mensaje ya armado
+// (y se ofrece copiarlo). Decisión pendiente: cambiar a un servicio de formularios o WhatsApp cuando existan.
+const needs = [
+  'Conseguir más clientes (publicidad y campañas)',
+  'Una marca y contenido que se recuerden',
+  'Una web, dashboard o app a medida',
+  'Asistentes de IA o sistemas para mi empresa',
+  'Vender un curso o una comunidad',
+  'Aún no lo tengo claro',
+];
+const kinds = ['Restaurante o local', 'Centro de eventos', 'E-commerce', 'Creador, curso o comunidad', 'Empresa', 'Otro'];
+---
+
+<section class="section section--cut closing" id="contacto" data-atmo-on="horizon" data-section="contacto" aria-labelledby="titulo-cierre">
+  <div class="section__inner">
+    <p class="section__label closing__label"><b>06</b> — Contacto</p>
+    <h2 class="closing__title" id="titulo-cierre">¿Qué quieres <span class="accent">mover</span> primero?</h2>
+    <p class="closing__lead">Cuéntanos en tres pasos y abrimos la conversación.</p>
+
+    <form class="diag" data-diag novalidate action="mailto:bombvstic@gmail.com" method="post" enctype="text/plain" aria-label="Diagnóstico Bombvstic">
+      <div class="diag__top">
+        <ol class="diag__bars" aria-hidden="true">
+          <li class="is-on"></li><li></li><li></li>
+        </ol>
+        <p class="diag__count" data-diag-count aria-live="polite">Paso 1 de 3</p>
+      </div>
+
+      <fieldset class="diag__step" data-step-pane tabindex="-1">
+        <legend>¿Qué necesitas primero?</legend>
+        <div class="chips">
+          {needs.map((n, i) => (
+            <label class="chip">
+              <input type="radio" name="need" value={n} required={i === 0} />
+              <span>{n}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset class="diag__step" data-step-pane tabindex="-1">
+        <legend>¿Qué tipo de negocio es?</legend>
+        <div class="chips">
+          {kinds.map((k, i) => (
+            <label class="chip">
+              <input type="radio" name="kind" value={k} required={i === 0} />
+              <span>{k}</span>
+            </label>
+          ))}
+        </div>
+        <label class="field">
+          <span>Nombre de tu negocio o tu Instagram <i>(opcional)</i></span>
+          <input type="text" name="business" autocomplete="organization" maxlength="120" />
+        </label>
+      </fieldset>
+
+      <fieldset class="diag__step" data-step-pane tabindex="-1">
+        <legend>¿Cómo te contactamos?</legend>
+        <div class="fields">
+          <label class="field">
+            <span>Nombre</span>
+            <input type="text" name="name" autocomplete="name" required maxlength="80" />
+          </label>
+          <label class="field">
+            <span>Correo</span>
+            <input type="email" name="email" autocomplete="email" required maxlength="120" />
+          </label>
+          <label class="field">
+            <span>WhatsApp <i>(opcional)</i></span>
+            <input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="30" />
+          </label>
+          <label class="field field--wide">
+            <span>Algo más que debamos saber <i>(opcional)</i></span>
+            <textarea name="message" rows="3" maxlength="600"></textarea>
+          </label>
+        </div>
+        <p class="diag__note">Al enviar se abrirá tu programa de correo con el mensaje listo. Tus datos solo viajan en ese correo.</p>
+      </fieldset>
+
+      <p class="diag__error" data-diag-error role="alert" hidden></p>
+
+      <div class="diag__nav">
+        <button type="button" class="btn btn--ghost" data-diag-back hidden>Atrás</button>
+        <button type="button" class="btn btn--primary" data-diag-next>
+          <span data-diag-next-label>Siguiente</span>
+          <span class="btn__arrow" aria-hidden="true">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+          </span>
+        </button>
+      </div>
+    </form>
+
+    <div class="diag__done" data-diag-done hidden tabindex="-1">
+      <h3>Listo: tu mensaje está armado.</h3>
+      <p>Se abrió tu correo para que lo envíes. Si no ocurrió, copia el mensaje y mándalo a <a href="mailto:bombvstic@gmail.com">bombvstic@gmail.com</a>.</p>
+      <pre class="diag__preview" data-diag-preview></pre>
+      <div class="diag__nav diag__nav--done">
+        <button type="button" class="btn btn--primary" data-diag-copy>Copiar mensaje</button>
+        <button type="button" class="btn btn--ghost" data-diag-reset>Empezar de nuevo</button>
+      </div>
+    </div>
+
+    <p class="closing__direct">
+      ¿Prefieres escribir directo?
+      <a href="mailto:bombvstic@gmail.com">bombvstic@gmail.com</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener">Instagram</a>
+    </p>
+  </div>
+</section>
+
+<script>
+  import '../scripts/diagnostic.ts';
+</script>
