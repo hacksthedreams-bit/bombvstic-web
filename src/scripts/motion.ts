@@ -22,6 +22,7 @@ syncNav();
 window.addEventListener('scroll', syncNav, { passive: true });
 
 // Capítulos y atmósfera: qué sección está en pantalla
+const chaptersEl = $('[data-chapters]');
 const chapterLinks = $$<HTMLAnchorElement>('[data-chapter]');
 const atmoLayers = $$('[data-atmo]');
 const setAtmo = (name: string | undefined) => {
@@ -45,6 +46,8 @@ $$('[data-section]').forEach((section) => {
       if (!self.isActive) return;
       setChapter(section.dataset.section);
       setAtmo(section.dataset.atmoOn);
+      // Sobre una sección clara (marfil) el índice lateral pasa a tinta para seguir leyéndose
+      chaptersEl?.classList.toggle('on-light', section.dataset.theme === 'light');
     },
   });
 });

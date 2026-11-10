@@ -199,7 +199,7 @@ a {
 }
 .nav.is-scrolled {
   height: 3.75rem;
-  background: rgb(11 11 14 / 0.92); /* más opaco: debe leerse también sobre la sección marfil */
+  background: rgb(11 11 14 / 0.97); /* casi opaco: debe leerse también sobre la sección marfil */
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border-bottom-color: var(--line);
@@ -406,6 +406,17 @@ a {
   .chapters {
     display: flex;
   }
+}
+/* Índice sobre fondo marfil */
+.chapters.on-light a {
+  color: #565160;
+}
+.chapters.on-light a.is-active {
+  color: var(--violet-on-ivory);
+}
+.chapters a,
+.chapters a::before {
+  transition: color var(--t-base), width var(--t-base) var(--ease-out);
 }
 
 /* ───── Hero ───── */
