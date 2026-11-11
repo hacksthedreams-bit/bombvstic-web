@@ -119,8 +119,24 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       .fromTo(heroItems.slice(0, 1), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8 }, 0.2)
       .fromTo(heroLines, { yPercent: 115, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 1.2, stagger: 0.12 }, 0.35)
       .fromTo(heroItems.slice(1), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 }, 1.0)
+      // El chip del titular se abre de izquierda a derecha, como una cortina
+      .fromTo('[data-chip]', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.3, ease: 'expo.inOut', clearProps: 'clipPath' }, 0.95)
       // El corte: la línea diagonal de luz se traza detrás del emblema
       .fromTo('[data-stage-cut]', { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 0.85, duration: 1.6, ease: 'expo.inOut' }, 0.8);
+  }
+
+  // Chip del titular: el motion real del caso se carga solo en escritorio y tras el `load` (no compite con el LCP).
+  // En móvil y con movimiento reducido queda el póster estático.
+  const chipVideo = $<HTMLVideoElement>('[data-chip-video]');
+  if (chipVideo && finePointer && window.innerWidth >= 900) {
+    const startChip = () => {
+      chipVideo.src = chipVideo.dataset.src ?? '';
+      chipVideo.addEventListener('playing', () => chipVideo.classList.add('is-on'), { once: true });
+      chipVideo.play().catch(() => {});
+      new IntersectionObserver(([e]) => (e.isIntersecting ? chipVideo.play().catch(() => {}) : chipVideo.pause())).observe(chipVideo);
+    };
+    if (document.readyState === 'complete') startChip();
+    else window.addEventListener('load', startChip, { once: true });
   }
 
   // El emblema responde al scroll: gira y se desvanece hacia la siguiente sección

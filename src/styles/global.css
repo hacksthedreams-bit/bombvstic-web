@@ -472,10 +472,58 @@ a {
 .hero__title {
   margin: 0;
   font-weight: 600;
-  font-size: clamp(2.6rem, 6.4vw, 7.25rem);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.35rem, 7.3vw, 8.4rem);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
   color: var(--ivory);
+}
+/* Escalonado editorial: cada línea con su sangría (se reduce en móvil para no desbordar) */
+.line--2 {
+  padding-left: 0.5em;
+}
+.line--3 {
+  padding-left: 0.18em;
+}
+.line--4 {
+  padding-left: 0.85em;
+}
+.hero__title .accent {
+  text-transform: none;
+}
+/* Chip incrustado en el titular: ventana al motion del caso, con el borde derecho cortado en diagonal (el corte de la marca) */
+.hchip {
+  display: inline-block;
+  vertical-align: -0.04em;
+  width: 2.1em;
+  height: 0.8em;
+  margin-left: 0.16em;
+}
+.hchip__media {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.2em) 100%, 0 100%);
+  background: linear-gradient(135deg, #1a0d3d, #7a00ff);
+  box-shadow: 0 0 0 1px rgb(173 139 250 / 0.35);
+}
+.hchip__media img,
+.hchip__media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 56%;
+}
+.hchip__media video {
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-out);
+}
+.hchip__media video.is-on {
+  opacity: 1;
 }
 .line {
   display: block;
@@ -753,15 +801,44 @@ a {
   }
 }
 
+.hero__copy {
+  position: relative;
+  z-index: 2; /* el titular va por encima del emblema */
+}
+.hero__sub {
+  display: flex;
+  flex-direction: column;
+}
 @media (min-width: 900px) {
+  /* Titular a todo el ancho; el emblema pasa a ser una presencia detrás, a la derecha */
   .hero__grid {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
   }
   .hero__stage {
     order: 0;
-    width: min(100%, 34rem);
-    margin-inline: 0 auto;
+    position: absolute;
+    z-index: 0;
+    right: max(var(--gutter), calc((100% - var(--maxw)) / 2));
+    top: 46%;
+    translate: 0 -56%;
+    width: min(34vw, 31rem);
+    margin: 0;
+  }
+  .hero__sub {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem 3rem;
+    margin-top: 2.25rem;
+  }
+  .hero__lead {
+    margin: 0;
+    max-width: 30rem;
+  }
+  .hero__actions {
+    margin-top: 0;
+    flex: none;
   }
 }
 
@@ -2966,7 +3043,19 @@ a {
     margin-bottom: 0.5rem;
   }
   .hero__title {
-    font-size: clamp(2.2rem, 9.6vw, 3.4rem);
+    font-size: clamp(2rem, 10.2vw, 3.4rem);
+  }
+  .line--2 {
+    padding-left: 0.3em;
+  }
+  .line--3 {
+    padding-left: 0.1em;
+  }
+  .line--4 {
+    padding-left: 0.5em;
+  }
+  .hchip {
+    width: 1.75em;
   }
   .hero__actions .btn {
     flex: 1 1 100%;
