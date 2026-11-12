@@ -10,8 +10,10 @@ import Team from '../components/Team.astro';
 import Faq from '../components/Faq.astro';
 import Diagnostic from '../components/Diagnostic.astro';
 import { EMAIL, whatsapp, WA_HELLO, WA_ICON } from '../config/contact';
+import { proofCells } from '../config/proof';
 
 const wa = whatsapp(); // null mientras no haya número confirmado
+const facts = proofCells(Astro.site?.host ?? ''); // null mientras no haya mediciones propias vigentes
 const mail = '#contacto'; // el diagnóstico se pide en el formulario del cierre
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 ---
@@ -122,6 +124,21 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
           Desliza
         </a>
       </div>
+
+      {facts && (
+        <section class="facts" aria-labelledby="titulo-facts" data-measured={facts.measuredOn} data-reveal>
+          <h2 class="facts__title" id="titulo-facts">Medido en esta misma web</h2>
+          <dl class="facts__list">
+            {facts.cells.map((c) => (
+              <div class="facts__cell">
+                <dt>{c.label}</dt>
+                <dd set:html={c.html} />
+              </div>
+            ))}
+          </dl>
+          <p class="facts__src">Lighthouse {facts.version} · mediana de {facts.runs} corridas sobre {facts.host} · {facts.fecha}</p>
+        </section>
+      )}
     </section>
 
     <section class="section section--cut section--surface" id="manifiesto" data-atmo-on="silver" data-section="manifiesto" aria-labelledby="titulo-manifiesto">

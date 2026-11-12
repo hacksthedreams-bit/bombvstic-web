@@ -442,9 +442,9 @@ main[tabindex='-1']:focus {
   position: relative;
   min-height: 100svh;
   display: grid;
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: 1fr auto auto auto;
   align-items: center;
-  padding: calc(var(--nav-h) + 2rem) var(--gutter) 4rem;
+  padding: calc(var(--nav-h) + 2rem) var(--gutter) max(4rem, calc(var(--cut) + 1.5rem));
   isolation: isolate;
   overflow-x: clip; /* el halo es más grande que el escenario: no debe crear scroll horizontal */
 }
@@ -3086,6 +3086,55 @@ main[tabindex='-1']:focus {
   .section,
   .footer {
     padding-left: calc(var(--gutter) + 5.25rem);
+  }
+}
+
+/* ───── Franja de datos medidos (ficha 004) ───── */
+.facts {
+  grid-row: 4;
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 1.5rem auto 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.facts__title {
+  margin: 0 0 1rem;
+  font: italic 500 1.15rem/1.2 var(--serif);
+  color: var(--muted);
+}
+.facts__list {
+  display: grid;
+  gap: 1.1rem 2.5rem;
+  margin: 0;
+}
+.facts__cell dt {
+  margin: 0 0 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--silver-dark);
+}
+.facts__cell dd {
+  margin: 0;
+  max-width: 32rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.facts__cell b {
+  color: var(--ivory);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.facts__src {
+  margin: 1rem 0 0;
+  font-size: 0.78rem;
+  color: var(--silver-dark);
+}
+@media (min-width: 900px) {
+  .facts__list {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   }
 }
 

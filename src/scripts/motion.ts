@@ -78,6 +78,13 @@ if (dock && heroCta && 'IntersectionObserver' in window) {
   menu?.addEventListener('toggle', sync);
 }
 
+// Franja de datos medidos: si la medición envejeció (> 120 días) deja de mostrarse, aunque nadie vuelva a construir el sitio
+const factsEl = $('[data-measured]');
+if (factsEl) {
+  const days = (Date.now() - new Date(`${factsEl.dataset.measured}T12:00:00`).getTime()) / 86400000;
+  if (!(days >= 0 && days <= 120)) factsEl.hidden = true;
+}
+
 // Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
 const nav = $('[data-nav]');
 const progress = $('[data-progress]');
