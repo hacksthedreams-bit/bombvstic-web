@@ -15,6 +15,9 @@ if (!location.hash) window.scrollTo(0, 0);
 
 /* ───── Siempre activo, con o sin animaciones ───── */
 
+// Scroll suave (solo existe con movimiento permitido). El menú lo detiene y lo reanuda; sin él, todo funciona igual.
+let lenisRef: Lenis | null = null;
+
 // Anclas internas: el foco viaja con el desplazamiento (WCAG 2.4.3). Un solo manejador, para Lenis y para movimiento reducido.
 // Si Lenis ya hizo `preventDefault` (ruta animada), aquí se actualiza el hash; si no, el salto nativo ya lo hizo.
 const focusTarget = (el: HTMLElement) => {
@@ -34,21 +37,44 @@ document.addEventListener('click', (e) => {
 
 // Menú móvil (<details>): se cierra al elegir un enlace, con Esc (devuelve el foco al botón) o con clic fuera.
 // El traslado de foco al destino lo hace el manejador de anclas de arriba; aquí solo se cierra.
+// Con este script activo el menú pasa a pantalla completa (ficha 203): `html.menu-full`. Sin el script queda el desplegable.
 const menu = $<HTMLDetailsElement>('[data-menu]');
 const menuBtn = menu ? $<HTMLElement>('summary', menu) : null;
 if (menu) {
-  menu.addEventListener('click', (e) => {
-    if ((e.target as Element).closest('.nav__panel a')) menu.open = false;
-  });
+  const root = document.documentElement;
+  root.classList.add('menu-full');
+  let isOpen = false;
+  // Idempotente y síncrono: abre/cierra, deja inerte el resto de la página y bloquea el desplazamiento del fondo.
+  const setMenu = (open: boolean) => {
+    if (menu.open !== open) menu.open = open;
+    if (isOpen === open) return;
+    isOpen = open;
+    root.classList.toggle('menu-open', open);
+    $$('main, .footer, [data-chapters], [data-dock], [data-cutthumb], .skip-link').forEach((el) => el.toggleAttribute('inert', open));
+    if (open) lenisRef?.stop();
+    else lenisRef?.start();
+  };
+  menu.addEventListener('toggle', () => setMenu(menu.open)); // el clic nativo en el botón solo se sincroniza aquí
+  // En fase de CAPTURA: al elegir un enlace hay que soltar la página (inert, scroll, Lenis) ANTES de que corran el manejador
+  // de Lenis del ancla y el de foco; si no, el menú se cerraría y la página no viajaría.
+  document.addEventListener(
+    'click',
+    (e) => {
+      if (menu.open && (e.target as Element | null)?.closest('.nav__panel a')) setMenu(false);
+    },
+    true,
+  );
   document.addEventListener('click', (e) => {
-    if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+    if (menu.open && !menu.contains(e.target as Node)) setMenu(false);
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && menu.open) {
-      menu.open = false;
+      setMenu(false);
       menuBtn?.focus();
     }
   });
+  // Si la ventana se ensancha hasta mostrar los enlaces en línea, el menú se cierra (la página no puede quedar inerte)
+  window.matchMedia('(min-width: 1080px)').addEventListener('change', (e) => e.matches && setMenu(false));
 }
 
 // Pastilla "Agendar diagnóstico" (solo celular): aparece cuando el botón del hero ya salió POR ARRIBA (no por estar bajo el
@@ -185,6 +211,7 @@ const mm = gsap.matchMedia();
 mm.add('(prefers-reduced-motion: no-preference)', () => {
   // Scroll suave: el visitante conserva el control
   const lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true });
+  lenisRef = lenis;
   lenis.on('scroll', ScrollTrigger.update);
   window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
   const tick = (t: number) => lenis.raf(t * 1000);
@@ -355,6 +382,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     mqCleanup.forEach((fn) => fn());
     mqCleanupEarly.forEach((fn) => fn());
     gsap.ticker.remove(tick);
+    lenisRef = null;
     lenis.destroy();
   };
 });

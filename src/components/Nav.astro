@@ -1,5 +1,6 @@
 ---
 import { u } from '../lib/url';
+import { EMAIL, whatsapp, WA_HELLO } from '../config/contact';
 
 interface Props {
   /** false en páginas internas: los anclajes apuntan a la portada */
@@ -7,6 +8,7 @@ interface Props {
 }
 const { onHome = true } = Astro.props;
 const prefix = onHome ? '' : u('/');
+const wa = whatsapp();
 const links = [
   { href: '#manifiesto', label: 'Manifiesto' },
   { href: '#servicios', label: 'Servicios' },
@@ -15,6 +17,7 @@ const links = [
   { href: '#preguntas', label: 'Preguntas' },
   { href: '#contacto', label: 'Contacto' },
 ];
+const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 ---
 
 <header class="nav" data-nav>
@@ -33,20 +36,41 @@ const links = [
     <div class="nav__end">
       <a class="btn btn--primary btn--sm nav__cta" href={`${prefix}#contacto`} data-cta="nav">
         <span>Agendar<span class="nav__cta-long"> diagnóstico</span></span>
-        <span class="btn__arrow" aria-hidden="true">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
-        </span>
+        <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
       </a>
-      <!-- Menú sin JavaScript: <details> nativo. Con JS se cierra al elegir un enlace, con Esc o al hacer clic fuera. -->
+      <!-- Menú sin JavaScript: <details> nativo (desplegable). Con el script activo pasa a pantalla completa (html.menu-full):
+           entra con el corte, bloquea el fondo y se cierra al elegir un enlace, con Esc o al hacer clic fuera. -->
       <details class="nav__menu" data-menu>
         <summary class="nav__menu-btn">
-          <span class="nav__menu-label">Menú</span>
-          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6.5h14M3 13.5h9" /></svg>
+          <span class="nav__menu-label">
+            <span class="nav__menu-open">Menú</span>
+            <span class="nav__menu-close">Cerrar<span class="sr-only"> menú</span></span>
+          </span>
+          <svg class="nav__ico-open" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6.5h14M3 13.5h9" /></svg>
+          <svg class="nav__ico-close" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4.5 4.5l11 11M15.5 4.5l-11 11" /></svg>
         </summary>
         <nav class="nav__panel" aria-label="Principal">
           <ul>
-            {links.map((l) => <li><a href={`${prefix}${l.href}`}>{l.label}</a></li>)}
+            {links.map((l, i) => (
+              <li style={`--i:${i}`}>
+                <a href={`${prefix}${l.href}`}>
+                  <span class="nav__idx" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="nav__mask"><span class="nav__name">{l.label}</span></span>
+                </a>
+              </li>
+            ))}
           </ul>
+          <div class="nav__panel-foot" style={`--i:${links.length}`}>
+            <a class="btn btn--primary" href={`${prefix}#contacto`} data-cta="menu">
+              Agendar diagnóstico
+              <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+            </a>
+            <p class="nav__panel-contact">
+              <a href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener" data-cta="menu-instagram">Instagram<span class="sr-only"> (se abre en otra pestaña)</span></a>
+              <a href={`mailto:${EMAIL}`} data-cta="menu-correo">{EMAIL}</a>
+              {wa && <a href={wa.href(WA_HELLO)} target="_blank" rel="noopener" data-cta="whatsapp-menu">WhatsApp<span class="sr-only"> (se abre en otra pestaña)</span></a>}
+            </p>
+          </div>
         </nav>
       </details>
     </div>

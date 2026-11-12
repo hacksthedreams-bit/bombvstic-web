@@ -3339,7 +3339,7 @@ main[tabindex='-1']:focus {
   padding: 0;
   list-style: none;
 }
-.nav__panel a {
+.nav__panel ul a {
   display: block;
   padding: 0.85rem 0;
   border-bottom: 1px solid var(--line);
@@ -3353,8 +3353,8 @@ main[tabindex='-1']:focus {
 .nav__panel li:last-child a {
   border-bottom: 0;
 }
-.nav__panel a:hover,
-.nav__panel a:focus-visible {
+.nav__panel ul a:hover,
+.nav__panel ul a:focus-visible {
   color: var(--lavender);
 }
 .nav:has(.nav__menu[open]) {
@@ -3388,6 +3388,148 @@ main[tabindex='-1']:focus {
     display: none;
   }
 }
+/* ───── Menú a pantalla completa (ficha 203). Solo con el script activo (html.menu-full) y bajo 1080 px ───── */
+.nav__menu-close,
+.nav__ico-close {
+  display: none;
+}
+.nav__menu[open] .nav__menu-open,
+.nav__menu[open] .nav__ico-open {
+  display: none;
+}
+.nav__menu[open] .nav__menu-close {
+  display: inline;
+}
+.nav__menu[open] .nav__ico-close {
+  display: block;
+}
+.nav__idx {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-right: 0.9rem;
+  font: italic 500 1rem/1 var(--serif);
+  letter-spacing: 0;
+  color: var(--lavender);
+  vertical-align: middle;
+}
+.nav__idx::before {
+  /* el mismo trazo a −31° de los índices de sección */
+  content: '';
+  width: 1.1rem;
+  height: 1px;
+  background: var(--lavender);
+  transform: rotate(-31deg);
+}
+.nav__mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+  padding-block: 0.08em; /* aire para descendentes y tildes dentro de la máscara */
+}
+.nav__name {
+  display: block;
+}
+.nav__panel-foot {
+  display: grid;
+  gap: 1rem;
+  padding-top: 1.25rem;
+}
+.nav__panel-foot .btn {
+  justify-self: start;
+}
+.nav__panel-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  font-size: 0.92rem;
+}
+.nav__panel-contact a {
+  display: inline-block;
+  padding-block: 0.6rem;
+  color: var(--muted);
+  text-underline-offset: 3px;
+}
+/* con el menú abierto el "Agendar" de la barra se oculta (el panel ya trae el suyo); visibility para no mover nada */
+html.menu-open .nav .nav__cta {
+  visibility: hidden;
+}
+html.menu-open {
+  overflow: hidden; /* el fondo no se desplaza con el menú abierto (Lenis no frena el arrastre táctil) */
+  scrollbar-gutter: stable;
+}
+@media (max-width: 1079px) {
+  html.menu-full .nav__panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100svh - 100%);
+    height: calc(100dvh - 100%);
+    max-height: none;
+    padding: 1.25rem var(--gutter) 1.75rem;
+    clip-path: none;
+    overscroll-behavior: contain;
+  }
+  html.menu-full .nav__panel ul {
+    width: 100%;
+    margin: 0;
+  }
+  html.menu-full .nav__panel ul a {
+    display: flex;
+    align-items: center;
+    padding: 0.45rem 0;
+    font-size: clamp(2.2rem, 11vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+  html.menu-full .nav__panel-foot {
+    width: 100%;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    border-top: 1px solid var(--line);
+  }
+  /* Entrada: el panel se descubre con el corte (borde inclinado, no línea) y los nombres suben de su máscara, escalonados */
+  html.menu-full .nav__menu[open] .nav__panel {
+    animation: menu-cut var(--t-slow) var(--ease-cut) both;
+  }
+  html.menu-full .nav__menu[open] .nav__name {
+    animation: menu-rise var(--t-slow) var(--ease-out) both;
+    animation-delay: calc(var(--i) * 60ms + 160ms);
+  }
+  html.menu-full .nav__menu[open] .nav__idx,
+  html.menu-full .nav__menu[open] .nav__panel-foot {
+    animation: menu-fade var(--t-slow) var(--ease-out) both;
+    animation-delay: calc(var(--i) * 60ms + 160ms);
+  }
+}
+@keyframes menu-cut {
+  from {
+    clip-path: polygon(0 0, 100% 0, 100% -14%, 0 0);
+  }
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 114%);
+  }
+}
+@keyframes menu-rise {
+  from {
+    transform: translateY(112%);
+  }
+}
+@keyframes menu-fade {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.menu-full .nav__menu[open] .nav__panel,
+  html.menu-full .nav__menu[open] .nav__name,
+  html.menu-full .nav__menu[open] .nav__idx,
+  html.menu-full .nav__menu[open] .nav__panel-foot {
+    animation: none;
+  }
+}
+
 /* "Agendar" de la barra cede su lugar a la pastilla solo cuando la pastilla ya apareció (la pone motion.ts) */
 @media (max-width: 719px) {
   html.has-dock .nav .nav__cta {
