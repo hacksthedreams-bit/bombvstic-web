@@ -4,15 +4,15 @@
 //    menos de 120 días y quedan al menos 2 celdas verdaderas. Si no, no se renderiza (no se maquilla ni se selecciona).
 //  - Se remide en cada cierre de ola y tras publicar la propia franja; si algo deja de cumplirse, se retira de inmediato.
 export const proof = {
-  measuredUrl: '', // p. ej. 'https://hacksthedreams-bit.github.io/bombvstic-web/'
-  measuredOn: '', // 'AAAA-MM-DD'
-  lighthouseVersion: '', // tomada del informe, p. ej. '12.8.2'
+  measuredUrl: 'https://hacksthedreams-bit.github.io/bombvstic-web/',
+  measuredOn: '2026-11-12',
+  lighthouseVersion: '12.8.2', // tomada del informe (docs/loop/004-evidencia/medicion-publicada)
   runs: 5,
-  lcpDesktopMs: null as number | null,
-  lcpMobileMs: null as number | null, // la celda de velocidad solo existe si es ≤ 2500 (y la de escritorio también está medida)
-  a11y: null as number | null, // puntaje de accesibilidad de Lighthouse (0–100)
-  axeClean: false, // axe sin violaciones serias/críticas en la versión PUBLICADA (requiere ficha 007 desplegada)
-  thirdPartyRequests: null as number | null, // conexiones a otros dominios durante la carga
+  lcpDesktopMs: 553 as number | null,
+  lcpMobileMs: 2785 as number | null, // > 2500: la celda de velocidad NO se publica (regla fijada antes de medir) // la celda de velocidad solo existe si es ≤ 2500 (y la de escritorio también está medida)
+  a11y: 100 as number | null, // puntaje de accesibilidad de Lighthouse (0–100)
+  axeClean: true, // puerta 4 del 12-nov-2026: axe sin serias/críticas en el build desplegado (fichas 007 y 108 incluidas) // axe sin violaciones serias/críticas en la versión PUBLICADA (requiere ficha 007 desplegada)
+  thirdPartyRequests: 0 as number | null, // medido el 12-nov-2026: solo hacksthedreams-bit.github.io // conexiones a otros dominios durante la carga
 };
 
 export const PROOF_MAX_AGE_DAYS = 120;
