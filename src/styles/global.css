@@ -1169,7 +1169,7 @@ main[tabindex='-1']:focus {
 
 /* Muro tipográfico: la línea que pasa por el centro de la pantalla se enciende */
 .wall.has-spot .wall__text {
-  opacity: 0.26;
+  opacity: 0.55; /* texto apagado pero legible: ≥ 4,5:1 también bajo 572 px, donde no cuenta como texto grande */
 }
 .wall.has-spot .wall__row.is-center .wall__text {
   opacity: 1;
@@ -1249,7 +1249,7 @@ main[tabindex='-1']:focus {
 }
 @media (hover: hover) {
   .wall__list:hover .wall__row:not(:hover) .wall__text {
-    opacity: 0.32;
+    opacity: 0.55;
   }
 }
 
