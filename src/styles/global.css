@@ -2690,18 +2690,24 @@ main[tabindex='-1']:focus {
   will-change: transform;
 }
 /* El corte: línea diagonal de luz que cruza el cierre */
-.closing__cut {
+/* El corte del cierre, a −31° como toda diagonal del sitio (ficha 105). El envoltorio fija posición e inclinación (estático);
+   dentro, la línea que GSAP traza con scaleX. El tramo brillante queda hacia la derecha (hacia el emblema), fuera del titular. */
+.closing__cutwrap {
   position: absolute;
-  top: 34%;
-  left: -20%;
+  top: 38%;
+  left: 50%;
   z-index: 0;
-  width: 140%;
+  width: min(78vw, 60rem);
   height: 2px;
-  transform: rotate(-9deg);
-  background: linear-gradient(90deg, transparent, rgb(173 139 250 / 0.85) 30%, rgb(245 241 234) 50%, rgb(173 139 250 / 0.85) 70%, transparent);
+  transform: translate(-50%, -50%) rotate(-31deg);
+  pointer-events: none;
+}
+.closing__cut {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgb(173 139 250 / 0.22) 30%, rgb(173 139 250 / 0.85) 62%, rgb(245 241 234) 72%, transparent);
   box-shadow: 0 0 24px 2px rgb(139 92 246 / 0.6);
   opacity: 0.5;
-  pointer-events: none;
 }
 .closing__title .w {
   display: inline-block;
