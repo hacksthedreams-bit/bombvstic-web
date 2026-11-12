@@ -78,6 +78,21 @@ if (dock && heroCta && 'IntersectionObserver' in window) {
   menu?.addEventListener('toggle', sync);
 }
 
+// El corte en los botones (ficha 202), versión táctil: sin cursor, el filo cruza cada botón principal UNA vez por carga,
+// cuando llega a la zona central de la pantalla. Fuera quedan el botón del hero (ya visible al cargar), la pastilla y el menú.
+if (!finePointer && 'IntersectionObserver' in window && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+  const cutIo = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-cut');
+        cutIo.unobserve(e.target);
+      }),
+    { rootMargin: '-35% 0px -35% 0px' },
+  );
+  $$('main .btn--primary:not([data-hero-cta])').forEach((el) => cutIo.observe(el));
+}
+
 // Franja de datos medidos: si la medición envejeció (> 120 días) deja de mostrarse, aunque nadie vuelva a construir el sitio
 const factsEl = $('[data-measured]');
 if (factsEl) {

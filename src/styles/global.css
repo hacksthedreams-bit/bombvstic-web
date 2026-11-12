@@ -3124,6 +3124,42 @@ main[tabindex='-1']:focus {
   }
 }
 
+/* ───── El corte pasa por los botones principales (ficha 202): un filo de 1,5 px a −31°, una sola pasada, por detrás del texto ───── */
+.btn--primary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.btn--primary::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -30%;
+  top: 50%;
+  width: 160%;
+  height: 1.5px;
+  background: rgb(245 241 234 / 0.6);
+  transform: translateX(-45%) rotate(-31deg);
+  transition: none; /* al salir vuelve a su origen sin verse: nunca hay pasada de regreso */
+  pointer-events: none;
+}
+.btn--primary:focus-visible::after,
+.btn--primary.is-cut::after {
+  transform: translateX(45%) rotate(-31deg);
+  transition: transform var(--t-slow) var(--ease-cut);
+}
+@media (hover: hover) {
+  .btn--primary:hover::after {
+    transform: translateX(45%) rotate(-31deg);
+    transition: transform var(--t-slow) var(--ease-cut);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn--primary::after {
+    display: none;
+  }
+}
+
 /* ───── El filo (ficha 103): el progreso de lectura como trazo de luz a −31° en el margen derecho ───── */
 .cutthumb {
   --p: 0;
