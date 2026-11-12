@@ -14,6 +14,23 @@ if (!location.hash) window.scrollTo(0, 0);
 
 /* ───── Siempre activo, con o sin animaciones ───── */
 
+// Anclas internas: el foco viaja con el desplazamiento (WCAG 2.4.3). Un solo manejador, para Lenis y para movimiento reducido.
+// Si Lenis ya hizo `preventDefault` (ruta animada), aquí se actualiza el hash; si no, el salto nativo ya lo hizo.
+const focusTarget = (el: HTMLElement) => {
+  if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
+  el.setAttribute('data-focus-target', '');
+  el.focus({ preventScroll: true });
+};
+document.addEventListener('click', (e) => {
+  const a = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[href^="#"]');
+  const id = a?.getAttribute('href');
+  if (!a || !id || id.length < 2 || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const target = document.getElementById(decodeURIComponent(id.slice(1)));
+  if (!target) return;
+  focusTarget(target);
+  if (e.defaultPrevented) history.replaceState(null, '', id);
+});
+
 // Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
 const nav = $('[data-nav]');
 const progress = $('[data-progress]');

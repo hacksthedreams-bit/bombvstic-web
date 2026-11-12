@@ -117,6 +117,11 @@ a {
   outline-offset: 4px;
   border-radius: 4px;
 }
+/* Destinos de enlaces internos (secciones, <main>): reciben el foco para el teclado, pero sin anillo sobre toda la sección */
+[data-focus-target]:focus,
+main[tabindex='-1']:focus {
+  outline: none;
+}
 
 .sr-only {
   position: absolute;
