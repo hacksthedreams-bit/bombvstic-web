@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Nav from '../components/Nav.astro';
 import { u } from '../lib/url';
+import { whatsapp } from '../config/contact';
+const wa = whatsapp();
 
 // Texto base: describe lo que el sitio hace HOY (sin analítica ni cookies propias; el formulario arma un correo).
 // Revisar con asesoría legal antes del lanzamiento en el dominio definitivo y actualizar si se agrega analítica, formulario con servidor, etc.
@@ -47,6 +49,15 @@ const updated = '10 de noviembre de 2026';
         El sitio enlaza a Instagram y usa tu programa de correo para escribirnos; esos servicios tienen sus propias políticas. Además, el sitio se aloja en un proveedor de hosting que puede registrar datos técnicos de la visita (como la dirección IP) para su funcionamiento y seguridad.
       </p>
     </section>
+
+    {wa && (
+      <section class="legal__block">
+        <h2>WhatsApp</h2>
+        <p>
+          Si eliges escribirnos por WhatsApp, el mensaje y tu número viajan por WhatsApp, un servicio de Meta con su propia política de privacidad. Desde el formulario solo se prepara un mensaje con lo que tú elegiste compartir (sin tu correo ni tu teléfono); lo envías tú.
+        </p>
+      </section>
+    )}
 
     <section class="legal__block">
       <h2>Tus derechos</h2>

@@ -9,7 +9,9 @@ import Method from '../components/Method.astro';
 import Team from '../components/Team.astro';
 import Faq from '../components/Faq.astro';
 import Diagnostic from '../components/Diagnostic.astro';
+import { EMAIL, whatsapp, WA_HELLO, WA_ICON } from '../config/contact';
 
+const wa = whatsapp(); // null mientras no haya número confirmado
 const mail = '#contacto'; // el diagnóstico se pide en el formulario del cierre
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 ---
@@ -150,7 +152,8 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
       <div class="footer__cols">
         <div>
           <h2>Escríbenos</h2>
-          <ul><li><a href="mailto:bombvstic@gmail.com" data-cta="pie-correo">bombvstic@gmail.com</a></li></ul>
+          <ul><li><a href={`mailto:${EMAIL}`} data-cta="pie-correo">{EMAIL}</a></li>
+            {wa && <li><a href={wa.href(WA_HELLO)} target="_blank" rel="noopener" data-cta="whatsapp-pie">WhatsApp<span class="sr-only"> (se abre en otra pestaña)</span></a></li>}</ul>
         </div>
         <div>
           <h2>Síguenos</h2>
@@ -175,5 +178,10 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
       Agendar diagnóstico
       <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
     </a>
+    {wa && (
+      <a class="dock__wa" href={wa.href(WA_HELLO)} target="_blank" rel="noopener" aria-label="Escribir por WhatsApp (se abre en otra pestaña)" data-cta="whatsapp-pastilla">
+        <span aria-hidden="true" set:html={WA_ICON} />
+      </a>
+    )}
   </aside>
 </Base>

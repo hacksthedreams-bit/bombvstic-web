@@ -16,6 +16,9 @@ if (form) {
   const preview = done.querySelector<HTMLElement>('[data-diag-preview]')!;
   const copyBtn = done.querySelector<HTMLButtonElement>('[data-diag-copy]')!;
   const resetBtn = done.querySelector<HTMLButtonElement>('[data-diag-reset]')!;
+  // WhatsApp (ficha 002): el href base llega ya armado desde el servidor (data-wa); este script no conoce ningún número
+  const waBtn = done.querySelector<HTMLAnchorElement>('[data-diag-wa]');
+  const waBase = done.dataset.wa;
 
   let step = 0;
   let started = false;
@@ -79,6 +82,15 @@ if (form) {
     return lines.join('\r\n');
   };
 
+  // Mensaje para WhatsApp: NUNCA incluye correo ni teléfono (la URL de wa.me llega a Meta al tocar, aunque no se envíe)
+  const buildWaMessage = () => {
+    const lines = ['Hola Bombvstic, quiero conversar sobre un diagnóstico.', '', `Lo que necesito primero: ${val('need')}`, `Tipo de negocio: ${val('kind')}`];
+    if (val('business')) lines.push(`Negocio / Instagram: ${val('business')}`);
+    lines.push('', `Nombre: ${val('name')}`);
+    if (val('message')) lines.push('', val('message'));
+    return lines.join('\n');
+  };
+
   next.addEventListener('click', () => {
     if (!validate(step)) return;
     if (step < panes.length - 1) {
@@ -91,6 +103,7 @@ if (form) {
     const body = buildMessage();
     const subject = `Diagnóstico Bombvstic · ${val('need')}`;
     preview.textContent = body;
+    if (waBtn && waBase) waBtn.href = `${waBase}?text=${encodeURIComponent(buildWaMessage())}`;
     form.hidden = true;
     done.hidden = false;
     done.focus({ preventScroll: true });

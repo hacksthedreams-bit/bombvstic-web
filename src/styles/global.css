@@ -3208,9 +3208,18 @@ main[tabindex='-1']:focus {
 .dock {
   display: none;
 }
+.btn__icon {
+  display: inline-grid;
+}
+.btn__icon svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
 @media (max-width: 719px) and (min-height: 480px) {
   .dock {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     position: fixed;
     left: 50%;
     bottom: 1.25rem;
@@ -3226,6 +3235,25 @@ main[tabindex='-1']:focus {
     visibility: visible;
     transform: translate(-50%, 0);
     transition-delay: 0s;
+  }
+  .dock:has(.dock__wa) {
+    max-width: none;
+  }
+  .dock__wa {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1px solid rgb(245 241 234 / 0.2);
+    background: #121216;
+    color: var(--ivory);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.5);
+  }
+  .dock__wa svg {
+    width: 1.35rem;
+    height: 1.35rem;
   }
   .dock .btn,
   .dock .btn--primary:hover,

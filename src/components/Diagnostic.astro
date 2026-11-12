@@ -1,5 +1,7 @@
 ---
 import { u } from '../lib/url';
+import { EMAIL, whatsapp, WA_HELLO, WA_ICON } from '../config/contact';
+const wa = whatsapp();
 // Formulario de diagnóstico en 3 pasos. No hay servidor: al enviar se abre el correo del visitante con el mensaje ya armado
 // (y se ofrece copiarlo). Decisión pendiente: cambiar a un servicio de formularios o WhatsApp cuando existan.
 const needs = [
@@ -77,7 +79,11 @@ const kinds = ['Restaurante o local', 'Centro de eventos', 'E-commerce', 'Creado
             <textarea name="message" rows="3" maxlength="600"></textarea>
           </label>
         </div>
-        <p class="diag__note">Al enviar se abrirá tu programa de correo con el mensaje listo. Tus datos solo viajan en ese correo.</p>
+        <p class="diag__note">
+          {wa
+            ? 'Al enviar se abrirá tu programa de correo con el mensaje listo. Tus datos solo viajan en ese correo o, si eliges WhatsApp, en ese mensaje.'
+            : 'Al enviar se abrirá tu programa de correo con el mensaje listo. Tus datos solo viajan en ese correo.'}
+        </p>
       </fieldset>
 
       <p class="diag__error" data-diag-error role="alert" hidden></p>
@@ -93,11 +99,13 @@ const kinds = ['Restaurante o local', 'Centro de eventos', 'E-commerce', 'Creado
       </div>
     </form>
 
-    <div class="diag__done" data-diag-done hidden tabindex="-1">
+    <div class="diag__done" data-diag-done hidden tabindex="-1" data-wa={wa?.base}>
       <h3>Listo: tu mensaje está armado.</h3>
       <p>Se abrió tu correo para que lo envíes. Si no ocurrió, copia el mensaje y mándalo a <a href="mailto:bombvstic@gmail.com">bombvstic@gmail.com</a>.</p>
       <pre class="diag__preview" data-diag-preview></pre>
+      {wa && <p class="diag__note">Se abre WhatsApp con tu mensaje; lo envías tú. No incluimos tu correo ni tu teléfono en ese mensaje.</p>}
       <div class="diag__nav diag__nav--done">
+        {wa && <a class="btn btn--primary" data-diag-wa target="_blank" rel="noopener" href={wa.href(WA_HELLO)} data-cta="whatsapp-formulario"><span class="btn__icon" aria-hidden="true" set:html={WA_ICON} />Enviar por WhatsApp<span class="sr-only"> (se abre en otra pestaña)</span></a>}
         <button type="button" class="btn btn--primary" data-diag-copy>Copiar mensaje</button>
         <button type="button" class="btn btn--ghost" data-diag-reset>Empezar de nuevo</button>
       </div>
@@ -105,7 +113,8 @@ const kinds = ['Restaurante o local', 'Centro de eventos', 'E-commerce', 'Creado
 
     <p class="closing__direct">
       ¿Prefieres escribir directo?
-      <a href="mailto:bombvstic@gmail.com" data-cta="cierre-correo">bombvstic@gmail.com</a>
+      <a href={`mailto:${EMAIL}`} data-cta="cierre-correo">{EMAIL}</a>
+      {wa && <><span aria-hidden="true">·</span><a href={wa.href(WA_HELLO)} target="_blank" rel="noopener" data-cta="whatsapp-cierre">WhatsApp<span class="sr-only"> (se abre en otra pestaña)</span></a></>}
       <span aria-hidden="true">·</span>
       <a href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener" data-cta="cierre-instagram">Instagram</a>
     </p>
