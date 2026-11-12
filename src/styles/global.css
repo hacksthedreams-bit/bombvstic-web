@@ -3079,6 +3079,158 @@ main[tabindex='-1']:focus {
   }
 }
 
+/* ───── Navegación móvil (ficha 001): menú sin JS + pastilla de acceso rápido ───── */
+.nav__main {
+  display: none;
+}
+.nav__end {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.nav .nav__cta {
+  min-height: 2.75rem;
+}
+.nav__menu {
+  position: static; /* el panel se ancla a la barra, no al botón */
+}
+.nav__menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ivory);
+  font: 600 0.85rem/1 var(--sans);
+  cursor: pointer;
+  transition: border-color var(--t-base) var(--ease-out), background var(--t-base) var(--ease-out);
+}
+.nav__menu-btn::-webkit-details-marker {
+  display: none;
+}
+.nav__menu-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.nav__menu-btn:hover,
+.nav__menu[open] .nav__menu-btn {
+  border-color: var(--silver-dark);
+  background: rgb(245 241 234 / 0.05);
+}
+.nav__panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 60svh;
+  overflow: auto;
+  padding: 0.25rem var(--gutter) calc(var(--cut) + 1rem);
+  background: #0b0b0e;
+  /* mismo corte que las secciones: es borde, no línea */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), 0 100%);
+}
+.nav__panel ul {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+.nav__panel a {
+  display: block;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ivory);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 6vw, 2rem);
+  letter-spacing: -0.02em;
+  transition: color var(--t-fast);
+}
+.nav__panel li:last-child a {
+  border-bottom: 0;
+}
+.nav__panel a:hover,
+.nav__panel a:focus-visible {
+  color: var(--lavender);
+}
+.nav:has(.nav__menu[open]) {
+  background: rgb(11 11 14 / 0.97);
+  border-bottom-color: var(--line);
+}
+@media (max-width: 519px) {
+  .nav__menu-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  .nav__menu-btn {
+    width: 2.75rem;
+    padding: 0;
+  }
+}
+@media (max-width: 419px) {
+  .nav__brand span {
+    display: none; /* a 360–419 px caben el emblema, "Agendar" y el menú sin apretar */
+  }
+}
+@media (min-width: 1080px) {
+  .nav__main {
+    display: block;
+  }
+  .nav__menu {
+    display: none;
+  }
+}
+/* "Agendar" de la barra cede su lugar a la pastilla solo cuando la pastilla ya apareció (la pone motion.ts) */
+@media (max-width: 719px) {
+  html.has-dock .nav .nav__cta {
+    display: none;
+  }
+}
+.dock {
+  display: none;
+}
+@media (max-width: 719px) and (min-height: 480px) {
+  .dock {
+    display: block;
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    z-index: 90;
+    max-width: 60vw;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 12px);
+    transition: opacity var(--t-base) var(--ease-out), transform var(--t-base) var(--ease-out), visibility 0s linear var(--t-base);
+  }
+  .dock.is-shown {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition-delay: 0s;
+  }
+  .dock .btn,
+  .dock .btn--primary:hover,
+  .dock .btn--primary:focus-visible {
+    width: 100%;
+    min-height: 2.75rem;
+    white-space: nowrap;
+    border: 1px solid rgb(245 241 234 / 0.16);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.5);
+  }
+}
+html.dock-on {
+  scroll-padding-bottom: 5rem; /* el foco no queda tapado por la pastilla (WCAG 2.4.11) */
+}
+
 /* ───── Movimiento reducido: igual de cuidada, sin animar ───── */
 @media (prefers-reduced-motion: reduce) {
   *,

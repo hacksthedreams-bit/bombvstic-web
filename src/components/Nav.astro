@@ -23,16 +23,32 @@ const links = [
       <img src={u('/brand/emblema-nav-80.webp')} srcset={`${u('/brand/emblema-nav-80.webp')} 1x, ${u('/brand/emblema-nav-160.webp')} 2x`} alt="" width="40" height="40" />
       <span>BOMBVSTIC</span>
     </a>
-    <nav aria-label="Principal">
+    <!-- Enlaces en línea (≥ 1080 px). Bajo ese ancho este bloque no existe para nadie y el menú de abajo toma su lugar:
+         nunca hay dos navegaciones "Principal" a la vez. -->
+    <nav class="nav__main" aria-label="Principal">
       <ul class="nav__links">
         {links.map((l) => <li><a href={`${prefix}${l.href}`}>{l.label}</a></li>)}
       </ul>
     </nav>
-    <a class="btn btn--primary btn--sm" href={`${prefix}#contacto`}>
-      <span>Agendar<span class="nav__cta-long"> diagnóstico</span></span>
-      <span class="btn__arrow" aria-hidden="true">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
-      </span>
-    </a>
+    <div class="nav__end">
+      <a class="btn btn--primary btn--sm nav__cta" href={`${prefix}#contacto`}>
+        <span>Agendar<span class="nav__cta-long"> diagnóstico</span></span>
+        <span class="btn__arrow" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+        </span>
+      </a>
+      <!-- Menú sin JavaScript: <details> nativo. Con JS se cierra al elegir un enlace, con Esc o al hacer clic fuera. -->
+      <details class="nav__menu" data-menu>
+        <summary class="nav__menu-btn">
+          <span class="nav__menu-label">Menú</span>
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6.5h14M3 13.5h9" /></svg>
+        </summary>
+        <nav class="nav__panel" aria-label="Principal">
+          <ul>
+            {links.map((l) => <li><a href={`${prefix}${l.href}`}>{l.label}</a></li>)}
+          </ul>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>

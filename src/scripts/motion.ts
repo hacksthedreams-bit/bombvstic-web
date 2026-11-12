@@ -31,6 +31,52 @@ document.addEventListener('click', (e) => {
   if (e.defaultPrevented) history.replaceState(null, '', id);
 });
 
+// Menú móvil (<details>): se cierra al elegir un enlace, con Esc (devuelve el foco al botón) o con clic fuera.
+// El traslado de foco al destino lo hace el manejador de anclas de arriba; aquí solo se cierra.
+const menu = $<HTMLDetailsElement>('[data-menu]');
+const menuBtn = menu ? $<HTMLElement>('summary', menu) : null;
+if (menu) {
+  menu.addEventListener('click', (e) => {
+    if ((e.target as Element).closest('.nav__panel a')) menu.open = false;
+  });
+  document.addEventListener('click', (e) => {
+    if (menu.open && !menu.contains(e.target as Node)) menu.open = false;
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.open) {
+      menu.open = false;
+      menuBtn?.focus();
+    }
+  });
+}
+
+// Pastilla "Agendar diagnóstico" (solo celular): aparece cuando el botón del hero ya salió POR ARRIBA (no por estar bajo el
+// pliegue), y se oculta en el cierre, en el pie y con el menú abierto. "Agendar" de la barra cede su lugar la primera vez.
+const dock = $('[data-dock]');
+const heroCta = $('[data-hero-cta]');
+if (dock && heroCta && 'IntersectionObserver' in window) {
+  const root = document.documentElement;
+  let leftAbove = false;
+  let inEnd = false;
+  const sync = () => {
+    const on = leftAbove && !inEnd && !menu?.open;
+    dock.classList.toggle('is-shown', on);
+    root.classList.toggle('dock-on', on);
+    if (on) root.classList.add('has-dock');
+  };
+  new IntersectionObserver(([e]) => {
+    leftAbove = !e.isIntersecting && e.boundingClientRect.bottom < 0;
+    sync();
+  }).observe(heroCta);
+  const endIo = new IntersectionObserver((entries) => {
+    entries.forEach((e) => ((e.target as HTMLElement).dataset.in = e.isIntersecting ? '1' : ''));
+    inEnd = $$('#contacto, .footer').some((el) => el.dataset.in === '1');
+    sync();
+  });
+  $$('#contacto, .footer').forEach((el) => endIo.observe(el));
+  menu?.addEventListener('toggle', sync);
+}
+
 // Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
 const nav = $('[data-nav]');
 const progress = $('[data-progress]');

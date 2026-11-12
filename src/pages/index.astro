@@ -65,7 +65,7 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
               Estrategia, campañas, contenido y software a medida para negocios que quieren crecer en serio. Desde Santiago de Chile.
             </p>
             <div class="hero__actions" data-reveal>
-              <a class="btn btn--primary" href={mail} data-magnetic>
+              <a class="btn btn--primary" href={mail} data-magnetic data-hero-cta>
                 Agendar diagnóstico
                 <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
               </a>
@@ -168,4 +168,12 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
       </div>
     </div>
   </footer>
+
+  <!-- Pastilla de acceso rápido (solo celular): aparece cuando el botón del hero ya salió por arriba y se va en el cierre y el pie. -->
+  <aside class="dock" aria-label="Acceso rápido" data-dock>
+    <a class="btn btn--primary btn--sm" href={mail} data-cta="pastilla">
+      Agendar diagnóstico
+      <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+    </a>
+  </aside>
 </Base>
