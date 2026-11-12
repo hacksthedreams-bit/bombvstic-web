@@ -52,6 +52,11 @@
   --ink-on-ivory: #151218;
   --violet-on-ivory: #603a90;
 
+  /* atmósfera por capítulo (ficha 101): tonos de la familia de marca; el violeta cálido está en 282° (violeta de marca ≈ 269°). Sin magenta. */
+  --atmo-indigo: 62 44 214;
+  --atmo-ink: 52 104 224;
+  --atmo-warm: 168 0 240;
+
   /* type */
   --sans: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
   --serif: 'Bodoni Moda', 'Didot', Georgia, serif;
@@ -190,9 +195,25 @@ main[tabindex='-1']:focus {
     radial-gradient(50% 45% at 12% 90%, rgb(139 92 246 / 0.09), transparent 70%);
 }
 .atmo__layer--silver {
+  /* los focos de toda capa siguen el eje del corte: abajo-izquierda → arriba-derecha */
   background:
-    radial-gradient(55% 45% at 20% 25%, rgb(216 217 227 / 0.14), transparent 70%),
-    radial-gradient(45% 40% at 85% 80%, rgb(174 200 232 / 0.1), transparent 70%);
+    radial-gradient(58% 48% at 16% 80%, rgb(216 217 227 / 0.15), transparent 70%),
+    radial-gradient(42% 36% at 84% 22%, rgb(174 200 232 / 0.09), transparent 70%);
+}
+.atmo__layer--indigo {
+  background:
+    radial-gradient(75% 60% at 38% 62%, rgb(var(--atmo-indigo) / 0.26), transparent 72%),
+    radial-gradient(36% 30% at 90% 14%, rgb(122 0 255 / 0.16), transparent 70%);
+}
+.atmo__layer--ink {
+  background:
+    radial-gradient(46% 62% at 92% 20%, rgb(var(--atmo-ink) / 0.28), transparent 70%),
+    radial-gradient(50% 40% at 6% 92%, rgb(174 200 232 / 0.1), transparent 70%);
+}
+.atmo__layer--warm {
+  background:
+    radial-gradient(66% 56% at 12% 86%, rgb(var(--atmo-warm) / 0.28), transparent 70%),
+    radial-gradient(40% 34% at 86% 18%, rgb(139 92 246 / 0.14), transparent 70%);
 }
 .atmo__layer--horizon {
   background: radial-gradient(90% 40% at 50% 100%, rgb(122 0 255 / 0.42), transparent 70%);
@@ -860,7 +881,9 @@ main[tabindex='-1']:focus {
   padding-top: calc(clamp(6rem, 14vw, 12rem) + var(--cut));
 }
 .section--surface {
-  background: var(--surface);
+  /* semitransparente: deja ver la plata del capítulo. Prohibido añadir backdrop-filter, filter o transform aquí:
+     contendrían el pin del Método. */
+  background: rgb(18 18 22 / 0.62);
 }
 .section__inner {
   max-width: var(--maxw);
