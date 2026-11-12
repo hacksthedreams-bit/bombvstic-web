@@ -550,7 +550,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
         const r = btn.getBoundingClientRect();
         gsap.to(btn, { x: (e.clientX - (r.left + r.width / 2)) * 0.25, y: (e.clientY - (r.top + r.height / 2)) * 0.35, duration: 0.4, ease: 'power2.out' });
       };
-      const leave = () => gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.45)' });
+      const leave = () => gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'expo.out', overwrite: 'auto' }); // sin rebote (ficha 104)
       btn.addEventListener('pointermove', move);
       btn.addEventListener('pointerleave', leave);
     });

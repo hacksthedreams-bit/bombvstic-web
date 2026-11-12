@@ -318,6 +318,10 @@ main[tabindex='-1']:focus {
 .btn:active {
   transform: scale(0.97);
 }
+/* El botón magnético lo mueve GSAP: sin transición CSS de transform, que lo haría arrastrarse (ficha 104) */
+.btn[data-magnetic] {
+  transition-property: background, color, border-color, box-shadow;
+}
 .btn__arrow {
   width: 1.5rem;
   height: 1.5rem;
