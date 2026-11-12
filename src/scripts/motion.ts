@@ -87,12 +87,12 @@ if (factsEl) {
 
 // Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
 const nav = $('[data-nav]');
-const progress = $('[data-progress]');
+const thumb = $('[data-cutthumb]');
 const syncNav = () => {
   nav?.classList.toggle('is-scrolled', window.scrollY > 24);
-  if (progress) {
+  if (thumb) {
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    progress.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+    thumb.style.setProperty('--p', String(max > 0 ? Math.min(1, window.scrollY / max) : 0)); // solo variable: nada se deforma
   }
 };
 syncNav();
@@ -107,6 +107,12 @@ const setAtmo = (name: string | undefined) => {
   atmoLayers.forEach((l) => l.classList.toggle('is-on', l.dataset.atmo === name));
 };
 const setChapter = (id: string | undefined) => {
+  if (thumb && thumb.dataset.now !== id) {
+    thumb.dataset.now = id ?? '';
+    thumb.classList.remove('is-pulse'); // pulso breve de la punta al cambiar de capítulo (coincide con el fundido de color)
+    void thumb.offsetWidth;
+    thumb.classList.add('is-pulse');
+  }
   chapterLinks.forEach((a) => {
     const on = a.dataset.chapter === id;
     a.classList.toggle('is-active', on);
