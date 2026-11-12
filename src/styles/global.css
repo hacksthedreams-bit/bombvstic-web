@@ -2559,6 +2559,16 @@ main[tabindex='-1']:focus {
 .qa__a p {
   margin: 0;
 }
+.qa__a .qa__flag {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  line-height: 1.2;
+  color: var(--silver);
+}
 @media (min-width: 900px) {
   .faq__grid {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);

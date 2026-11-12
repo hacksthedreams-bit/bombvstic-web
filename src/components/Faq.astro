@@ -1,10 +1,11 @@
 ---
-// OJO — respuestas provisionales que describen cómo trabaja la agencia. Confirmar con Alan y Martina antes de publicar:
+// OJO — respuestas provisionales (marcadas `provisional: true`: se rotulan en la página y NO entran al JSON-LD) que describen cómo trabaja la agencia. Confirmar con Alan y Martina antes de publicar:
 // precio/rango de inversión, si el diagnóstico tiene costo, y si se puede contratar un solo servicio.
 const faqs = [
   {
     q: '¿Cuánto cuesta trabajar con Bombvstic?',
     a: 'Depende del alcance: una campaña, una marca completa o un sistema a medida no se parecen. Después del diagnóstico te enviamos una propuesta por escrito con lo que incluye y su valor, para que decidas con todo claro.',
+    provisional: true,
   },
   {
     q: '¿Con qué tipo de negocios trabajan?',
@@ -13,10 +14,12 @@ const faqs = [
   {
     q: '¿Qué pasa en el diagnóstico?',
     a: 'Conversamos sobre tu negocio, tu objetivo y dónde se está frenando el crecimiento. Con eso te decimos qué haría sentido hacer primero y qué no vale la pena todavía.',
+    provisional: true,
   },
   {
     q: '¿Puedo contratar solo una parte, como la web o las campañas?',
     a: 'Sí. Puedes empezar por un frente, por ejemplo publicidad, marca o tecnología, y sumar otros cuando tenga sentido. Todo comparte el mismo equipo, así que se conecta sin fricción.',
+    provisional: true,
   },
   {
     q: '¿Me ayudan a vender un curso o una comunidad en Skool?',
@@ -31,7 +34,7 @@ const faqs = [
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
+  mainEntity: faqs.filter((f) => !f.provisional).map((f) => ({
     '@type': 'Question',
     name: f.q,
     acceptedAnswer: { '@type': 'Answer', text: f.a },
@@ -55,13 +58,16 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
 
     <div class="faq__list" data-reveal>
       {faqs.map((f, i) => (
-        <details class="qa" name="faq">
+        <details class="qa" name="faq" data-placeholder={f.provisional ? 'respuesta-provisional' : undefined}>
           <summary>
             <span class="qa__idx">{String(i + 1).padStart(2, '0')}</span>
             <span class="qa__q">{f.q}</span>
             <span class="qa__icon" aria-hidden="true"></span>
           </summary>
-          <div class="qa__a"><p>{f.a}</p></div>
+          <div class="qa__a">
+            {f.provisional && <p class="qa__flag">Respuesta provisional · estamos confirmando estas condiciones</p>}
+            <p>{f.a}</p>
+          </div>
         </details>
       ))}
     </div>
