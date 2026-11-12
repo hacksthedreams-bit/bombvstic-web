@@ -892,12 +892,24 @@ main[tabindex='-1']:focus {
 .section__label {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.6rem;
   margin: 0 0 2.5rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--silver-dark);
+  /* índice editorial en la serif cursiva de la marca (ficha 102): "01 — Nombre" */
+  font: italic 500 1.2rem/1.15 var(--serif);
+  font-optical-sizing: auto;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+}
+.section__label::before {
+  /* el corte en miniatura: 1 px × 1,5 rem a −31° */
+  content: '';
+  flex: none;
+  width: 1.5rem;
+  height: 1px;
+  margin-right: 0.35rem;
+  background: var(--lavender);
+  transform: rotate(-31deg);
 }
 .section__label b {
   color: var(--lavender);
