@@ -680,3 +680,23 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
     ticks.forEach((t) => t.classList.remove('is-on'));
   };
 });
+
+// El riel lateral se aparta también ANTES de que la galería de Proyectos se fije y DESPUÉS de soltarla (mientras la galería ocupa
+// la pantalla al entrar y al salir, el riel quedaba sobre las imágenes). Es un disparador común, no un pin; se crea al final, en orden.
+mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+  const stage = $('[data-stories-stage]');
+  const rail = $('[data-chapters]');
+  if (!stage || !rail) return;
+  const pin = ScrollTrigger.getAll().find((st) => st.pin === stage);
+  if (!pin) return;
+  const near = ScrollTrigger.create({
+    start: () => pin.start - window.innerHeight * 0.9,
+    end: () => pin.end + window.innerHeight * 0.9,
+    invalidateOnRefresh: true,
+    onToggle: (self) => rail.classList.toggle('is-near', self.isActive),
+  });
+  return () => {
+    near.kill();
+    rail.classList.remove('is-near');
+  };
+});

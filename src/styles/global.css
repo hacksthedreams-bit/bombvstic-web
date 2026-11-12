@@ -442,6 +442,7 @@ main[tabindex='-1']:focus {
 .chapters {
   transition: opacity var(--t-base) var(--ease-out);
 }
+.chapters.is-near,
 .chapters.is-away {
   opacity: 0;
   pointer-events: none;
@@ -3156,6 +3157,7 @@ main[tabindex='-1']:focus {
 .cutthumb[data-now]:not([data-now='inicio']):not([data-now='contacto']) {
   --vis: 1;
 }
+.chapters.is-near ~ .cutthumb[data-now],
 .chapters.is-away ~ .cutthumb[data-now] {
   --vis: 0;
 }
