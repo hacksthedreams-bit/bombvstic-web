@@ -65,11 +65,11 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
               Estrategia, campañas, contenido y software a medida para negocios que quieren crecer en serio. Desde Santiago de Chile.
             </p>
             <div class="hero__actions" data-reveal>
-              <a class="btn btn--primary" href={mail} data-magnetic data-hero-cta>
+              <a class="btn btn--primary" href={mail} data-magnetic data-hero-cta data-cta="hero">
                 Agendar diagnóstico
                 <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
               </a>
-              <a class="btn btn--ghost" href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener">Ver Instagram</a>
+              <a class="btn btn--ghost" href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener" data-cta="hero-instagram">Ver Instagram</a>
             </div>
           </div>
         </div>
@@ -150,11 +150,11 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
       <div class="footer__cols">
         <div>
           <h2>Escríbenos</h2>
-          <ul><li><a href="mailto:bombvstic@gmail.com">bombvstic@gmail.com</a></li></ul>
+          <ul><li><a href="mailto:bombvstic@gmail.com" data-cta="pie-correo">bombvstic@gmail.com</a></li></ul>
         </div>
         <div>
           <h2>Síguenos</h2>
-          <ul><li><a href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener">Instagram</a></li></ul>
+          <ul><li><a href="https://www.instagram.com/bombvstic/" target="_blank" rel="noopener" data-cta="pie-instagram">Instagram</a></li></ul>
         </div>
         <div>
           <h2>Estamos en</h2>

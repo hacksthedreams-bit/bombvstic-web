@@ -1,4 +1,6 @@
 // Formulario de diagnóstico por pasos. Sin JS todos los pasos se ven apilados y el formulario usa mailto como respaldo.
+import { track } from './track';
+
 const TO = 'bombvstic@gmail.com';
 
 const form = document.querySelector<HTMLFormElement>('[data-diag]');
@@ -16,7 +18,19 @@ if (form) {
   const resetBtn = done.querySelector<HTMLButtonElement>('[data-diag-reset]')!;
 
   let step = 0;
+  let started = false;
   form.classList.add('is-stepper');
+  // form_start: una sola vez por carga, al primer cambio (sin guardar lo escrito)
+  form.addEventListener('change', () => {
+    if (started) return;
+    started = true;
+    track('form_start');
+  });
+  form.addEventListener('input', () => {
+    if (started) return;
+    started = true;
+    track('form_start');
+  });
 
   const show = (i: number, focus = true) => {
     step = i;
@@ -69,8 +83,11 @@ if (form) {
     if (!validate(step)) return;
     if (step < panes.length - 1) {
       show(step + 1);
+      track('form_step', { step: step + 1 });
       return;
     }
+    // "mensaje preparado": se abrió el correo del visitante; NO equivale a un contacto recibido
+    track('form_submit', { method: 'mailto' });
     const body = buildMessage();
     const subject = `Diagnóstico Bombvstic · ${val('need')}`;
     preview.textContent = body;
