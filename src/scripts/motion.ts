@@ -376,6 +376,155 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     });
   }
 
+  // Cursor propio (ficha 201). Una sola pieza: el punto ES la posición real del puntero (sin retraso) y el trazo a −31° sale de él;
+  // la inercia va solo en el largo del trazo. Vuelve el cursor del sistema en formularios, menú, selección de texto, teclado,
+  // toque, fuera de la ventana y si el equipo no da la fluidez (dos cuadros seguidos > 100 ms: apagado por toda la visita).
+  const curOff = () => {
+    try {
+      return sessionStorage.getItem('bv-cur') === 'off';
+    } catch {
+      return false;
+    }
+  };
+  if (finePointer && !window.matchMedia('(forced-colors: active), (prefers-contrast: more)').matches && !curOff()) {
+    const root = document.documentElement;
+    const cur = document.createElement('div');
+    cur.className = 'cur';
+    cur.setAttribute('aria-hidden', 'true');
+    const tail = document.createElement('i');
+    tail.className = 'cur__tail';
+    cur.appendChild(tail);
+    document.body.appendChild(cur);
+    const LEN = { text: 14 / 52, rest: 26 / 52, link: 1 }; // tres largos: 14, 26 y 52 px
+    gsap.set(tail, { rotation: -31, scaleX: LEN.rest, transformOrigin: '100% 50%' });
+    const toLen = gsap.quickTo(tail, 'scaleX', { duration: 0.35, ease: 'power3.out' });
+    const NATIVE = 'input, textarea, select, [contenteditable], [data-diag], .diag__done, .nav__panel, iframe';
+    const LINK = 'a, button, summary, label, [role="button"], [data-chip]';
+    const TEXT = 'p, h1, h2, h3, h4, li, dd, dt, blockquote, figcaption';
+    let base = LEN.rest;
+    let ready = false; // se habilita al terminar la entrada del hero
+    let moved = false;
+    let native = false;
+    let keyboard = false;
+    let selecting = false;
+    let dead = false;
+    let active = false;
+    let lx = 0;
+    let ly = 0;
+    let rest = 0;
+    let rafId = 0;
+    let slow = 0;
+    let last = 0;
+    let movedAt = 0;
+    const watch = (t: number) => {
+      // vigilancia de fluidez: solo mientras el cursor propio está activo y la pestaña visible
+      // Solo cuenta mientras el ratón se está moviendo (ahí se notaría el desfase); un salto de página largo no lo apaga
+      if (last && !document.hidden && t - movedAt < 300) slow = t - last > 100 ? slow + 1 : 0;
+      else slow = 0;
+      last = t;
+      if (slow >= 2) {
+        dead = true;
+        try {
+          sessionStorage.setItem('bv-cur', 'off');
+        } catch {
+          /* sin almacenamiento: queda apagado solo en esta carga */
+        }
+        sync();
+        return;
+      }
+      rafId = requestAnimationFrame(watch);
+    };
+    const sync = () => {
+      const on = ready && moved && !native && !keyboard && !selecting && !dead;
+      if (on === active) return;
+      active = on;
+      cur.classList.toggle('is-on', on);
+      root.classList.toggle('cut-cursor', on);
+      cancelAnimationFrame(rafId);
+      last = 0;
+      slow = 0;
+      if (on) rafId = requestAnimationFrame(watch);
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      cur.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      const d = Math.hypot(e.clientX - lx, e.clientY - ly);
+      lx = e.clientX;
+      ly = e.clientY;
+      keyboard = false;
+      movedAt = performance.now();
+      if (!moved) {
+        moved = true;
+        d0(e.target as Element | null);
+      }
+      toLen(Math.min(1, base + d / 60)); // al mover rápido el trazo se estira; al parar vuelve a su largo
+      window.clearTimeout(rest);
+      rest = window.setTimeout(() => toLen(base), 90);
+      sync();
+    };
+    const d0 = (t: Element | null) => {
+      native = !!t?.closest(NATIVE);
+      const link = !native && !!t?.closest(LINK);
+      const text = !native && !link && !!t?.closest(TEXT);
+      base = link ? LEN.link : text ? LEN.text : LEN.rest;
+      cur.classList.toggle('is-text', text);
+      toLen(base);
+    };
+    const onOver = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return;
+      d0(e.target as Element | null);
+      sync();
+    };
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') {
+        moved = false; // toque o lápiz: fuera hasta el próximo movimiento de ratón
+        sync();
+        return;
+      }
+      toLen(base * 0.6);
+      window.clearTimeout(rest);
+      rest = window.setTimeout(() => toLen(base), 140);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      keyboard = true;
+      sync();
+    };
+    const onLeave = () => {
+      moved = false;
+      sync();
+    };
+    const onSel = () => {
+      selecting = !(document.getSelection()?.isCollapsed ?? true);
+      sync();
+    };
+    const enable = gsap.delayedCall(2.6, () => {
+      ready = true;
+      sync();
+    });
+    window.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('pointerover', onOver, { passive: true });
+    window.addEventListener('pointerdown', onDown, { passive: true });
+    window.addEventListener('keydown', onKey);
+    document.documentElement.addEventListener('mouseleave', onLeave);
+    window.addEventListener('blur', onLeave);
+    document.addEventListener('selectionchange', onSel);
+    cleanups.push(() => {
+      enable.kill();
+      cancelAnimationFrame(rafId);
+      window.clearTimeout(rest);
+      window.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerover', onOver);
+      window.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('keydown', onKey);
+      document.documentElement.removeEventListener('mouseleave', onLeave);
+      window.removeEventListener('blur', onLeave);
+      document.removeEventListener('selectionchange', onSel);
+      root.classList.remove('cut-cursor');
+      cur.remove();
+    });
+  }
+
   // Limpieza si la persona activa "reducir movimiento" mientras navega
   return () => {
     cleanups.forEach((fn) => fn());

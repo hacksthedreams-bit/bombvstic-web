@@ -3160,6 +3160,52 @@ main[tabindex='-1']:focus {
   }
 }
 
+/* ───── Cursor propio (ficha 201): una sola pieza, el punto es la posición real y el trazo a −31° sale de él ───── */
+.cur {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 300;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+.cur.is-on {
+  opacity: 1;
+}
+.cur::after {
+  content: '';
+  position: absolute;
+  left: -2.5px;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgb(245 241 234);
+  box-shadow: 0 0 8px 1px rgb(139 92 246 / 0.9);
+}
+.cur__tail {
+  position: absolute;
+  right: 0;
+  top: -0.75px;
+  width: 52px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgb(173 139 250 / 0), rgb(173 139 250 / 0.55) 55%, rgb(245 241 234 / 0.95));
+  transform-origin: 100% 50%;
+  transition: opacity var(--t-fast);
+}
+.cur.is-text .cur__tail {
+  opacity: 0.5;
+}
+/* El cursor del sistema solo se oculta mientras el propio está dibujado (la clase la pone y la quita el script) */
+html.cut-cursor,
+html.cut-cursor * {
+  cursor: none !important;
+}
+
 /* ───── El filo (ficha 103): el progreso de lectura como trazo de luz a −31° en el margen derecho ───── */
 .cutthumb {
   --p: 0;
