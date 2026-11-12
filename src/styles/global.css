@@ -86,7 +86,9 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  /* Transparente a propósito: el color de fondo lo da <html>. Con un fondo opaco aquí, el cuerpo se pintaba ENCIMA de la atmósfera
+     (.atmo, z-index:-1) y el campo de luz por capítulo nunca se veía (ficha 108). */
+  background: transparent;
   color: var(--ivory);
   font-family: var(--sans);
   font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
@@ -184,8 +186,8 @@ main[tabindex='-1']:focus {
 }
 .atmo__layer--violet {
   background:
-    radial-gradient(60% 50% at 78% 30%, rgb(122 0 255 / 0.32), transparent 70%),
-    radial-gradient(50% 45% at 12% 90%, rgb(139 92 246 / 0.14), transparent 70%);
+    radial-gradient(60% 50% at 78% 30%, rgb(122 0 255 / 0.15), transparent 70%),
+    radial-gradient(50% 45% at 12% 90%, rgb(139 92 246 / 0.09), transparent 70%);
 }
 .atmo__layer--silver {
   background:
