@@ -1,0 +1,1 @@
+function e(e,t={}){let n=window.dataLayer??=[];n.length>=200&&n.shift(),n.push({event:e,...t})}document.addEventListener(`click`,t=>{let n=t.target?.closest(`[data-cta]`);n?.dataset.cta&&e(`cta_click`,{cta:n.dataset.cta})});export{e as t};
