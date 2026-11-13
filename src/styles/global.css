@@ -1704,6 +1704,76 @@ main[tabindex='-1']:focus {
 }
 
 /* Próximos casos */
+/* ───── Caso 00 · Esta web (ficha 303): más chico que los casos de clientes, sin imagen ───── */
+.case00 {
+  display: grid;
+  gap: 0.25rem 3rem;
+  margin-top: clamp(4rem, 8vw, 7rem);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.case00__tag {
+  margin: 0 0 0.75rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--lavender);
+}
+.case00__title {
+  margin: 0;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.case00__text {
+  max-width: 40rem;
+  margin: 1rem 0 0;
+  color: var(--silver);
+}
+.case00__data {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1.5rem;
+  margin: 1.75rem 0 0;
+}
+.case00__data dt {
+  font-size: 0.95rem;
+  color: var(--ivory);
+}
+.case00__data dt b {
+  display: block;
+  font-size: clamp(1.7rem, 1.3rem + 1.4vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.case00__data dd {
+  margin: 0.3rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.case00__foot {
+  margin: 1.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--silver-dark);
+}
+@media (min-width: 900px) {
+  .case00 {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .case00 > * {
+    grid-column: 1;
+  }
+  .case00__data {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    margin-top: 0;
+    align-self: center;
+  }
+}
 .upcoming {
   margin-top: clamp(4rem, 8vw, 7rem);
 }

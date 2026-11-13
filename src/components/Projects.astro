@@ -2,6 +2,9 @@
 // OJO — antes de publicar: permiso de cada cliente para mostrar su nombre y su pieza.
 // Solo se publica lo que consta en el material entregado por la agencia (textos de las historias); sin cifras inventadas.
 import { u } from '../lib/url';
+import { case00 } from '../config/proof';
+// "Caso 00 · Esta web" (ficha 303): datos medidos y fechados; con la medición vencida u otro host, el bloque no existe.
+const c00 = case00(Astro.site?.host ?? '');
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 
 const upcoming = [
@@ -134,6 +137,27 @@ const did = [
         </a>
       </div>
     </article>
+
+    {c00 && (
+      <aside class="case00" aria-labelledby="case00-titulo" data-reveal>
+        <p class="case00__tag">Caso 00 · Esta web</p>
+        <h3 class="case00__title" id="case00-titulo">El caso que estás usando.</h3>
+        <p class="case00__text">
+          Esta web se diseñó y se construyó con asistencia de IA y un método propio: cada idea se escribe, pasa una segunda revisión hecha por un revisor automático distinto del que la propuso, se prueba en un navegador real y solo entonces se publica.
+        </p>
+        <dl class="case00__data">
+          <div>
+            <dt><b>{c00.ideas}</b> mejoras publicadas</dt>
+            <dd>al {c00.fecha}, cada una revisada antes de construirse.</dd>
+          </div>
+          <div>
+            <dt><b>{c00.kb} KB</b> de peso</dt>
+            <dd>el texto, los estilos y el programa de la página, comprimidos. Las imágenes y las tipografías van aparte.</dd>
+          </div>
+        </dl>
+        <p class="case00__foot">Medido el {c00.fecha} sobre esta misma página publicada: el conteo sale del historial público del código y el peso, de una medición automática.</p>
+      </aside>
+    )}
 
     <div class="upcoming">
       <h3 class="upcoming__label">Próximos casos</h3>

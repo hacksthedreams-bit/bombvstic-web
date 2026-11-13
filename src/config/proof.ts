@@ -13,14 +13,19 @@ export const proof = {
   a11y: 100 as number | null, // puntaje de accesibilidad de Lighthouse (0–100)
   axeClean: true, // puerta 4 del 12-nov-2026: axe sin serias/críticas en el build desplegado (fichas 007 y 108 incluidas) // axe sin violaciones serias/críticas en la versión PUBLICADA (requiere ficha 007 desplegada)
   thirdPartyRequests: 0 as number | null, // medido el 12-nov-2026: solo hacksthedreams-bit.github.io // conexiones a otros dominios durante la carga
+  // "Caso 00 · Esta web" (ficha 303). Misma fecha y mismas reglas de caducidad: si la medición vence o el host no coincide, el bloque no se renderiza.
+  ideasShipped: 16 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
+  criticalKB: 80 as number | null, // HTML + CSS + JS comprimidos (gzip), en KB enteros, de la puerta 4 sobre el build publicado; las imágenes y tipografías van aparte
 };
 
 export const PROOF_MAX_AGE_DAYS = 120;
 
 const sec = (ms: number) => (ms / 1000).toFixed(1).replace('.', ',');
 
-/** Celdas verdaderas hoy (vacío = la franja no existe). `siteHost` = host de Astro.site; `now` = fecha del build. */
-export function proofCells(siteHost: string, now = new Date()) {
+const fechaLarga = (iso: string) => new Date(iso + 'T12:00:00').toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
+
+/** ¿La medición vale hoy? Mismo host que la web y no vencida. Lo comparten la franja del inicio y el bloque "Caso 00". */
+function proofValid(siteHost: string, now: Date) {
   const p = proof;
   if (!p.measuredUrl || !p.measuredOn) return null;
   let host = '';
@@ -32,6 +37,22 @@ export function proofCells(siteHost: string, now = new Date()) {
   if (host !== siteHost) return null;
   const age = (now.getTime() - new Date(p.measuredOn + 'T12:00:00').getTime()) / 86400000;
   if (!(age >= 0 && age <= PROOF_MAX_AGE_DAYS)) return null;
+  return host;
+}
+
+/** Datos del bloque "Caso 00 · Esta web" (null = el bloque no existe). Sin comparaciones, sin herramientas ni modelos nombrados. */
+export function case00(siteHost: string, now = new Date()) {
+  const p = proof;
+  if (!proofValid(siteHost, now)) return null;
+  if (p.ideasShipped == null || p.criticalKB == null || !(p.ideasShipped > 0) || !(p.criticalKB > 0)) return null;
+  return { ideas: p.ideasShipped, kb: p.criticalKB, fecha: fechaLarga(p.measuredOn), measuredOn: p.measuredOn };
+}
+
+/** Celdas verdaderas hoy (vacío = la franja no existe). `siteHost` = host de Astro.site; `now` = fecha del build. */
+export function proofCells(siteHost: string, now = new Date()) {
+  const p = proof;
+  const host = proofValid(siteHost, now);
+  if (!host) return null;
   const cells: { key: string; label: string; html: string }[] = [];
   if (p.lcpDesktopMs != null && p.lcpMobileMs != null && p.lcpMobileMs <= 2500) {
     cells.push({
@@ -51,6 +72,6 @@ export function proofCells(siteHost: string, now = new Date()) {
     cells.push({ key: 'terceros', label: 'Sin terceros al cargar', html: `<b>0</b> conexiones a otras empresas al cargar la página (medido).` });
   }
   if (cells.length < 2) return null;
-  const fecha = new Date(p.measuredOn + 'T12:00:00').toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
+  const fecha = fechaLarga(p.measuredOn);
   return { cells, fecha, host, version: p.lighthouseVersion, runs: p.runs, measuredOn: p.measuredOn };
 }
