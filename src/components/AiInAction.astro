@@ -1,38 +1,118 @@
 ---
-// Ejemplo ILUSTRATIVO de cómo se reparte un proceso entre personas y un asistente de IA. Sin cifras ni resultados.
+// Ejemplo ILUSTRATIVO de cómo se reparte un proceso entre personas y un asistente de IA, en tres rubros. Sin cifras, nombres ni resultados (ficha 302).
+// Los tres rubros están anotados en docs/PENDIENTES_APROBACION.md: el dueño debe confirmar que los vende. No se añade ningún rubro nuevo hasta entonces.
+// Los pasos que dependen de una conexión (agenda, calendario, tienda) se redactan como diseño a medida, no como capacidad ya instalada.
 // Cuando existan capturas o un demo real (dashboard / asistente con datos anonimizados), reemplazar o complementar este bloque.
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 
-const steps = [
+const scenes = [
   {
-    title: 'Llega la consulta',
-    off: 'Alguien tiene que estar mirando el teléfono. Fuera de horario, el cliente espera.',
-    on: 'El asistente responde al instante, a cualquier hora, con la información de tu negocio.',
-    onWho: 'Asistente',
+    id: 'restaurante',
+    name: 'Restaurante',
+    steps: [
+      {
+        title: 'Llega el mensaje del cliente',
+        off: 'Alguien del local tiene que estar mirando el teléfono mientras atiende las mesas.',
+        on: 'El asistente contesta a cualquier hora con la carta y los horarios que tú le entregaste.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Entender qué quiere',
+        off: 'Se lee el mensaje y se anota a mano si es una reserva, un pedido o una consulta.',
+        on: 'Distingue si es reserva, pedido o consulta, y deja anotados el día, la hora y para cuántas personas.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Mirar las mesas',
+        off: 'Se revisa el cuaderno o la planilla para ver si queda espacio.',
+        on: 'Conectado a tu agenda de reservas, si la tienes, propone los horarios posibles.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Lo que pide criterio',
+        off: 'Alergias, grupos grandes y reclamos llegan mezclados con las reservas de siempre.',
+        on: 'Si hay una alergia, un grupo grande o un reclamo, el asistente avisa al encargado con el mensaje completo. Decide tu equipo.',
+        onWho: 'Tu equipo',
+      },
+      {
+        title: 'Confirmar y recibir',
+        off: 'Se confirma por teléfono y se apunta en un papel hasta que alguien lo pasa en limpio.',
+        on: 'Tu equipo confirma con trato cercano; el asistente deja las reservas ordenadas para el día.',
+        onWho: 'Juntos',
+      },
+    ],
   },
   {
-    title: 'Entender qué necesita',
-    off: 'Se lee el mensaje, se interpreta y se anota a mano.',
-    on: 'Clasifica el mensaje: pedido, reserva, cotización o reclamo.',
-    onWho: 'Asistente',
+    id: 'eventos',
+    name: 'Centro de eventos',
+    steps: [
+      {
+        title: 'Llega la consulta por una fecha',
+        off: 'Las consultas llegan a cualquier hora y esperan hasta que alguien pueda responder con calma.',
+        on: 'El asistente responde de inmediato y pregunta lo básico: la fecha, el tipo de evento y cuántas personas serían.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Armar la cotización',
+        off: 'Los datos se juntan a mano para preparar el presupuesto desde cero.',
+        on: 'Ordena los datos del evento y deja listo un borrador de cotización para que tu equipo lo revise.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Revisar el calendario',
+        off: 'Se mira el calendario del recinto, a veces repartido en más de un lugar.',
+        on: 'Conectado a tu calendario, si lo tienes, muestra qué fechas están libres antes de ofrecer una.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Precios especiales y visitas',
+        off: 'Los descuentos, las condiciones especiales y las visitas al lugar se resuelven entre llamadas y mensajes sueltos.',
+        on: 'El asistente reúne lo que el cliente pidió y se lo pasa a tu equipo, que define el precio y agenda la visita.',
+        onWho: 'Tu equipo',
+      },
+      {
+        title: 'Cerrar el evento',
+        off: 'El seguimiento depende de que alguien se acuerde de volver a escribir.',
+        on: 'Tu equipo cierra el trato; el asistente recuerda los pendientes y deja el historial de cada cliente en un solo lugar.',
+        onWho: 'Juntos',
+      },
+    ],
   },
   {
-    title: 'Revisar disponibilidad',
-    off: 'Se consulta la agenda, el stock o la planilla.',
-    on: 'Consulta la agenda o el catálogo conectado y propone opciones.',
-    onWho: 'Asistente',
-  },
-  {
-    title: 'Decidir lo delicado',
-    off: 'Excepciones, reclamos y precios especiales llegan mezclados con todo lo demás.',
-    on: 'El asistente te avisa y te lo entrega con el contexto completo. Decides tú.',
-    onWho: 'Tu equipo',
-  },
-  {
-    title: 'Cerrar y cuidar al cliente',
-    off: 'Se confirma, se registra a mano y se hace seguimiento cuando hay tiempo.',
-    on: 'Tu equipo confirma con trato humano; el asistente deja todo registrado en un dashboard.',
-    onWho: 'Juntos',
+    id: 'tienda',
+    name: 'Tienda online',
+    steps: [
+      {
+        title: 'Llega la pregunta del comprador',
+        off: 'Las preguntas sobre tallas, envíos y pedidos se acumulan en el correo y en los mensajes.',
+        on: 'El asistente responde con las políticas y la información de tu tienda, también fuera de horario.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Entender el motivo',
+        off: 'Hay que leer cada mensaje para saber si es una duda, un seguimiento o un problema.',
+        on: 'Separa las dudas de producto, los seguimientos de pedidos y los problemas.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Revisar producto y pedido',
+        off: 'Se abre el panel de la tienda y se busca el producto o el pedido uno por uno.',
+        on: 'Conectado a tu tienda, si la plataforma lo permite, consulta el stock y el estado del pedido para responder.',
+        onWho: 'Asistente',
+      },
+      {
+        title: 'Cambios y devoluciones',
+        off: 'Los cambios, las devoluciones y los casos fuera de lo normal se responden sobre la marcha.',
+        on: 'Cuando un caso se sale de la política de la tienda, el asistente lo deriva a tu equipo con el historial. Decide tu equipo.',
+        onWho: 'Tu equipo',
+      },
+      {
+        title: 'Cerrar y seguir en contacto',
+        off: 'Cuando el pedido llega, nadie vuelve a escribirle al cliente.',
+        on: 'Tu equipo atiende lo delicado; el asistente deja ordenado qué preguntan los clientes.',
+        onWho: 'Juntos',
+      },
+    ],
   },
 ];
 ---
@@ -41,9 +121,20 @@ const steps = [
   <div class="section__inner">
     <p class="section__label"><b>04</b> — IA en acción</p>
     <h2 class="ai__title" id="titulo-ia">La máquina hace lo repetitivo. Tu equipo, lo <span class="accent">importante.</span></h2>
-    <p class="ai__lead" data-reveal>Un mismo proceso, dos formas de resolverlo. Activa el asistente y mira qué cambia.</p>
+    <p class="ai__lead" data-reveal>Elige tu rubro, activa el asistente y mira qué cambia.</p>
 
     <div class="ai__panel" data-reveal>
+      <p class="ai__label">Ejemplo ilustrativo: así se repartiría el trabajo. No es un cliente ni un sistema en funcionamiento.</p>
+
+      <!-- Las pestañas solo existen con JS: el script quita hidden. Sin JS se ven los tres escenarios apilados, cada uno con su título. -->
+      <div class="ai__tabs" role="tablist" aria-label="Rubro del ejemplo" data-ai-tabs hidden>
+        {scenes.map((s) => (
+          <button type="button" class="ai__tab" role="tab" id={`ai-tab-${s.id}`} aria-controls={`ai-pane-${s.id}`} aria-selected="false" tabindex="-1">
+            {s.name}
+          </button>
+        ))}
+      </div>
+
       <div class="ai__bar">
         <label class="switch">
           <span class="switch__text switch__text--off">Solo personas</span>
@@ -51,31 +142,37 @@ const steps = [
           <span class="switch__track" aria-hidden="true"><span class="switch__knob"></span></span>
           <span class="switch__text switch__text--on">Personas + IA</span>
         </label>
-        <p class="ai__caption">Ejemplo: un negocio que recibe consultas por Instagram y WhatsApp.</p>
       </div>
 
-      <ol class="flow">
-        {steps.map((s, i) => (
-          <li class="flow__step" data-who={s.onWho === 'Asistente' ? 'ai' : s.onWho === 'Juntos' ? 'both' : 'human'}>
-            <span class="flow__idx">{String(i + 1).padStart(2, '0')}</span>
-            <div class="flow__text">
-              <h3>{s.title}</h3>
-              <div class="flow__desc">
-                <p class="flow__off">{s.off}</p>
-                <p class="flow__on">{s.on}</p>
-              </div>
-            </div>
-            <span class="flow__chip">
-              <span class="flow__chip-off">Tu equipo</span>
-              <span class="flow__chip-on">{s.onWho}</span>
-            </span>
-          </li>
+      <div class="ai__scenes">
+        {scenes.map((s) => (
+          <section class="ai__scene" id={`ai-pane-${s.id}`} aria-labelledby={`ai-title-${s.id}`} data-ai-scene>
+            <h3 class="ai__scene-title" id={`ai-title-${s.id}`}>{s.name}</h3>
+            <ol class="flow">
+              {s.steps.map((st, i) => (
+                <li class="flow__step" data-who={st.onWho === 'Asistente' ? 'ai' : st.onWho === 'Juntos' ? 'both' : 'human'}>
+                  <span class="flow__idx">{String(i + 1).padStart(2, '0')}</span>
+                  <div class="flow__text">
+                    <h4>{st.title}</h4>
+                    <div class="flow__desc">
+                      <p class="flow__off">{st.off}</p>
+                      <p class="flow__on">{st.on}</p>
+                    </div>
+                  </div>
+                  <span class="flow__chip">
+                    <span class="flow__chip-off">Tu equipo</span>
+                    <span class="flow__chip-on">{st.onWho}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </section>
         ))}
-      </ol>
+      </div>
     </div>
 
     <p class="ai__note">
-      Ejemplo ilustrativo. Cada asistente se diseña a la medida de cómo trabaja tu negocio, y el objetivo no es reemplazar a tu equipo: es liberar su tiempo para lo que pide criterio humano.
+      Cada asistente se diseña a la medida de cómo trabaja tu negocio, y el objetivo no es reemplazar a tu equipo: es liberar su tiempo para lo que pide criterio humano.
     </p>
     <a class="btn btn--primary" href="#contacto" data-need="3" data-topic="Un asistente de IA para mi negocio" data-cta="ia" data-reveal>
       Quiero un asistente así
@@ -83,3 +180,41 @@ const steps = [
     </a>
   </div>
 </section>
+
+<script>
+  // Pestañas de rubro (ficha 302). Patrón WAI-ARIA: Tab entra a la pestaña activa, las flechas cambian. Los tres escenarios ocupan la
+  // misma celda de una rejilla (altura constante), de modo que cambiar de pestaña no mueve nada de lo que viene debajo.
+  const panel = document.querySelector<HTMLElement>('.ai__panel');
+  const tabsEl = panel?.querySelector<HTMLElement>('[data-ai-tabs]');
+  if (panel && tabsEl) {
+    const tabs = Array.from(tabsEl.querySelectorAll<HTMLButtonElement>('[role=tab]'));
+    const scenes = Array.from(panel.querySelectorAll<HTMLElement>('[data-ai-scene]'));
+    panel.classList.add('ai--tabs');
+    tabsEl.hidden = false;
+    scenes.forEach((s, i) => {
+      s.setAttribute('role', 'tabpanel');
+      s.setAttribute('aria-labelledby', tabs[i].id);
+    });
+    const select = (i: number, focus = false) => {
+      tabs.forEach((t, k) => {
+        t.setAttribute('aria-selected', String(k === i));
+        t.tabIndex = k === i ? 0 : -1;
+      });
+      scenes.forEach((s, k) => {
+        s.classList.toggle('is-on', k === i);
+        s.inert = k !== i;
+      });
+      if (focus) tabs[i].focus();
+    };
+    tabs.forEach((t, i) => t.addEventListener('click', () => select(i)));
+    tabsEl.addEventListener('keydown', (e) => {
+      const cur = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+      const last = tabs.length - 1;
+      const to = e.key === 'ArrowRight' ? (cur === last ? 0 : cur + 1) : e.key === 'ArrowLeft' ? (cur === 0 ? last : cur - 1) : e.key === 'Home' ? 0 : e.key === 'End' ? last : -1;
+      if (to < 0) return;
+      e.preventDefault();
+      select(to, true);
+    });
+    select(0);
+  }
+</script>
