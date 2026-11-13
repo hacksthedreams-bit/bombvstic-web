@@ -2095,7 +2095,7 @@ main[tabindex='-1']:focus {
   font-variant-numeric: tabular-nums;
   padding-top: 0.45rem;
 }
-.flow__text h4 {
+.flow__text h3 {
   margin: 0 0 0.45rem;
   font-weight: 600;
   font-size: clamp(1.3rem, 1.1rem + 1vw, 2rem);

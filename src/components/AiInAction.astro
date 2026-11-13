@@ -147,13 +147,13 @@ const scenes = [
       <div class="ai__scenes">
         {scenes.map((s) => (
           <section class="ai__scene" id={`ai-pane-${s.id}`} aria-labelledby={`ai-title-${s.id}`} data-ai-scene>
-            <h3 class="ai__scene-title" id={`ai-title-${s.id}`}>{s.name}</h3>
+            <p class="ai__scene-title" id={`ai-title-${s.id}`}>{s.name}</p>
             <ol class="flow">
               {s.steps.map((st, i) => (
                 <li class="flow__step" data-who={st.onWho === 'Asistente' ? 'ai' : st.onWho === 'Juntos' ? 'both' : 'human'}>
                   <span class="flow__idx">{String(i + 1).padStart(2, '0')}</span>
                   <div class="flow__text">
-                    <h4>{st.title}</h4>
+                    <h3>{st.title}</h3>
                     <div class="flow__desc">
                       <p class="flow__off">{st.off}</p>
                       <p class="flow__on">{st.on}</p>
