@@ -1204,7 +1204,9 @@ main[tabindex='-1']:focus {
   opacity: 1;
 }
 .wall.has-spot .wall__row.is-center .wall__idx {
-  color: var(--lavender);
+  /* índice en la serif cursiva de la marca, como el resto de los índices */
+  font: italic 500 1rem/1 var(--serif);
+  color: var(--muted);
 }
 .wall.has-spot .wall__idx {
   transition: color var(--t-base);
@@ -1253,7 +1255,7 @@ main[tabindex='-1']:focus {
 }
 .wall__text {
   font-weight: 600;
-  font-size: clamp(1.45rem, 4.2vw, 3.85rem);
+  font-size: clamp(1.6rem, 5.4vw, 4.4rem); /* muro tipográfico (ficha 301): desde 1,6 rem ya es texto grande en todos los anchos */
   line-height: 1.05;
   letter-spacing: -0.03em;
   transition: transform var(--t-slow) var(--ease-out), color var(--t-base), opacity var(--t-base);
@@ -3273,6 +3275,35 @@ html.cut-cursor * {
   .cutthumb.is-pulse::after {
     animation: none;
   }
+}
+
+/* ───── Interés con el que llega la persona al diagnóstico (ficha 301) ───── */
+.diag__topic {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem 0.75rem;
+  margin: 1.5rem auto 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.diag__topic b {
+  color: var(--ivory);
+  font-weight: 600;
+}
+.diag__topic-x {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  border: 0;
+  background: none;
+  color: var(--silver);
+  font: inherit;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
 }
 
 /* ───── Franja de datos medidos (ficha 004) ───── */

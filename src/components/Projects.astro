@@ -2,7 +2,6 @@
 // OJO — antes de publicar: permiso de cada cliente para mostrar su nombre y su pieza.
 // Solo se publica lo que consta en el material entregado por la agencia (textos de las historias); sin cifras inventadas.
 import { u } from '../lib/url';
-const mail = (subject: string) => `mailto:bombvstic@gmail.com?subject=${encodeURIComponent(subject)}`;
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 
 const upcoming = [
@@ -100,7 +99,7 @@ const did = [
       </ol>
       </div>
 
-      <a class="feature__link" href={mail('Quiero un proyecto como Digital Sneakers Shop')} data-reveal>
+      <a class="feature__link" href="#contacto" data-topic="Un proyecto como Digital Sneakers Shop" data-cta="caso" data-reveal>
         Quiero algo así
         <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
       </a>
@@ -129,7 +128,7 @@ const did = [
           <li>Identidad de marca completa</li>
           <li>Gestión de redes y crecimiento</li>
         </ul>
-        <a class="feature__link" href={mail('Quiero un proyecto como Calyzzo')} data-reveal>
+        <a class="feature__link" href="#contacto" data-topic="Un proyecto como Calyzzo" data-cta="caso" data-reveal>
           Quiero algo así
           <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
         </a>

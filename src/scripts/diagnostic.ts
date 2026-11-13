@@ -22,6 +22,26 @@ if (form) {
 
   let step = 0;
   let started = false;
+
+  // Interés con el que llega la persona (ficha 301): los enlaces de servicios, casos e IA traen data-topic y, si corresponde,
+  // data-need (índice de la opción de "¿Qué necesitas primero?"). Se anota; nunca se cambia de paso ni se pisa una elección hecha.
+  let topic = '';
+  const topicEl = document.querySelector<HTMLElement>('[data-diag-topic]');
+  const topicText = topicEl?.querySelector<HTMLElement>('[data-diag-topic-text]');
+  const setTopic = (t: string) => {
+    topic = t;
+    if (topicText) topicText.textContent = t;
+    if (topicEl) topicEl.hidden = !t;
+  };
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element | null)?.closest<HTMLElement>('[data-topic]');
+    if (!a) return;
+    setTopic(a.dataset.topic ?? '');
+    const needs = Array.from(form.querySelectorAll<HTMLInputElement>('input[name=need]'));
+    const i = Number(a.dataset.need);
+    if (a.dataset.need !== undefined && needs[i] && !needs.some((r) => r.checked)) needs[i].checked = true;
+  });
+  topicEl?.querySelector('[data-diag-topic-clear]')?.addEventListener('click', () => setTopic(''));
   form.classList.add('is-stepper');
   // form_start: una sola vez por carga, al primer cambio (sin guardar lo escrito)
   form.addEventListener('change', () => {
@@ -75,6 +95,7 @@ if (form) {
       `Lo que necesito primero: ${val('need')}`,
       `Tipo de negocio: ${val('kind')}`,
     ];
+    if (topic) lines.push(`Me interesa: ${topic}`);
     if (val('business')) lines.push(`Negocio / Instagram: ${val('business')}`);
     lines.push('', `Nombre: ${val('name')}`, `Correo: ${val('email')}`);
     if (val('phone')) lines.push(`WhatsApp: ${val('phone')}`);
@@ -85,6 +106,7 @@ if (form) {
   // Mensaje para WhatsApp: NUNCA incluye correo ni teléfono (la URL de wa.me llega a Meta al tocar, aunque no se envíe)
   const buildWaMessage = () => {
     const lines = ['Hola Bombvstic, quiero conversar sobre un diagnóstico.', '', `Lo que necesito primero: ${val('need')}`, `Tipo de negocio: ${val('kind')}`];
+    if (topic) lines.push(`Me interesa: ${topic}`);
     if (val('business')) lines.push(`Negocio / Instagram: ${val('business')}`);
     lines.push('', `Nombre: ${val('name')}`);
     if (val('message')) lines.push('', val('message'));
@@ -138,6 +160,7 @@ if (form) {
 
   resetBtn.addEventListener('click', () => {
     form.reset();
+    setTopic('');
     done.hidden = true;
     form.hidden = false;
     show(0);

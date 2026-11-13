@@ -1,6 +1,6 @@
 ---
 import { u } from '../lib/url';
-const mail = (subject: string) => `mailto:bombvstic@gmail.com?subject=${encodeURIComponent(subject)}`;
+// Todo interés lleva al diagnóstico (#contacto) con la opción correspondiente ya marcada: data-need + data-topic (ficha 301)
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 
 const cards = [
@@ -14,7 +14,8 @@ const cards = [
     pos: '15% 50%',
     r: '-2.2deg',
     alt: 'Imán de titanio con un extremo violeta atrayendo tres esferas negras',
-    subject: 'Consulta de publicidad y campañas',
+    need: 0,
+    topic: 'Publicidad y campañas',
   },
   {
     n: '02',
@@ -27,7 +28,8 @@ const cards = [
     origin: '50% 0%', // el diapasón llega casi al borde superior: el zoom crece hacia abajo
     r: '1.4deg',
     alt: 'Diapasón de titanio sobre una base de piedra oscura, con luz violeta entre sus brazos',
-    subject: 'Consulta de marca y contenido',
+    need: 1,
+    topic: 'Marca y contenido',
   },
   {
     n: '03',
@@ -39,7 +41,8 @@ const cards = [
     pos: '30% 50%',
     r: '-1.2deg',
     alt: 'Dos engranajes de titanio acoplados sobre una base negra, el pequeño con un centro violeta',
-    subject: 'Consulta de IA y software',
+    need: 2,
+    topic: 'IA y software',
   },
 ];
 
@@ -47,18 +50,24 @@ const wall = [
   {
     group: 'Growth y Marca',
     items: [
-      'Estrategia de marketing digital',
-      'Branding e identidad',
-      'Creación de contenido',
-      'Gestión de redes sociales',
-      'Campañas publicitarias',
-      'Videos para Meta Ads',
-      'Asesoría para vender cursos y comunidades',
+      { t: 'Estrategia de marketing digital', need: 0 },
+      { t: 'Branding e identidad', need: 1 },
+      { t: 'Creación de contenido', need: 1 },
+      { t: 'Gestión de redes sociales', need: 1 },
+      { t: 'Campañas publicitarias', need: 0 },
+      { t: 'Videos para Meta Ads', need: 0 },
+      { t: 'Asesoría para vender cursos y comunidades', need: 4 },
     ],
   },
   {
     group: 'IA y Software',
-    items: ['Páginas web', 'Dashboards a medida', 'Asistentes de IA', 'Apps a la medida', 'Sistemas para empresas'],
+    items: [
+      { t: 'Páginas web', need: 2 },
+      { t: 'Dashboards a medida', need: 2 },
+      { t: 'Asistentes de IA', need: 3 },
+      { t: 'Apps a la medida', need: 2 },
+      { t: 'Sistemas para empresas', need: 3 },
+    ],
   },
 ];
 ---
@@ -98,7 +107,7 @@ const wall = [
               <ul class="svc__list">
                 {c.items.map((i) => <li>{i}</li>)}
               </ul>
-              <a class="svc__link" href={mail(c.subject)}>
+              <a class="svc__link" href="#contacto" data-need={c.need} data-topic={c.topic} data-cta="servicio-tarjeta">
                 Conversemos
                 <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
               </a>
@@ -116,9 +125,9 @@ const wall = [
           <ul class="wall__list">
             {g.items.map((item, i) => (
               <li class="wall__row" data-row>
-                <a href={mail(`Consulta: ${item}`)}>
+                <a href="#contacto" data-need={item.need} data-topic={item.t} data-cta="servicio-muro">
                   <span class="wall__idx">{String.fromCharCode(65 + gi)}.{String(i + 1).padStart(2, '0')}</span>
-                  <span class="wall__text">{item}</span>
+                  <span class="wall__text">{item.t}</span>
                   <span class="wall__go" aria-hidden="true" set:html={arrow} />
                 </a>
               </li>
