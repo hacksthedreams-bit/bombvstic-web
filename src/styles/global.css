@@ -3873,3 +3873,60 @@ html.dock-on {
     display: none;
   }
 }
+
+/* ───── Cortina de entrada (ficha 403) ─────
+   El corte de −31° (tan 31° = 0,6009 → 60,09vw de caída en todo el ancho) barre la pantalla una sola vez por sesión. Animación de CSS puro:
+   no espera al programa y el hero ya está pintado debajo (404). No bloquea clics ni foco. Solo existe si el script del <head> puso `html.intro`. */
+.curtain {
+  display: none;
+}
+.intro .curtain {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100vh + 60.09vw);
+  height: calc(100lvh + 60.09vw);
+  z-index: 1000;
+  pointer-events: none;
+  animation: curtain-sweep 1050ms var(--ease-cut) both;
+}
+.curtain__sheet {
+  position: absolute;
+  inset: 0;
+  background: #0b0b0e;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 60.09vw), 0 100%);
+}
+/* el trazo de luz va fuera del recorte: lo mismo que la línea del escenario, sobre el borde exacto */
+.curtain__line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 116.66vw; /* 100vw / cos 31° */
+  height: 2px;
+  transform-origin: 0 100%;
+  transform: rotate(-31deg);
+  background: linear-gradient(90deg, transparent, rgb(173 139 250 / 0.9) 25%, rgb(245 241 234) 50%, rgb(173 139 250 / 0.9) 75%, transparent);
+  box-shadow: 0 0 22px 2px rgb(139 92 246 / 0.7);
+}
+@keyframes curtain-sweep {
+  0%,
+  24% {
+    transform: translateY(0);
+    visibility: visible;
+  }
+  100% {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+.intro-skip .curtain {
+  animation: none !important;
+  visibility: hidden !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .curtain {
+    display: none !important;
+  }
+}

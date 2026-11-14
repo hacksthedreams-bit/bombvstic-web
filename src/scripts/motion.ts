@@ -233,7 +233,14 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   const heroItems = $$('.hero [data-reveal]');
   const stage = $('[data-stage]');
   if (stage) {
-    const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.15 });
+    // 403: bajo la cortina de entrada el hero arranca cuando ella va a media subida; si se saltó, o el programa llegó tarde, de inmediato
+    const rootCls = document.documentElement.classList;
+    const underCurtain = rootCls.contains('intro') && !rootCls.contains('intro-skip') && performance.now() < 800;
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: underCurtain ? 0.55 : 0.15 });
+    if (underCurtain) {
+      const quick = () => tl.delay(0.15);
+      ['keydown', 'pointerdown', 'wheel', 'touchstart'].forEach((ev) => window.addEventListener(ev, quick, { passive: true, once: true }));
+    }
     // 404: el escenario ya está pintado (a 0,94 por CSS): solo asienta; nunca parte de invisible
     tl.fromTo(stage, { scale: 0.94 }, { scale: 1, duration: 1.6 }, 0)
       .fromTo(heroItems.slice(0, 1), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8 }, 0.2)

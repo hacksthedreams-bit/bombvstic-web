@@ -65,18 +65,41 @@ const agency = {
       fetchpriority="high"
     />
 
-    <script is:inline>
+    <script is:inline define:vars={{ home: path === '/' }}>
       // Oculta el hero hasta que la animación de entrada esté lista.
       // Si algo falla, a los 3,5 s todo se muestra igual: el contenido nunca queda invisible.
       document.documentElement.classList.add('js');
       setTimeout(function () {
         document.documentElement.classList.add('reveal-fallback');
       }, 3500);
+      // Cortina de entrada (ficha 403): solo la primera carga de la sesión, en la portada, sin ancla, sin recarga ni retroceso y con movimiento
+      // permitido. "Visto" se marca en cualquier página del sitio; si sessionStorage falla, se trata como visto (nunca se repite).
+      try {
+        var seen = sessionStorage.getItem('bv-intro');
+        sessionStorage.setItem('bv-intro', '1');
+        var nav = performance.getEntriesByType('navigation')[0];
+        if (!seen && home && !location.hash && (!nav || nav.type === 'navigate') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          var root = document.documentElement;
+          root.classList.add('intro');
+          var skip = function () {
+            root.classList.add('intro-skip');
+          };
+          ['keydown', 'pointerdown', 'wheel', 'touchstart'].forEach(function (ev) {
+            addEventListener(ev, skip, { passive: true, once: true });
+          });
+        }
+      } catch (e) {}
     </script>
 
     <slot name="head" />
   </head>
   <body>
+    {path === '/' && (
+      <div class="curtain" aria-hidden="true">
+        <div class="curtain__sheet"></div>
+        <span class="curtain__line"></span>
+      </div>
+    )}
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
     <div class="atmo" aria-hidden="true">
