@@ -5,17 +5,17 @@
 //  - Se remide en cada cierre de ola y tras publicar la propia franja; si algo deja de cumplirse, se retira de inmediato.
 export const proof = {
   measuredUrl: 'https://hacksthedreams-bit.github.io/bombvstic-web/',
-  measuredOn: '2026-11-13',
+  measuredOn: '2026-11-14',
   lighthouseVersion: '12.8.2', // tomada del informe (docs/loop/004-evidencia/medicion-publicada)
   runs: 5,
-  lcpDesktopMs: 562 as number | null,
-  lcpMobileMs: 2888 as number | null, // > 2500: la celda de velocidad NO se publica (regla fijada antes de medir) // la celda de velocidad solo existe si es ≤ 2500 (y la de escritorio también está medida)
+  lcpDesktopMs: 559 as number | null,
+  lcpMobileMs: 2717 as number | null, // > 2500: la celda de velocidad NO se publica (regla fijada antes de medir) // la celda de velocidad solo existe si es ≤ 2500 (y la de escritorio también está medida)
   a11y: 100 as number | null, // puntaje de accesibilidad de Lighthouse (0–100)
-  axeClean: true, // puerta 4 del 13-nov-2026 (Ola 3): axe sin serias/críticas en el build publicado
-  thirdPartyRequests: 0 as number | null, // medido el 13-nov-2026 en las 10 corridas: solo hacksthedreams-bit.github.io
+  axeClean: true, // puerta 4 del 14-nov-2026 (Ola 4): axe sin serias/críticas en el build publicado
+  thirdPartyRequests: 0 as number | null, // medido el 14-nov-2026 en las 10 corridas: solo hacksthedreams-bit.github.io
   // "Caso 00 · Esta web" (ficha 303). Misma fecha y mismas reglas de caducidad: si la medición vence o el host no coincide, el bloque no se renderiza.
-  ideasShipped: 19 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
-  criticalKB: 82 as number | null, // HTML + CSS + JS comprimidos (gzip), en KB enteros, de la puerta 4 sobre el build publicado; las imágenes y tipografías van aparte
+  ideasShipped: 23 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
+  criticalKB: 84 as number | null, // HTML + CSS + JS comprimidos (gzip), en KB enteros, de la puerta 4 sobre el build publicado; las imágenes y tipografías van aparte
 };
 
 export const PROOF_MAX_AGE_DAYS = 120;
