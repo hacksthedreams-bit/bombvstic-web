@@ -45,21 +45,21 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
         <div class="hero__copy">
           <p class="kicker" data-reveal>Marketing digital &amp; AI Solutions</p>
           <!-- Titular aprobado: opción B, ahora apilado y escalonado (hero tipográfico).
-               El "chip" es decorativo: muestra el motion real del caso Digital Sneakers Shop. -->
+               El "chip" es decorativo: una pieza propia (titanio cortado por luz violeta), ficha 501. -->
           <h1 class="hero__title" id="titulo-hero" data-hero-title>
             <span class="line line--1"><span>Marca,
               <span class="hchip" aria-hidden="true" data-chip>
                 <span class="hchip__media">
-                  <img src={u('/media/proyectos/dss-03-480.webp')} alt="" width="480" height="600" decoding="async" fetchpriority="low" />
-                  <video
-                    data-chip-video
-                    data-src={u('/media/proyectos/dss-03-motion.mp4')}
-                    muted
-                    loop
-                    playsinline
-                    preload="none"
-                    tabindex="-1"
-                  ></video>
+                  <img
+                    src={u('/media/hero/chip-filo-720.webp')}
+                    srcset={`${u('/media/hero/chip-filo-480.webp')} 480w, ${u('/media/hero/chip-filo-720.webp')} 720w`}
+                    sizes="(min-width: 900px) 18rem, 14rem"
+                    alt=""
+                    width="720"
+                    height="305"
+                    decoding="async"
+                    fetchpriority="low"
+                  />
                 </span>
               </span>
             </span></span>

@@ -511,7 +511,7 @@ main[tabindex='-1']:focus {
 .hero__title .accent {
   text-transform: none;
 }
-/* Chip incrustado en el titular: ventana al motion del caso, con el borde derecho cortado en diagonal (el corte de la marca) */
+/* Chip incrustado en el titular: ventana con una pieza propia (ficha 501), con el borde derecho cortado en diagonal (el corte de la marca) */
 .hchip {
   display: inline-block;
   vertical-align: -0.04em;
@@ -529,21 +529,13 @@ main[tabindex='-1']:focus {
   background: linear-gradient(135deg, #1a0d3d, #7a00ff);
   box-shadow: 0 0 0 1px rgb(173 139 250 / 0.35);
 }
-.hchip__media img,
-.hchip__media video {
+.hchip__media img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 56%;
-}
-.hchip__media video {
-  opacity: 0;
-  transition: opacity 0.8s var(--ease-out);
-}
-.hchip__media video.is-on {
-  opacity: 1;
 }
 .line {
   display: block;

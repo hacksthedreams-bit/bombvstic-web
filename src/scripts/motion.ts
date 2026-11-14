@@ -252,20 +252,6 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       .fromTo('[data-stage-cut]', { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 0.85, duration: 1.6, ease: 'expo.inOut' }, 0.8);
   }
 
-  // Chip del titular: el motion real del caso se carga solo en escritorio y tras el `load` (no compite con el LCP).
-  // En móvil y con movimiento reducido queda el póster estático.
-  const chipVideo = $<HTMLVideoElement>('[data-chip-video]');
-  if (chipVideo && finePointer && window.innerWidth >= 900) {
-    const startChip = () => {
-      chipVideo.src = chipVideo.dataset.src ?? '';
-      chipVideo.addEventListener('playing', () => chipVideo.classList.add('is-on'), { once: true });
-      chipVideo.play().catch(() => {});
-      new IntersectionObserver(([e]) => (e.isIntersecting ? chipVideo.play().catch(() => {}) : chipVideo.pause())).observe(chipVideo);
-    };
-    if (document.readyState === 'complete') startChip();
-    else window.addEventListener('load', startChip, { once: true });
-  }
-
   // El emblema responde al scroll: gira y se desvanece hacia la siguiente sección
   const emblem = $('[data-emblem]');
   if (emblem) {
