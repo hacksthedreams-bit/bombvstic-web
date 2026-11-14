@@ -8,10 +8,10 @@ export const proof = {
   measuredOn: '2026-11-14',
   lighthouseVersion: '12.8.2', // tomada del informe (docs/loop/004-evidencia/medicion-publicada)
   runs: 5,
-  lcpDesktopMs: 557 as number | null,
-  lcpMobileMs: 2701 as number | null, // > 2500: la celda de velocidad NO se publica (regla fijada antes de medir) // la celda de velocidad solo existe si es ≤ 2500 (y la de escritorio también está medida)
+  lcpDesktopMs: 591 as number | null,
+  lcpMobileMs: 2705 as number | null, // > 2500: la celda de velocidad NO se publica (regla fijada antes de medir) // la celda de velocidad solo existe si es ≤ 2500 (y la de escritorio también está medida)
   a11y: 100 as number | null, // puntaje de accesibilidad de Lighthouse (0–100)
-  axeClean: true, // puerta 4 del 14-nov-2026 (Ola 5): axe sin serias/críticas en el build publicado
+  axeClean: true, // puerta 4 del 14-nov-2026 (cierre de la Ola 3): axe sin serias/críticas en el build publicado
   thirdPartyRequests: 0 as number | null, // medido el 14-nov-2026 en las 10 corridas: solo hacksthedreams-bit.github.io
   // "Caso 00 · Esta web" (ficha 303). Misma fecha y mismas reglas de caducidad: si la medición vence o el host no coincide, el bloque no se renderiza.
   ideasShipped: 26 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
