@@ -900,3 +900,55 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
     rail.classList.remove('is-near');
   };
 });
+
+// Titulares que salen del desenfoque, por el corte (ficha 402). Tres titulares de secciones sin pin (Servicios, IA, Equipo): borroso, algo
+// más tenue y 24 px más abajo → nítido, mientras una diagonal de −31° los descubre de abajo-izquierda a arriba-derecha. Va al final: ningún
+// pin existente cambia. El texto sigue entero en el DOM; con movimiento reducido (y sin JS) este bloque no corre y el titular queda nítido.
+mm.add('(prefers-reduced-motion: no-preference)', () => {
+  const T = Math.tan((31 * Math.PI) / 180);
+  const blurPx = window.matchMedia('(max-width: 899px)').matches ? 8 : 12;
+  const heads = ['.services__title', '.ai__title', '.team__title'].map((s) => $<HTMLElement>(s)).filter((el): el is HTMLElement => !!el);
+  const undo: Array<() => void> = [];
+  heads.forEach((el) => {
+    let w = 0;
+    let h = 0;
+    const measure = () => {
+      w = el.offsetWidth;
+      h = el.offsetHeight;
+    };
+    const clear = () => {
+      el.style.filter = el.style.clipPath = el.style.opacity = el.style.transform = el.style.willChange = '';
+    };
+    const apply = (p: number) => {
+      if (p >= 0.999) return clear();
+      const e = 1 - (1 - p) * (1 - p); // sale rápido y asienta suave
+      // caja de recorte ampliada (±5 % lados, ±10 % arriba y abajo) para no cortar tildes ni la cursiva del acento
+      const x0 = -0.05 * w, x1 = 1.05 * w, y0 = -0.1 * h, y1 = 1.1 * h;
+      const c = (y1 + T * x1) + e * ((y0 + T * x0) - (y1 + T * x1)); // el borde sube de "vacío" a "todo descubierto"
+      const yl = c - T * x0, yr = c - T * x1, yb = y1 + T * (x1 - x0) + 4;
+      el.style.willChange = 'filter, transform, clip-path, opacity';
+      el.style.filter = `blur(${((1 - e) * blurPx).toFixed(2)}px)`;
+      el.style.opacity = String((0.5 + 0.5 * e).toFixed(3));
+      el.style.transform = `translateY(${((1 - e) * 24).toFixed(2)}px)`;
+      el.style.clipPath = `polygon(${x0.toFixed(1)}px ${yl.toFixed(1)}px, ${x1.toFixed(1)}px ${yr.toFixed(1)}px, ${x1.toFixed(1)}px ${yb.toFixed(1)}px, ${x0.toFixed(1)}px ${yb.toFixed(1)}px)`;
+    };
+    measure();
+    const proxy = { p: 0 };
+    const tween = gsap.fromTo(
+      proxy,
+      { p: 0 },
+      {
+        p: 1,
+        ease: 'none',
+        onUpdate: () => apply(proxy.p),
+        scrollTrigger: { trigger: el, start: 'top 88%', end: 'top 62%', scrub: 0.4, invalidateOnRefresh: true, onRefresh: measure },
+      },
+    );
+    undo.push(() => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+      clear();
+    });
+  });
+  return () => undo.forEach((f) => f());
+});
