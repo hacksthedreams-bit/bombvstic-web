@@ -35,7 +35,7 @@ function proofValid(siteHost: string, now: Date) {
     return null;
   }
   if (host !== siteHost) return null;
-  const age = (now.getTime() - new Date(p.measuredOn + 'T12:00:00').getTime()) / 86400000;
+  const age = (now.getTime() - new Date(p.measuredOn + 'T00:00:00').getTime()) / 86400000; // inicio del día: una medición de hoy ya vale desde la madrugada
   if (!(age >= 0 && age <= PROOF_MAX_AGE_DAYS)) return null;
   return host;
 }
