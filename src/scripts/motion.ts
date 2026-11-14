@@ -234,7 +234,8 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   const stage = $('[data-stage]');
   if (stage) {
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.15 });
-    tl.fromTo(stage, { autoAlpha: 0, scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 1.6 }, 0)
+    // 404: el escenario ya está pintado (a 0,94 por CSS): solo asienta; nunca parte de invisible
+    tl.fromTo(stage, { scale: 0.94 }, { scale: 1, duration: 1.6 }, 0)
       .fromTo(heroItems.slice(0, 1), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.8 }, 0.2)
       .fromTo(heroLines, { yPercent: 115, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 1.2, stagger: 0.12 }, 0.35)
       .fromTo(heroItems.slice(1), { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.1 }, 1.0)

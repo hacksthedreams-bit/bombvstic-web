@@ -800,14 +800,23 @@ main[tabindex='-1']:focus {
 }
 /* El hero espera a su animación de entrada; el respaldo y "reducir movimiento" lo muestran siempre */
 .js:not(.reveal-fallback) .hero [data-reveal],
-.js:not(.reveal-fallback) .hero .line > span,
-.js:not(.reveal-fallback) .hero [data-stage] {
+.js:not(.reveal-fallback) .hero .line > span {
   visibility: hidden;
+}
+/* Ficha 404: el escenario (emblema = elemento del LCP) NO espera al programa: se pinta en el primer cuadro ya en su escala inicial,
+   y solo la línea de luz parte oculta para trazarse después. Con movimiento reducido y con el respaldo no se aplica nada de esto. */
+@media (prefers-reduced-motion: no-preference) {
+  .js:not(.reveal-fallback) .hero [data-stage] {
+    transform: scale(0.94);
+  }
+  .js:not(.reveal-fallback) .hero [data-stage-cut] {
+    opacity: 0;
+    transform: rotate(-31deg) scaleX(0);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .js .hero [data-reveal],
-  .js .hero .line > span,
-  .js .hero [data-stage] {
+  .js .hero .line > span {
     visibility: visible !important;
   }
 }
