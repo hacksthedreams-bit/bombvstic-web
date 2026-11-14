@@ -23,11 +23,12 @@ const cards = [
     accent: 'y contenido',
     lead: 'Una identidad clara y contenido constante para que te reconozcan y te elijan.',
     items: ['Branding e identidad completa', 'Creación de contenido', 'Gestión de redes sociales'],
-    img: 'marca',
-    pos: '68% 50%',
-    origin: '50% 0%', // el diapasón llega casi al borde superior: el zoom crece hacia abajo
+    img: 'marca-dss',
+    ws: [640, 720],
+    pos: '50% 50%',
+    tag: 'Caso real · Digital Sneakers Shop',
     r: '1.4deg',
-    alt: 'Diapasón de titanio sobre una base de piedra oscura, con luz violeta entre sus brazos',
+    alt: 'Historia de Instagram del caso Digital Sneakers Shop: el logo renovado con dos versiones horizontales y un sello circular',
     need: 1,
     topic: 'Marca y contenido',
   },
@@ -37,10 +38,12 @@ const cards = [
     accent: 'y software',
     lead: 'Páginas web, dashboards, asistentes de IA y sistemas hechos a la medida de cómo trabaja tu negocio.',
     items: ['Páginas web', 'Dashboards y apps a medida', 'Asistentes de IA y sistemas para empresas'],
-    img: 'tecnologia',
-    pos: '30% 50%',
+    img: 'ia-demo',
+    ws: [640, 960],
+    pos: '50% 0%',
+    tag: 'Ejemplo ilustrativo',
     r: '-1.2deg',
-    alt: 'Dos engranajes de titanio acoplados sobre una base negra, el pequeño con un centro violeta',
+    alt: 'Captura de la demostración de esta página: el interruptor en «Personas + IA» y los primeros pasos de un restaurante, cada uno con la etiqueta «Asistente»',
     need: 2,
     topic: 'IA y software',
   },
@@ -84,21 +87,25 @@ const wall = [
       {cards.map((c, i) => (
         <article class="svc" data-svc style={`--i:${i}`}>
           <div class="svc__card" style={`--r:${c.r}`}>
-            <div class="svc__media">
-              <picture data-svc-pic>
-                <img
-                  src={u(`/media/servicios/${c.img}-960.webp`)}
-                  srcset={`${u(`/media/servicios/${c.img}-640.webp`)} 640w, ${u(`/media/servicios/${c.img}-960.webp`)} 960w`}
-                  sizes="(min-width: 900px) 30vw, 92vw"
-                  width="960"
-                  height="720"
-                  alt={c.alt}
-                  loading="lazy"
-                  decoding="async"
-                  style={`object-position:${c.pos};transform-origin:${c.origin ?? '50% 50%'}`}
-                />
-              </picture>
-              <span class="svc__sweep" aria-hidden="true"></span>
+            <div class="svc__window">
+              <div class="svc__media">
+                <picture data-svc-pic>
+                  <img
+                    src={u(`/media/servicios/${c.img}-${(c.ws ?? [640, 960])[1]}.webp`)}
+                    srcset={(c.ws ?? [640, 960]).map((w) => `${u(`/media/servicios/${c.img}-${w}.webp`)} ${w}w`).join(', ')}
+                    sizes="(min-width: 900px) 30vw, 92vw"
+                    width="960"
+                    height={c.ws ? '960' : '720'}
+                    alt={c.alt}
+                    loading="lazy"
+                    decoding="async"
+                    style={`object-position:${c.pos};transform-origin:${c.origin ?? '50% 50%'}`}
+                  />
+                </picture>
+                <span class="svc__sweep" aria-hidden="true"></span>
+              </div>
+              <span class="svc__edge" aria-hidden="true"></span>
+              {c.tag && <span class="svc__tag">{c.tag}</span>}
             </div>
             <div class="svc__body">
               <p class="svc__num">{c.n}</p>

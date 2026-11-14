@@ -984,11 +984,59 @@ main[tabindex='-1']:focus {
     transform: rotate(var(--r, 0deg));
   }
 }
-.svc__media {
+/* Ventana del corte (ficha 502): una esquina de la imagen se corta a −31° (tramo horizontal 40 % del ancho, caída = 40 % × tan 31° = 24,04 %).
+   Va en cqw porque el ángulo debe medirse sobre la ventana y no sobre la pantalla. La esquina cortada es la interior (hacia el texto). */
+.svc__window {
   position: relative;
   aspect-ratio: 1;
+  container-type: inline-size;
+}
+.svc__media {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   background: var(--bg);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24.04cqw), calc(100% - 40cqw) 100%, 0 100%);
+}
+.svc:nth-child(2) .svc__media {
+  clip-path: polygon(40cqw 0, 100% 0, 100% 100%, 0 100%, 0 24.04cqw);
+}
+.svc__edge {
+  position: absolute;
+  z-index: 2;
+  left: calc(100% - 40cqw);
+  bottom: 0;
+  width: 46.66cqw; /* 40cqw / cos 31° */
+  height: 1.5px;
+  transform-origin: 0 100%;
+  transform: rotate(-31deg);
+  background: linear-gradient(90deg, transparent, rgb(173 139 250 / 0.9) 30%, rgb(245 241 234) 70%, rgb(173 139 250 / 0.9));
+  box-shadow: 0 0 14px 1px rgb(139 92 246 / 0.6);
+  pointer-events: none;
+}
+.svc:nth-child(2) .svc__edge {
+  left: 0;
+  bottom: auto;
+  top: 24.04cqw;
+  transform-origin: 0 0;
+}
+.svc__tag {
+  position: absolute;
+  z-index: 3;
+  top: 0.9rem;
+  left: 0.9rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid rgb(173 139 250 / 0.45);
+  border-radius: 999px;
+  background: rgb(11 11 14 / 0.78);
+  color: var(--ivory, #f5f1ea);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.svc:nth-child(2) .svc__tag {
+  left: auto;
+  right: 0.9rem;
 }
 .svc__media::after {
   content: '';
@@ -1164,7 +1212,7 @@ main[tabindex='-1']:focus {
   opacity: var(--dim, 0);
   pointer-events: none;
 }
-.is-deck .svc__media {
+.is-deck .svc__window {
   width: 48%;
   height: 100%;
   aspect-ratio: auto;
