@@ -902,7 +902,7 @@ mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
 });
 
 // Titulares que salen del desenfoque, por el corte (ficha 402). Tres titulares de secciones sin pin (Servicios, IA, Equipo): borroso, algo
-// más tenue y 24 px más abajo → nítido, mientras una diagonal de −31° los descubre de abajo-izquierda a arriba-derecha. Va al final: ningún
+// más tenue (opacidad 0,7: con 0,5 axe marca la palabra lavanda a 2,6:1) y 24 px más abajo → nítido, mientras una diagonal de −31° los descubre de abajo-izquierda a arriba-derecha. Va al final: ningún
 // pin existente cambia. El texto sigue entero en el DOM; con movimiento reducido (y sin JS) este bloque no corre y el titular queda nítido.
 mm.add('(prefers-reduced-motion: no-preference)', () => {
   const T = Math.tan((31 * Math.PI) / 180);
@@ -928,7 +928,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       const yl = c - T * x0, yr = c - T * x1, yb = y1 + T * (x1 - x0) + 4;
       el.style.willChange = 'filter, transform, clip-path, opacity';
       el.style.filter = `blur(${((1 - e) * blurPx).toFixed(2)}px)`;
-      el.style.opacity = String((0.5 + 0.5 * e).toFixed(3));
+      el.style.opacity = String((0.7 + 0.3 * e).toFixed(3));
       el.style.transform = `translateY(${((1 - e) * 24).toFixed(2)}px)`;
       el.style.clipPath = `polygon(${x0.toFixed(1)}px ${yl.toFixed(1)}px, ${x1.toFixed(1)}px ${yr.toFixed(1)}px, ${x1.toFixed(1)}px ${yb.toFixed(1)}px, ${x0.toFixed(1)}px ${yb.toFixed(1)}px)`;
     };
