@@ -14,7 +14,7 @@ export const proof = {
   axeClean: true, // puerta 4 del 14-nov-2026 (Ola 5): axe sin serias/críticas en el build publicado
   thirdPartyRequests: 0 as number | null, // medido el 14-nov-2026 en las 10 corridas: solo hacksthedreams-bit.github.io
   // "Caso 00 · Esta web" (ficha 303). Misma fecha y mismas reglas de caducidad: si la medición vence o el host no coincide, el bloque no se renderiza.
-  ideasShipped: 25 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
+  ideasShipped: 26 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
   criticalKB: 84 as number | null, // HTML + CSS + JS comprimidos (gzip), en KB enteros, de la puerta 4 sobre el build publicado; las imágenes y tipografías van aparte
 };
 
