@@ -3930,3 +3930,39 @@ html.dock-on {
     display: none !important;
   }
 }
+
+/* ───── Entre páginas, con el corte (ficha 401) ─────
+   Solo CSS (sin JS ni enrutador): la página nueva entra por una diagonal de −31° que sube de abajo a arriba (60,09vw = tan 31° × ancho) y la
+   anterior se atenúa un poco. Aplica a la navegación entre páginas del sitio; los #anclas, mailto: y enlaces externos no la disparan.
+   Sin movimiento (reducir movimiento) y en navegadores sin soporte: corte duro. La barra va dentro de la captura y se barre con la página. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--t-slow);
+    animation-timing-function: var(--ease-cut);
+    animation-fill-mode: both;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-old(root) {
+    animation-name: vt-out;
+  }
+  ::view-transition-new(root) {
+    animation-name: vt-in;
+  }
+}
+@keyframes vt-out {
+  to {
+    opacity: 0.6;
+  }
+}
+@keyframes vt-in {
+  from {
+    clip-path: polygon(0 calc(100% + 60.09vw), 100% 100%, 100% 100%, 0 100%);
+  }
+  to {
+    clip-path: polygon(0 0, 100% calc(-60.09vw), 100% 100%, 0 100%);
+  }
+}
