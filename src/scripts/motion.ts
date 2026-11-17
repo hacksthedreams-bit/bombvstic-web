@@ -122,7 +122,7 @@ if (!finePointer && 'IntersectionObserver' in window && window.matchMedia('(pref
 // Franja de datos medidos: si la medición envejeció (> 120 días) deja de mostrarse, aunque nadie vuelva a construir el sitio
 const factsEl = $('[data-measured]');
 if (factsEl) {
-  const days = (Date.now() - new Date(`${factsEl.dataset.measured}T12:00:00`).getTime()) / 86400000;
+  const days = (Date.now() - new Date(`${factsEl.dataset.measured}T00:00:00`).getTime()) / 86400000; // inicio del día, igual que proof.ts: una medición de hoy vale desde la madrugada
   if (!(days >= 0 && days <= 120)) factsEl.hidden = true;
 }
 
