@@ -5,7 +5,7 @@
 //  - Se remide en cada cierre de ola y tras publicar la propia franja; si algo deja de cumplirse, se retira de inmediato.
 export const proof = {
   measuredUrl: 'https://hacksthedreams-bit.github.io/bombvstic-web/',
-  measuredOn: '2026-11-14',
+  measuredOn: '2026-11-17',
   lighthouseVersion: '12.8.2', // tomada del informe (docs/loop/004-evidencia/medicion-publicada)
   runs: 5,
   lcpDesktopMs: 591 as number | null,
@@ -14,7 +14,7 @@ export const proof = {
   axeClean: true, // puerta 4 del 14-nov-2026 (cierre de la Ola 3): axe sin serias/críticas en el build publicado
   thirdPartyRequests: 0 as number | null, // medido el 14-nov-2026 en las 10 corridas: solo hacksthedreams-bit.github.io
   // "Caso 00 · Esta web" (ficha 303). Misma fecha y mismas reglas de caducidad: si la medición vence o el host no coincide, el bloque no se renderiza.
-  ideasShipped: 26 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
+  ideasShipped: 27 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
   criticalKB: 84 as number | null, // HTML + CSS + JS comprimidos (gzip), en KB enteros, de la puerta 4 sobre el build publicado; las imágenes y tipografías van aparte
 };
 
