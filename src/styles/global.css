@@ -539,7 +539,10 @@ main[tabindex='-1']:focus {
 }
 .line {
   display: block;
-  overflow: hidden;
+  /* Máscara de la entrada: recorta por abajo en el borde de siempre y deja 0,22em arriba para que la tilde de la Í de «TECNOLOGÍA» no se corte
+     (con overflow:hidden quedaba como una raya plana). Sin cambios de flujo (ficha 601). */
+  overflow: visible;
+  clip-path: inset(-0.22em -0.05em 0 -0.05em);
   padding-bottom: 0.08em;
   margin-bottom: -0.08em;
 }
