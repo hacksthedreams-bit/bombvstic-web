@@ -865,6 +865,14 @@ main[tabindex='-1']:focus {
     flex: none;
   }
 }
+/* Entre 900 y 1279 px los botones quedaban sobre el emblema: la bajada y los botones se apilan a la izquierda (ficha 601) */
+@media (min-width: 900px) and (max-width: 1279px) {
+  .hero__sub {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
 
 /* ───── Cortes entre secciones ───── */
 .section {
