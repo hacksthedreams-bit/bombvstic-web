@@ -3237,7 +3237,9 @@ main[tabindex='-1']:focus {
   font-size: 0.95rem;
 }
 .footer__cols a {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem; /* objetivo táctil ≥ 44 px (ficha 601) */
   padding-block: 0.3rem;
   text-decoration: none;
 }
@@ -3257,10 +3259,12 @@ main[tabindex='-1']:focus {
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 0.4rem;
+  gap: 0;
 }
 .footer__link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   padding-block: 0.3rem;
   color: var(--muted);
   text-underline-offset: 3px;
