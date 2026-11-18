@@ -64,6 +64,19 @@ const did = [
               <div class="story__frame">
                 {s.video ? (
                   <>
+                    <!-- Póster como imagen perezosa detrás del video (ficha 602): el atributo `poster` se descargaba al cargar la página aunque el video está muy abajo -->
+                    <img
+                      class="story__poster"
+                      src={u('/media/proyectos/dss-03-720.webp')}
+                      srcset={`${u('/media/proyectos/dss-03-480.webp')} 480w, ${u('/media/proyectos/dss-03-720.webp')} 720w`}
+                      sizes="(min-width: 900px) 18vw, 70vw"
+                      width="720"
+                      height="1280"
+                      alt=""
+                      aria-hidden="true"
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <video
                       class="story__video"
                       data-story-video
@@ -73,7 +86,6 @@ const did = [
                       preload="none"
                       width="720"
                       height="1280"
-                      poster={u('/media/proyectos/dss-03-720.webp')}
                       aria-label={s.alt}
                     >
                       <source src={u('/media/proyectos/dss-03-motion.mp4')} type="video/mp4" />
@@ -176,6 +188,22 @@ const did = [
 </section>
 
 <script>
+  // Póster perezoso (ficha 602): la imagen vive en una pista horizontal y `loading="lazy"` no la adelanta cuando solo asoma por un costado; al
+  // acercarse la pista al pliegue (1 200 px) se pasa a `eager` para que ya esté lista cuando se deslice a esa historia (sin cuadro vacío).
+  const poster = document.querySelector<HTMLImageElement>('.story__poster');
+  const track = document.querySelector<HTMLElement>('[data-stories]');
+  if (poster && track && 'IntersectionObserver' in window) {
+    const near = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        poster.loading = 'eager';
+        near.disconnect();
+      },
+      { rootMargin: '1200px 0px' },
+    );
+    near.observe(track);
+  }
+
   // Video del caso: reproduce en silencio solo mientras se ve (y si la persona no pidió menos movimiento); siempre con botón de pausa.
   const video = document.querySelector<HTMLVideoElement>('[data-story-video]');
   const btn = document.querySelector<HTMLButtonElement>('[data-story-toggle]');

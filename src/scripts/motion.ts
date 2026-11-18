@@ -205,6 +205,22 @@ if ('IntersectionObserver' in window) {
   $$('[data-step]').forEach((el) => steps.observe(el));
 }
 
+/* Destello del emblema (ficha 602): su máscara reutiliza la imagen que ya eligió el <img> (`currentSrc`), sin pedir otra copia. Se vuelve a fijar si
+   el navegador cambia de candidata del `srcset` (giro, zoom, densidad). Con movimiento reducido el destello está oculto por CSS. */
+{
+  const emblemImg = document.querySelector<HTMLImageElement>('[data-emblem] img');
+  const sweep = document.querySelector<HTMLElement>('.emblem__sweep');
+  if (emblemImg && sweep) {
+    const setMask = () => {
+      if (!emblemImg.currentSrc || !emblemImg.complete || emblemImg.naturalWidth === 0) return;
+      sweep.style.setProperty('--sweep-mask', `url("${new URL(emblemImg.currentSrc, location.href).href}")`);
+      sweep.classList.add('is-ready');
+    };
+    setMask();
+    emblemImg.addEventListener('load', setMask);
+  }
+}
+
 /* ───── Solo con movimiento permitido ───── */
 const mm = gsap.matchMedia();
 

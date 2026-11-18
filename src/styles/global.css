@@ -631,9 +631,15 @@ main[tabindex='-1']:focus {
   pointer-events: none;
   mix-blend-mode: overlay;
   background: linear-gradient(115deg, transparent 38%, rgb(255 255 255 / 0.95) 50%, transparent 62%) 0% 0% / 260% 100% no-repeat;
-  -webkit-mask: url('/brand/emblema-720.webp') center / contain no-repeat;
-  mask: url('/brand/emblema-720.webp') center / contain no-repeat;
+  /* La máscara es la MISMA imagen que ya descargó el <img> del emblema (la fija motion.ts desde `currentSrc`): antes pedía otra copia de 63 KB
+     al cargar (ficha 602). Sin máscara el destello cubriría toda la caja, por eso queda oculto hasta `.is-ready`. */
+  -webkit-mask: var(--sweep-mask, none) center / contain no-repeat;
+  mask: var(--sweep-mask, none) center / contain no-repeat;
+  opacity: 0;
   animation: sweep 7s var(--ease-cut) infinite;
+}
+.emblem__sweep.is-ready {
+  opacity: 1;
 }
 /* Pie del hero: prueba de trabajo + invitación a bajar */
 /* Cinta gigante: "Estrategia / Diseño / Tecnología" (la barra es el corte de la marca) */
@@ -1533,6 +1539,19 @@ main[tabindex='-1']:focus {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+/* El póster del video es una imagen perezosa debajo de él (ficha 602); el video, sin datos, no pinta nada y lo cubre al reproducirse */
+.story__poster {
+  position: absolute;
+  inset: 0;
+}
+.story__video {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+.story__toggle {
+  z-index: 2;
 }
 .story figcaption {
   margin-top: 0.9rem;
