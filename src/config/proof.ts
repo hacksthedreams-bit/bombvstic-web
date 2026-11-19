@@ -5,17 +5,17 @@
 //  - Se remide en cada cierre de ola y tras publicar la propia franja; si algo deja de cumplirse, se retira de inmediato.
 export const proof = {
   measuredUrl: 'https://hacksthedreams-bit.github.io/bombvstic-web/',
-  measuredOn: '2026-11-18',
+  measuredOn: '2026-11-19',
   lighthouseVersion: '12.8.2', // tomada del informe (docs/loop/004-evidencia/medicion-publicada)
   runs: 5,
-  lcpDesktopMs: 545 as number | null,
-  lcpMobileMs: 2144 as number | null, // ≤ 2500: desde la ficha 602 la celda de velocidad se publica (las 5 corridas móviles de Lighthouse dieron 2,1–2,3 s)
+  lcpDesktopMs: 509 as number | null,
+  lcpMobileMs: 2068 as number | null, // ≤ 2500: desde la ficha 602 la celda de velocidad se publica (las 5 corridas móviles de Lighthouse dieron 2,0–2,1 s)
   a11y: 100 as number | null, // puntaje de accesibilidad de Lighthouse (0–100)
   axeClean: true, // puerta 4 del 14-nov-2026 (ficha 602): axe sin serias/críticas en el build publicado
   thirdPartyRequests: 0 as number | null, // medido el 14-nov-2026 en las 10 corridas: solo hacksthedreams-bit.github.io
   // "Caso 00 · Esta web" (ficha 303). Misma fecha y mismas reglas de caducidad: si la medición vence o el host no coincide, el bloque no se renderiza.
-  ideasShipped: 28 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
-  criticalKB: 84 as number | null, // HTML + CSS + JS comprimidos (gzip), en KB enteros, de la puerta 4 sobre el build publicado; las imágenes y tipografías van aparte
+  ideasShipped: 29 as number | null, // ideas DISTINTAS con commit [NNN] en la rama publicada (git log origin/main) al día de `measuredOn`; se actualiza en cada cierre de ola
+  criticalKB: 85 as number | null, // HTML + CSS + JS comprimidos (gzip), en KB enteros, de la puerta 4 sobre el build publicado; las imágenes y tipografías van aparte
 };
 
 export const PROOF_MAX_AGE_DAYS = 120;
