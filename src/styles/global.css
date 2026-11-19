@@ -75,6 +75,7 @@
   --radius: 8px;
   --cut: 6vw; /* inclinación del corte entre secciones */
   --nav-h: 4.5rem;
+  color-scheme: dark; /* teclado de iOS, barras de desplazamiento y autocompletado en oscuro (ficha 605) */
 }
 
 *,
@@ -102,6 +103,11 @@ body {
   text-rendering: optimizeLegibility;
   overflow-x: clip;
 }
+@supports not (overflow: clip) {
+  body {
+    overflow-x: hidden; /* iOS ≤ 15: sin `clip` el recorte horizontal lo hace `hidden` (ficha 605) */
+  }
+}
 
 img,
 video,
@@ -112,6 +118,14 @@ svg {
 
 a {
   color: inherit;
+}
+/* Destello del toque en la paleta de la marca (iOS y Android lo pintan gris por defecto) y sin retraso de doble toque (ficha 605) */
+a,
+button,
+summary,
+label {
+  -webkit-tap-highlight-color: rgb(173 139 250 / 0.28);
+  touch-action: manipulation;
 }
 
 ::selection {
@@ -245,6 +259,8 @@ main[tabindex='-1']:focus {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-height: 2.75rem; /* objetivo táctil ≥ 44 px (ficha 605) */
+  min-width: 2.75rem;
   text-decoration: none;
 }
 .nav__brand img {
@@ -284,13 +300,23 @@ main[tabindex='-1']:focus {
   transform-origin: left;
   transition: transform var(--t-base) var(--ease-out);
 }
-.nav__links a:hover,
+
 .nav__links a:focus-visible {
   color: var(--ivory);
 }
-.nav__links a:hover::after,
+@media (hover: hover) and (pointer: fine) {
+.nav__links a:hover {
+  color: var(--ivory);
+}
+}
+
 .nav__links a:focus-visible::after {
   transform: scaleX(1);
+}
+@media (hover: hover) and (pointer: fine) {
+.nav__links a:hover::after {
+  transform: scaleX(1);
+}
 }
 @media (min-width: 1080px) {
   .nav__links {
@@ -335,9 +361,14 @@ main[tabindex='-1']:focus {
   width: 0.8rem;
   height: 0.8rem;
 }
-.btn:hover .btn__arrow,
+
 .btn:focus-visible .btn__arrow {
   transform: translateX(3px) rotate(-45deg);
+}
+@media (hover: hover) and (pointer: fine) {
+.btn:hover .btn__arrow {
+  transform: translateX(3px) rotate(-45deg);
+}
 }
 .btn--primary {
   background: var(--violet);
@@ -347,20 +378,32 @@ main[tabindex='-1']:focus {
 .btn--primary .btn__arrow {
   background: rgb(245 241 234 / 0.18);
 }
-.btn--primary:hover,
+
 .btn--primary:focus-visible {
   background: var(--interactive);
   box-shadow: 0 10px 40px -8px rgb(122 0 255 / 0.65);
+}
+@media (hover: hover) and (pointer: fine) {
+.btn--primary:hover {
+  background: var(--interactive);
+  box-shadow: 0 10px 40px -8px rgb(122 0 255 / 0.65);
+}
 }
 .btn--ghost {
   background: transparent;
   color: var(--ivory);
   border-color: var(--line);
 }
-.btn--ghost:hover,
+
 .btn--ghost:focus-visible {
   border-color: var(--silver-dark);
   background: rgb(245 241 234 / 0.05);
+}
+@media (hover: hover) and (pointer: fine) {
+.btn--ghost:hover {
+  border-color: var(--silver-dark);
+  background: rgb(245 241 234 / 0.05);
+}
 }
 .btn--sm {
   --pad-y: 0.7rem;
@@ -379,7 +422,7 @@ main[tabindex='-1']:focus {
   display: none;
   flex-direction: column;
   gap: 1rem;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   list-style: none;
@@ -429,10 +472,16 @@ main[tabindex='-1']:focus {
 .chapters a.is-active::before {
   width: 1.75rem;
 }
-.chapters a:hover .name,
+
 .chapters a:focus-visible .name {
   opacity: 1;
   transform: none;
+}
+@media (hover: hover) and (pointer: fine) {
+.chapters a:hover .name {
+  opacity: 1;
+  transform: none;
+}
 }
 @media (min-width: 1280px) {
   .chapters {
@@ -729,13 +778,14 @@ main[tabindex='-1']:focus {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.35rem 0.7rem;
+  min-height: 2.75rem;
   padding-block: 0.4rem;
   text-decoration: none;
   font-size: 0.9rem;
   color: var(--muted);
 }
 .hero__proof-label {
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--silver-dark);
@@ -754,13 +804,23 @@ main[tabindex='-1']:focus {
   color: var(--lavender);
   transition: transform var(--t-slow) var(--ease-out);
 }
-.hero__proof:hover .hero__proof-arrow,
+
 .hero__proof:focus-visible .hero__proof-arrow {
   transform: translateX(4px) rotate(-45deg);
 }
-.hero__proof:hover b,
+@media (hover: hover) and (pointer: fine) {
+.hero__proof:hover .hero__proof-arrow {
+  transform: translateX(4px) rotate(-45deg);
+}
+}
+
 .hero__proof:focus-visible b {
   color: var(--lavender);
+}
+@media (hover: hover) and (pointer: fine) {
+.hero__proof:hover b {
+  color: var(--lavender);
+}
 }
 .hero__scroll {
   display: none;
@@ -768,7 +828,7 @@ main[tabindex='-1']:focus {
   gap: 0.9rem;
   padding-block: 0.4rem;
   text-decoration: none;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--silver-dark);
@@ -874,6 +934,38 @@ main[tabindex='-1']:focus {
 /* En escritorio ancho el botón «Ver Instagram» pasa sobre el metal del emblema: fondo oscuro suave para que el texto se lea siempre (ficha 601) */
 .hero .btn--ghost {
   background: rgb(11 11 14 / 0.62);
+}
+/* Celular en horizontal (ficha 605): dos columnas, titular a la izquierda y emblema a la derecha; en una pantalla de ~390 px de alto el emblema
+   entero ocupaba la primera vista y el titular quedaba debajo. `min-width` evita que un teléfono en vertical con el teclado abierto active la regla. */
+@media (orientation: landscape) and (min-width: 560px) and (max-height: 520px) {
+  .hero {
+    align-items: start;
+    padding-top: calc(var(--nav-h) + 0.5rem);
+    padding-bottom: 2rem;
+  }
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+  .hero__stage {
+    order: 1;
+    width: min(100%, 60vh);
+    width: min(100%, 60svh);
+    margin: 0 auto;
+  }
+  .hero__title {
+    font-size: clamp(1.7rem, 5.4vw, 2.6rem);
+  }
+  .kicker {
+    margin-bottom: 0.9rem;
+  }
+  .hero__lead {
+    margin-top: 1rem;
+  }
+  .hero__actions {
+    margin-top: 1.25rem;
+  }
 }
 /* Entre 900 y 1279 px los botones quedaban sobre el emblema: la bajada y los botones se apilan a la izquierda (ficha 601) */
 @media (min-width: 900px) and (max-width: 1279px) {
@@ -1051,7 +1143,7 @@ main[tabindex='-1']:focus {
   border-radius: 999px;
   background: rgb(11 11 14 / 0.78);
   color: var(--ivory, #f5f1ea);
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1150,6 +1242,7 @@ html:not(.js) .svc__media picture {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
+  min-height: 2.75rem;
   margin-top: auto;
   padding-top: 1rem;
   font-weight: 600;
@@ -1174,30 +1267,53 @@ html:not(.js) .svc__media picture {
 }
 
 /* Reposo → acción: el objeto se "enciende" con el cursor, el foco o al llegar al centro de la pantalla (celular) */
-.svc__card:hover,
+
 .svc__card:has(.svc__link:focus-visible),
 .svc.is-live .svc__card {
   transform: rotate(0deg) translateY(-10px);
   border-color: rgb(173 139 250 / 0.55);
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 40px 90px -30px rgb(122 0 255 / 0.6), inset 0 1px 0 rgb(245 241 234 / 0.08);
 }
-.svc__card:hover img,
+@media (hover: hover) and (pointer: fine) {
+.svc__card:hover {
+  transform: rotate(0deg) translateY(-10px);
+  border-color: rgb(173 139 250 / 0.55);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 40px 90px -30px rgb(122 0 255 / 0.6), inset 0 1px 0 rgb(245 241 234 / 0.08);
+}
+}
+
 .svc__card:has(.svc__link:focus-visible) img,
 .svc.is-live img {
   transform: scale(1.15);
   filter: saturate(1.08) brightness(1.06);
 }
+@media (hover: hover) and (pointer: fine) {
+.svc__card:hover img {
+  transform: scale(1.15);
+  filter: saturate(1.08) brightness(1.06);
+}
+}
 .svc__name .accent {
   display: block; /* la palabra clave siempre en su propia línea: tarjetas parejas */
 }
-.svc__card:hover .svc__sweep,
+
 .svc__card:has(.svc__link:focus-visible) .svc__sweep,
 .svc.is-live .svc__sweep {
   animation: svc-sweep 1.5s var(--ease-cut) both;
 }
-.svc__card:hover .btn__arrow,
+@media (hover: hover) and (pointer: fine) {
+.svc__card:hover .svc__sweep {
+  animation: svc-sweep 1.5s var(--ease-cut) both;
+}
+}
+
 .svc.is-live .btn__arrow {
   transform: translateX(3px) rotate(-45deg);
+}
+@media (hover: hover) and (pointer: fine) {
+.svc__card:hover .btn__arrow {
+  transform: translateX(3px) rotate(-45deg);
+}
 }
 @keyframes svc-sweep {
   0% {
@@ -1273,9 +1389,14 @@ html:not(.js) .svc__media picture {
 .is-deck .svc__list {
   font-size: 1rem;
 }
-.is-deck .svc__card:hover,
+
 .is-deck .svc__card:has(.svc__link:focus-visible) {
   transform: none;
+}
+@media (hover: hover) and (pointer: fine) {
+.is-deck .svc__card:hover {
+  transform: none;
+}
 }
 
 /* Muro tipográfico: la línea que pasa por el centro de la pantalla se enciende */
@@ -1350,15 +1471,27 @@ html:not(.js) .svc__media picture {
   transform: translateX(-10px);
   transition: opacity var(--t-base), transform var(--t-slow) var(--ease-out);
 }
-.wall__row a:hover .wall__text,
+
 .wall__row a:focus-visible .wall__text {
   transform: translateX(0.9rem);
   color: var(--lavender);
 }
-.wall__row a:hover .wall__go,
+@media (hover: hover) and (pointer: fine) {
+.wall__row a:hover .wall__text {
+  transform: translateX(0.9rem);
+  color: var(--lavender);
+}
+}
+
 .wall__row a:focus-visible .wall__go {
   opacity: 1;
   transform: translateX(0) rotate(-45deg);
+}
+@media (hover: hover) and (pointer: fine) {
+.wall__row a:hover .wall__go {
+  opacity: 1;
+  transform: translateX(0) rotate(-45deg);
+}
 }
 @media (hover: hover) {
   .wall__list:hover .wall__row:not(:hover) .wall__text {
@@ -1423,14 +1556,25 @@ html:not(.js) .svc__media picture {
 .feature__link .btn__arrow {
   background: rgb(245 241 234 / 0.18);
 }
-.feature__link:hover,
+
 .feature__link:focus-visible {
   background: var(--interactive);
   box-shadow: 0 10px 40px -8px rgb(122 0 255 / 0.65);
 }
-.feature__link:hover .btn__arrow,
+@media (hover: hover) and (pointer: fine) {
+.feature__link:hover {
+  background: var(--interactive);
+  box-shadow: 0 10px 40px -8px rgb(122 0 255 / 0.65);
+}
+}
+
 .feature__link:focus-visible .btn__arrow {
   transform: translateX(3px) rotate(-45deg);
+}
+@media (hover: hover) and (pointer: fine) {
+.feature__link:hover .btn__arrow {
+  transform: translateX(3px) rotate(-45deg);
+}
 }
 
 /* Caso con historias (Digital Sneakers Shop) */
@@ -1594,8 +1738,10 @@ html:not(.js) .svc__media picture {
   cursor: pointer;
   transition: background var(--t-base), transform 120ms ease;
 }
+@media (hover: hover) and (pointer: fine) {
 .story__toggle:hover {
   background: var(--violet);
+}
 }
 .story__toggle:active {
   transform: scale(0.94);
@@ -1917,7 +2063,7 @@ html:not(.js) .svc__media picture {
   padding: 0.3rem 0.8rem;
   border: 1px solid var(--line);
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--silver-dark);
@@ -1979,6 +2125,7 @@ html:not(.js) .svc__media picture {
   display: inline-flex;
   align-items: center;
   gap: 1rem;
+  min-height: 2.75rem;
   cursor: pointer;
   font-weight: 600;
   font-size: 1.05rem;
@@ -2228,7 +2375,7 @@ html:not(.js) .svc__media picture {
   padding: 0.3rem 0.85rem;
   border: 1px solid var(--line);
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -2675,12 +2822,16 @@ html:not(.js) .svc__media picture {
   transition: opacity var(--t-slow);
   pointer-events: none;
 }
+@media (hover: hover) and (pointer: fine) {
 .person:hover .person__frame {
   border-color: rgb(173 139 250 / 0.55);
   box-shadow: 0 40px 90px -35px rgb(122 0 255 / 0.75);
 }
+}
+@media (hover: hover) and (pointer: fine) {
 .person:hover .person__frame::after {
   opacity: 1;
+}
 }
 /* Nombre que sube desde una máscara */
 .person__name {
@@ -2840,9 +2991,14 @@ html:not(.js) .svc__media picture {
 .qa[open] .qa__icon::before {
   transform: rotate(180deg);
 }
-.qa summary:hover,
+
 .qa[open] summary {
   color: var(--lavender);
+}
+@media (hover: hover) and (pointer: fine) {
+.qa summary:hover {
+  color: var(--lavender);
+}
 }
 .qa__a {
   padding: 0 2.5rem 1.75rem 3.5rem;
@@ -2993,10 +3149,15 @@ html:not(.js) .svc__media picture {
   transition: opacity var(--t-slow);
   pointer-events: none;
 }
-.diag:hover::before,
-.diag__done:hover::before,
+
 .diag:focus-within::before {
   opacity: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+.diag:hover::before,
+.diag__done:hover::before {
+  opacity: 1;
+}
 }
 .closing__label {
   justify-content: center;
@@ -3104,7 +3265,9 @@ html:not(.js) .svc__media picture {
   cursor: pointer;
 }
 .chip span {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem; /* objetivo táctil ≥ 44 px (ficha 605) */
   padding: 0.8rem 1.1rem;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -3113,8 +3276,10 @@ html:not(.js) .svc__media picture {
   color: var(--silver);
   transition: border-color var(--t-fast), background var(--t-fast), color var(--t-fast), transform 120ms ease;
 }
+@media (hover: hover) and (pointer: fine) {
 .chip:hover span {
   border-color: var(--silver-dark);
+}
 }
 .chip input:checked + span {
   border-color: var(--lavender);
@@ -3149,6 +3314,7 @@ html:not(.js) .svc__media picture {
 .field input,
 .field textarea {
   width: 100%;
+  min-height: 2.75rem;
   padding: 0.85rem 1rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -3246,13 +3412,17 @@ html:not(.js) .closing__lead {
   margin-inline-start: 0.5em;
 }
 .closing__direct a {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   padding-block: 0.45rem;
   color: var(--muted);
   text-underline-offset: 3px;
 }
+@media (hover: hover) and (pointer: fine) {
 .closing__direct a:hover {
   color: var(--ivory);
+}
 }
 @media (min-width: 640px) {
   .fields {
@@ -3293,12 +3463,14 @@ html:not(.js) .closing__lead {
   padding-block: 0.3rem;
   text-decoration: none;
 }
+@media (hover: hover) and (pointer: fine) {
 .footer__cols a:hover {
   color: var(--ivory);
 }
+}
 .footer__cols h2 {
   margin: 0 0 0.75rem;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -3319,8 +3491,10 @@ html:not(.js) .closing__lead {
   color: var(--muted);
   text-underline-offset: 3px;
 }
+@media (hover: hover) and (pointer: fine) {
 .footer__link:hover {
   color: var(--ivory);
+}
 }
 .footer--slim {
   margin-top: 2rem;
@@ -3333,8 +3507,10 @@ html:not(.js) .closing__lead {
   display: inline-block;
   transition: transform var(--t-slow) var(--ease-out);
 }
+@media (hover: hover) and (pointer: fine) {
 .footer__top:hover span {
   transform: translateY(-4px);
+}
 }
 .footer__wordmark {
   will-change: transform;
@@ -3608,7 +3784,7 @@ html.cut-cursor * {
 }
 .facts__cell dt {
   margin: 0 0 0.25rem;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--silver-dark);
@@ -3674,10 +3850,16 @@ html.cut-cursor * {
   width: 1.25rem;
   height: 1.25rem;
 }
-.nav__menu-btn:hover,
+
 .nav__menu[open] .nav__menu-btn {
   border-color: var(--silver-dark);
   background: rgb(245 241 234 / 0.05);
+}
+@media (hover: hover) and (pointer: fine) {
+.nav__menu-btn:hover {
+  border-color: var(--silver-dark);
+  background: rgb(245 241 234 / 0.05);
+}
 }
 .nav__panel {
   position: absolute;
@@ -3711,9 +3893,14 @@ html.cut-cursor * {
 .nav__panel li:last-child a {
   border-bottom: 0;
 }
-.nav__panel ul a:hover,
+
 .nav__panel ul a:focus-visible {
   color: var(--lavender);
+}
+@media (hover: hover) and (pointer: fine) {
+.nav__panel ul a:hover {
+  color: var(--lavender);
+}
 }
 .nav:has(.nav__menu[open]) {
   background: rgb(11 11 14 / 0.97);
@@ -3956,6 +4143,23 @@ html.menu-open {
 }
 html.dock-on {
   scroll-padding-bottom: 5rem; /* el foco no queda tapado por la pastilla (WCAG 2.4.11) */
+}
+
+/* Acuse del toque (ficha 605): en táctil el :hover ya no se pega, así que estos elementos responden mientras se pulsan */
+.svc__link:active,
+.qa summary:active,
+.nav__panel ul a:active,
+.wall__row a:active .wall__text {
+  color: var(--lavender);
+}
+.footer__cols a:active,
+.footer__link:active,
+.closing__direct a:active {
+  color: var(--ivory);
+}
+.nav__menu-btn:active {
+  border-color: var(--silver-dark);
+  background: rgb(245 241 234 / 0.05);
 }
 
 /* ───── Movimiento reducido: igual de cuidada, sin animar ───── */
