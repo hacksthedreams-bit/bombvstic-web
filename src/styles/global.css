@@ -1079,6 +1079,18 @@ main[tabindex='-1']:focus {
   filter: saturate(0.88) brightness(0.9);
   transition: transform 1.4s var(--ease-out), filter var(--t-slow) var(--ease-out);
 }
+/* Ficha 603: la imagen real entra con un fundido corto al asignarse (la clase se quita en load/error); sin JS se ve solo la del <noscript> */
+.svc__media img.is-lazy-loading {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .svc__media img[decoding] {
+    transition: transform 1.4s var(--ease-out), filter var(--t-slow) var(--ease-out), opacity var(--t-base) var(--ease-out);
+  }
+}
+html:not(.js) .svc__media picture {
+  display: none;
+}
 .svc__sweep {
   position: absolute;
   inset: 0;

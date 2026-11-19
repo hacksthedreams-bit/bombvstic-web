@@ -18,6 +18,20 @@ if (!location.hash) window.scrollTo(0, 0);
 // Scroll suave (solo existe con movimiento permitido). El menú lo detiene y lo reanuda; sin él, todo funciona igual.
 let lenisRef: Lenis | null = null;
 
+// Respaldo de la ficha 603: si el script en línea de Servicios no corrió (bloqueado), a los 6 s de la carga se asignan las imágenes de las tarjetas.
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if ((window as unknown as { __svcLazy?: boolean }).__svcLazy) return;
+    document.querySelectorAll<HTMLImageElement>('img[data-lazy-src]').forEach((i) => {
+      const set = i.getAttribute('data-lazy-srcset');
+      if (set) i.srcset = set;
+      i.src = i.getAttribute('data-lazy-src') ?? i.src;
+      i.removeAttribute('data-lazy-src');
+      i.removeAttribute('data-lazy-srcset');
+    });
+  }, 6000);
+});
+
 // Anclas internas: el foco viaja con el desplazamiento (WCAG 2.4.3). Un solo manejador, para Lenis y para movimiento reducido.
 // Si Lenis ya hizo `preventDefault` (ruta animada), aquí se actualiza el hash; si no, el salto nativo ya lo hizo.
 const focusTarget = (el: HTMLElement) => {
