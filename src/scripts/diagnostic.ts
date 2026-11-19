@@ -1,4 +1,4 @@
-// Formulario de diagnóstico por pasos. Sin JS todos los pasos se ven apilados y el formulario usa mailto como respaldo.
+// Formulario de diagnóstico por pasos. Sin JS no hay envío (el formulario se oculta y queda el correo directo, ficha 604); el mailto se arma aquí.
 import { track } from './track';
 
 const TO = 'bombvstic@gmail.com';

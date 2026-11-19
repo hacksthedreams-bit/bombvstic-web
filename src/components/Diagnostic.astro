@@ -2,8 +2,10 @@
 import { u } from '../lib/url';
 import { EMAIL, whatsapp, WA_HELLO, WA_ICON } from '../config/contact';
 const wa = whatsapp();
-// Formulario de diagnóstico en 3 pasos. No hay servidor: al enviar se abre el correo del visitante con el mensaje ya armado
-// (y se ofrece copiarlo). Decisión pendiente: cambiar a un servicio de formularios o WhatsApp cuando existan.
+// Formulario de diagnóstico en 3 pasos. No hay servidor: al enviar, el script abre el correo del visitante con el mensaje ya armado
+// (y se ofrece copiarlo). Sin JS no existe envío (no hay botón submit): se oculta el formulario y queda el aviso con el correo directo (ficha 604).
+// El <form> no lleva `action` (Chrome marcaba el `mailto:` como solicitud insegura) pero conserva method="post" para que, si algún día se agrega un envío nativo,
+// los datos nunca viajen en la URL. Decisión pendiente: cambiar a un servicio de formularios o WhatsApp cuando existan.
 const needs = [
   'Conseguir más clientes (publicidad y campañas)',
   'Una marca y contenido que se recuerden',
@@ -28,7 +30,11 @@ const kinds = ['Restaurante o local', 'Centro de eventos', 'E-commerce', 'Creado
       <button type="button" class="diag__topic-x" data-diag-topic-clear aria-label="Quitar este interés del mensaje">quitar</button>
     </p>
 
-    <form class="diag" data-diag novalidate action="mailto:bombvstic@gmail.com" method="post" enctype="text/plain" aria-label="Diagnóstico Bombvstic">
+    <noscript>
+      <p class="diag__nojs">El diagnóstico necesita JavaScript para armar tu mensaje. Escríbenos directo a <a href={`mailto:${EMAIL}`}>{EMAIL}</a> y conversamos.</p>
+    </noscript>
+
+    <form class="diag" data-diag novalidate method="post" aria-label="Diagnóstico Bombvstic">
       <div class="diag__top">
         <ol class="diag__bars" aria-hidden="true">
           <li class="is-on"></li><li></li><li></li>

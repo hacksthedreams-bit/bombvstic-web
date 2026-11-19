@@ -3169,6 +3169,21 @@ html:not(.js) .svc__media picture {
   font-size: 0.82rem;
   color: var(--silver-dark);
 }
+/* Ficha 604: sin JS el formulario no puede enviarse (no hay botón submit): se oculta y queda el aviso con el correo directo */
+html:not(.js) .diag,
+html:not(.js) .closing__lead {
+  display: none;
+}
+.diag__nojs {
+  margin: 1.5rem 0 0;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+.diag__nojs a {
+  color: var(--ivory);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
 .diag__error {
   margin: 1.25rem 0 0;
   padding: 0.7rem 1rem;
