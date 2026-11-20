@@ -137,11 +137,14 @@ if (!finePointer && 'IntersectionObserver' in window && window.matchMedia('(pref
 // Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
 const nav = $('[data-nav]');
 const thumb = $('[data-cutthumb]');
+const atmoRoot = $('[data-atmo-root]');
 const syncNav = () => {
   nav?.classList.toggle('is-scrolled', window.scrollY > 24);
   if (thumb) {
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    thumb.style.setProperty('--p', String(max > 0 ? Math.min(1, window.scrollY / max) : 0)); // solo variable: nada se deforma
+    const p = String(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+    thumb.style.setProperty('--p', p); // solo variable: nada se deforma
+    atmoRoot?.style.setProperty('--p', p); // la base púrpura sube despacio con el scroll (608); solo en .atmo, no en :root
   }
 };
 syncNav();
