@@ -1,3 +1,5 @@
+// RETIRADO DE LA PÁGINA POR LA FICHA 606 (19-nov-2026): la franja «Medido» y el «Caso 00» ya no se muestran (el sitio es para clientes).
+// Se conservan estas funciones y datos solo como historial y para uso interno; nada de la página las importa.
 // Datos MEDIDOS de esta misma web (ficha 004). Regla: nunca estimados, siempre con fecha y con la URL donde se midieron.
 //  - Se rellenan DESPUÉS de desplegar, con tools/verify/measure-live.mjs sobre la URL pública (5 corridas, mediana).
 //  - La franja de index.astro solo se muestra si: el host de `Astro.site` coincide con el de `measuredUrl`, la medición tiene

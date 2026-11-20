@@ -1,12 +1,12 @@
 ---
-// Equipo. Datos confirmados: solo los nombres (Alan y Martina). Cargo y línea se muestran únicamente si se completan aquí.
+// Equipo. Datos confirmados: solo los nombres (Allan y Martina). Cargo y línea se muestran únicamente si se completan aquí.
 // Foto: dejar `public/media/equipo/<slug>-720.webp` (retrato 3:4) y `<slug>-480.webp`; sin foto se muestra un monograma de marca.
 import { u } from '../lib/url';
 
 // Detecta las fotos que existan en public/media/equipo (sin depender del directorio de trabajo)
 const photos = Object.keys(import.meta.glob('/public/media/equipo/*-720.webp'));
 const team = [
-  { slug: 'alan', name: 'Alan', role: '', line: '' },
+  { slug: 'allan', name: 'Allan', role: '', line: '' },
   { slug: 'martina', name: 'Martina', role: '', line: '' },
 ].map((p) => ({
   ...p,

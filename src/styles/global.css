@@ -506,7 +506,7 @@ main[tabindex='-1']:focus {
   position: relative;
   min-height: 100svh;
   display: grid;
-  grid-template-rows: 1fr auto auto auto;
+  grid-template-rows: 1fr auto auto;
   align-items: center;
   padding: calc(var(--nav-h) + 2rem) var(--gutter) max(4rem, calc(var(--cut) + 1.5rem));
   isolation: isolate;
@@ -605,18 +605,6 @@ main[tabindex='-1']:focus {
   font-weight: 400;
   letter-spacing: -0.02em;
   color: var(--lavender);
-}
-.hero__lead {
-  max-width: 34rem;
-  margin: 2rem 0 0;
-  color: var(--muted);
-  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.3rem);
-}
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-top: 2.5rem;
 }
 .hero__stage {
   position: relative;
@@ -895,10 +883,6 @@ main[tabindex='-1']:focus {
   position: relative;
   z-index: 2; /* el titular va por encima del emblema */
 }
-.hero__sub {
-  display: flex;
-  flex-direction: column;
-}
 @media (min-width: 900px) {
   /* Titular a todo el ancho; el emblema pasa a ser una presencia detrás, a la derecha */
   .hero__grid {
@@ -915,25 +899,6 @@ main[tabindex='-1']:focus {
     width: min(34vw, 31rem);
     margin: 0;
   }
-  .hero__sub {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 2rem 3rem;
-    margin-top: 2.25rem;
-  }
-  .hero__lead {
-    margin: 0;
-    max-width: 30rem;
-  }
-  .hero__actions {
-    margin-top: 0;
-    flex: none;
-  }
-}
-/* En escritorio ancho el botón «Ver Instagram» pasa sobre el metal del emblema: fondo oscuro suave para que el texto se lea siempre (ficha 601) */
-.hero .btn--ghost {
-  background: rgb(11 11 14 / 0.62);
 }
 /* Celular en horizontal (ficha 605): dos columnas, titular a la izquierda y emblema a la derecha; en una pantalla de ~390 px de alto el emblema
    entero ocupaba la primera vista y el titular quedaba debajo. `min-width` evita que un teléfono en vertical con el teclado abierto active la regla. */
@@ -959,20 +924,6 @@ main[tabindex='-1']:focus {
   }
   .kicker {
     margin-bottom: 0.9rem;
-  }
-  .hero__lead {
-    margin-top: 1rem;
-  }
-  .hero__actions {
-    margin-top: 1.25rem;
-  }
-}
-/* Entre 900 y 1279 px los botones quedaban sobre el emblema: la bajada y los botones se apilan a la izquierda (ficha 601) */
-@media (min-width: 900px) and (max-width: 1279px) {
-  .hero__sub {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
   }
 }
 
@@ -1501,6 +1452,7 @@ html:not(.js) .svc__media picture {
 
 /* ───── Proyectos (oscuro, cinematográfico) ───── */
 .projects {
+  overflow-x: clip; /* la galería fijada mide 100vw (con barra de desplazamiento visible son unos 8 px más que el área útil): que no genere scroll horizontal (ficha 606) */
   background:
     radial-gradient(60% 34% at 85% 4%, rgb(122 0 255 / 0.2), transparent 70%),
     radial-gradient(50% 30% at 8% 62%, rgb(139 92 246 / 0.1), transparent 70%),
@@ -1791,12 +1743,20 @@ html:not(.js) .svc__media picture {
 /* Escritorio con movimiento: la galería se fija y se desliza mientras bajas */
 .stories-stage.is-pinned {
   height: 100svh;
-  margin: clamp(2rem, 4vw, 3rem) calc(var(--gutter) * -1) 0;
-  margin-left: calc((var(--gutter) + 5.25rem) * -1);
+  /* Ancho de ventana completo (ficha 606): antes medía lo que la columna de contenido (tope de 92 rem) y, en pantallas anchas, recortaba las historias 04 y 05
+     contra un borde que quedaba dentro de la ventana, a la vista pero sin poder verlas enteras. El recorrido del script se mide contra innerWidth. */
+  width: 100vw;
+  margin: clamp(2rem, 4vw, 3rem) 0 0 calc(50% - 50vw);
   padding-top: 4.5rem; /* libra el menú fijo */
   display: flex;
   align-items: center;
   overflow: hidden;
+}
+/* desde 1280 px la sección deja 5,25 rem más a la izquierda (riel de capítulos): su centro queda 2,625 rem a la derecha del de la ventana */
+@media (min-width: 1280px) {
+  .stories-stage.is-pinned {
+    margin-left: calc(50% - 50vw - 2.625rem);
+  }
 }
 .is-pinned .stories {
   --h: min(62vh, 38rem);
@@ -1945,76 +1905,6 @@ html:not(.js) .svc__media picture {
 }
 
 /* Próximos casos */
-/* ───── Caso 00 · Esta web (ficha 303): más chico que los casos de clientes, sin imagen ───── */
-.case00 {
-  display: grid;
-  gap: 0.25rem 3rem;
-  margin-top: clamp(4rem, 8vw, 7rem);
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-}
-.case00__tag {
-  margin: 0 0 0.75rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--lavender);
-}
-.case00__title {
-  margin: 0;
-  font-weight: 600;
-  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.2rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-}
-.case00__text {
-  max-width: 40rem;
-  margin: 1rem 0 0;
-  color: var(--silver);
-}
-.case00__data {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem 1.5rem;
-  margin: 1.75rem 0 0;
-}
-.case00__data dt {
-  font-size: 0.95rem;
-  color: var(--ivory);
-}
-.case00__data dt b {
-  display: block;
-  font-size: clamp(1.7rem, 1.3rem + 1.4vw, 2.4rem);
-  font-weight: 600;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-}
-.case00__data dd {
-  margin: 0.3rem 0 0;
-  font-size: 0.88rem;
-  color: var(--muted);
-}
-.case00__foot {
-  margin: 1.5rem 0 0;
-  font-size: 0.8rem;
-  color: var(--silver-dark);
-}
-@media (min-width: 900px) {
-  .case00 {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    align-items: start;
-  }
-  .case00 > * {
-    grid-column: 1;
-  }
-  .case00__data {
-    grid-column: 2;
-    grid-row: 1 / span 4;
-    margin-top: 0;
-    align-self: center;
-  }
-}
 .upcoming {
   margin-top: clamp(4rem, 8vw, 7rem);
 }
@@ -3566,9 +3456,6 @@ html:not(.js) .closing__lead {
   .hchip {
     width: 1.75em;
   }
-  .hero__actions .btn {
-    flex: 1 1 100%;
-  }
 }
 
 /* Reserva el carril del índice de capítulos para que nada se encime (va al final por orden de cascada) */
@@ -3761,55 +3648,6 @@ html.cut-cursor * {
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
-}
-
-/* ───── Franja de datos medidos (ficha 004) ───── */
-.facts {
-  grid-row: 4;
-  width: 100%;
-  max-width: var(--maxw);
-  margin: 1.5rem auto 0;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--line);
-}
-.facts__title {
-  margin: 0 0 1rem;
-  font: italic 500 1.15rem/1.2 var(--serif);
-  color: var(--muted);
-}
-.facts__list {
-  display: grid;
-  gap: 1.1rem 2.5rem;
-  margin: 0;
-}
-.facts__cell dt {
-  margin: 0 0 0.25rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--silver-dark);
-}
-.facts__cell dd {
-  margin: 0;
-  max-width: 32rem;
-  font-size: 0.95rem;
-  line-height: 1.45;
-  color: var(--muted);
-}
-.facts__cell b {
-  color: var(--ivory);
-  font-weight: 600;
-  white-space: nowrap;
-}
-.facts__src {
-  margin: 1rem 0 0;
-  font-size: 0.78rem;
-  color: var(--silver-dark);
-}
-@media (min-width: 900px) {
-  .facts__list {
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  }
 }
 
 /* ───── Navegación móvil (ficha 001): menú sin JS + pastilla de acceso rápido ───── */

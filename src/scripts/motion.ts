@@ -91,11 +91,12 @@ if (menu) {
   window.matchMedia('(min-width: 1080px)').addEventListener('change', (e) => e.matches && setMenu(false));
 }
 
-// Pastilla "Agendar diagnóstico" (solo celular): aparece cuando el botón del hero ya salió POR ARRIBA (no por estar bajo el
-// pliegue), y se oculta en el cierre, en el pie y con el menú abierto. "Agendar" de la barra cede su lugar la primera vez.
+// Pastilla "Agendar diagnóstico" (solo celular): aparece cuando el hero ya salió POR ARRIBA (no por estar bajo el pliegue: ficha 606,
+// el hero ya no lleva botones y la pastilla toma como referencia la sección entera), y se oculta en el cierre, en el pie y con el menú abierto.
+// "Agendar" de la barra cede su lugar la primera vez.
 const dock = $('[data-dock]');
-const heroCta = $('[data-hero-cta]');
-if (dock && heroCta && 'IntersectionObserver' in window) {
+const hero = $('#inicio');
+if (dock && hero && 'IntersectionObserver' in window) {
   const root = document.documentElement;
   let leftAbove = false;
   let inEnd = false;
@@ -108,7 +109,7 @@ if (dock && heroCta && 'IntersectionObserver' in window) {
   new IntersectionObserver(([e]) => {
     leftAbove = !e.isIntersecting && e.boundingClientRect.bottom < 0;
     sync();
-  }).observe(heroCta);
+  }).observe(hero);
   const endIo = new IntersectionObserver((entries) => {
     entries.forEach((e) => ((e.target as HTMLElement).dataset.in = e.isIntersecting ? '1' : ''));
     inEnd = $$('#contacto, .footer').some((el) => el.dataset.in === '1');
@@ -119,7 +120,7 @@ if (dock && heroCta && 'IntersectionObserver' in window) {
 }
 
 // El corte en los botones (ficha 202), versión táctil: sin cursor, el filo cruza cada botón principal UNA vez por carga,
-// cuando llega a la zona central de la pantalla. Fuera quedan el botón del hero (ya visible al cargar), la pastilla y el menú.
+// cuando llega a la zona central de la pantalla. Fuera quedan la pastilla y el menú.
 if (!finePointer && 'IntersectionObserver' in window && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
   const cutIo = new IntersectionObserver(
     (entries) =>
@@ -130,14 +131,7 @@ if (!finePointer && 'IntersectionObserver' in window && window.matchMedia('(pref
       }),
     { rootMargin: '-35% 0px -35% 0px' },
   );
-  $$('main .btn--primary:not([data-hero-cta])').forEach((el) => cutIo.observe(el));
-}
-
-// Franja de datos medidos: si la medición envejeció (> 120 días) deja de mostrarse, aunque nadie vuelva a construir el sitio
-const factsEl = $('[data-measured]');
-if (factsEl) {
-  const days = (Date.now() - new Date(`${factsEl.dataset.measured}T00:00:00`).getTime()) / 86400000; // inicio del día, igual que proof.ts: una medición de hoy vale desde la madrugada
-  if (!(days >= 0 && days <= 120)) factsEl.hidden = true;
+  $$('main .btn--primary').forEach((el) => cutIo.observe(el));
 }
 
 // Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
@@ -320,7 +314,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     gsap.fromTo(line, { y: 0 }, { y: -(40 + i * 45), ease: 'none', immediateRender: false, scrollTrigger: exitST });
   });
   gsap.fromTo(
-    ['.hero .kicker', '.hero__lead', '.hero__actions'].map((s) => $(s)).filter(Boolean),
+    ['.hero .kicker'].map((s) => $(s)).filter(Boolean),
     { opacity: 1, y: 0 },
     { opacity: 0.1, y: -60, ease: 'none', immediateRender: false, scrollTrigger: exitST },
   );
