@@ -42,10 +42,11 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
       <div class="hero__grid">
         <div class="hero__copy">
           <p class="kicker" data-reveal>Marketing digital &amp; AI Solutions</p>
-          <!-- Titular aprobado: opción B, ahora apilado y escalonado (hero tipográfico).
-               El "chip" es decorativo: una pieza propia (titanio cortado por luz violeta), ficha 501. -->
+          <!-- Titular elegido por el dueño (19-nov-2026, opción 2): «Hacemos que tu marca se vea, se note y venda.» Apilado a la izquierda.
+               El "chip" es decorativo: una pieza propia (titanio cortado por luz violeta), ficha 501; la pantalla de carga (607) parte de ella. -->
           <h1 class="hero__title" id="titulo-hero" data-hero-title>
-            <span class="line line--1"><span>Marca,
+            <span class="line line--1"><span>Hacemos que </span></span>
+            <span class="line line--2"><span>tu marca
               <span class="hchip" aria-hidden="true" data-chip>
                 <span class="hchip__media">
                   <img
@@ -59,11 +60,10 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
                     fetchpriority="low"
                   />
                 </span>
-              </span>
+              </span>{' '}
             </span></span>
-            <span class="line line--2"><span>contenido</span></span>
-            <span class="line line--3"><span>y tecnología.</span></span>
-            <span class="line line--4"><span>Un solo <span class="accent">equipo.</span></span></span>
+            <span class="line line--3"><span>se vea, se note </span></span>
+            <span class="line line--4"><span>y <span class="accent">venda.</span></span></span>
           </h1>
         </div>
 
@@ -92,9 +92,9 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
         <div class="marquee__track" data-marquee-track>
           {[0, 1].map(() => (
             <div class="marquee__group">
-              <span class="marquee__word">Estrategia</span><i>/</i>
-              <span class="marquee__word marquee__word--solid">Diseño</span><i>/</i>
-              <span class="marquee__word">Tecnología</span><i>/</i>
+              <span class="marquee__word marquee__word--a">Estrategia</span><i>/</i>
+              <span class="marquee__word marquee__word--b">Diseño</span><i>/</i>
+              <span class="marquee__word marquee__word--c">Tecnología</span><i>/</i>
             </div>
           ))}
         </div>

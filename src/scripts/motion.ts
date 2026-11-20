@@ -131,7 +131,7 @@ if (!finePointer && 'IntersectionObserver' in window && window.matchMedia('(pref
       }),
     { rootMargin: '-35% 0px -35% 0px' },
   );
-  $$('main .btn--primary').forEach((el) => cutIo.observe(el));
+  $$('main .btn--primary, main .feature__link').forEach((el) => cutIo.observe(el));
 }
 
 // Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
@@ -257,10 +257,16 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   const heroItems = $$('.hero [data-reveal]');
   const stage = $('[data-stage]');
   if (stage) {
-    // 403: bajo la cortina de entrada el hero arranca cuando ella va a media subida; si se saltó, o el programa llegó tarde, de inmediato
+    // 403/607: bajo la pantalla de carga (2,0 s; el telón empieza a subir a los 1,24 s) el hero arranca justo al subir; si se saltó, o el programa
+    // llegó cuando ya subía, de inmediato
     const rootCls = document.documentElement.classList;
-    const underCurtain = rootCls.contains('intro') && !rootCls.contains('intro-skip') && performance.now() < 800;
-    const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: underCurtain ? 0.55 : 0.15 });
+    // El reloj es el de la propia animación del telón (arranca en su primer pintado, no en la navegación): así el hero entra justo al subir aunque
+    // el programa llegue tarde en un celular lento. Sin telón (saltado, oculto o sin soporte) la entrada parte de inmediato.
+    const LIFT = 1.3; // segundos de la animación del telón hasta que ya va subiendo
+    const curtainAnim = rootCls.contains('intro') && !rootCls.contains('intro-skip') ? document.querySelector('.curtain')?.getAnimations().find((a) => (a as CSSAnimation).animationName === 'curtain-sweep') : undefined;
+    const elapsed = curtainAnim ? Number(curtainAnim.currentTime ?? 0) / 1000 : Infinity;
+    const underCurtain = elapsed < LIFT - 0.2;
+    const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: underCurtain ? LIFT - elapsed : 0.15 });
     if (underCurtain) {
       const quick = () => tl.delay(0.15);
       ['keydown', 'pointerdown', 'wheel', 'touchstart'].forEach((ev) => window.addEventListener(ev, quick, { passive: true, once: true }));
@@ -755,14 +761,20 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
 
   // Botón magnético (solo con puntero fino)
   if (finePointer) {
-    $$('[data-magnetic]').forEach((btn) => {
+    $$('.nav__cta, main .btn--primary, main .feature__link').forEach((btn) => {
       const move = (e: PointerEvent) => {
         const r = btn.getBoundingClientRect();
         gsap.to(btn, { x: (e.clientX - (r.left + r.width / 2)) * 0.25, y: (e.clientY - (r.top + r.height / 2)) * 0.35, duration: 0.4, ease: 'power2.out' });
       };
       const leave = () => gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'expo.out', overwrite: 'auto' }); // sin rebote (ficha 104)
       btn.addEventListener('pointermove', move);
-      btn.addEventListener('pointerleave', leave);
+      btn.addEventListener('pointerleave', () => {
+        leave();
+        gsap.to(btn, { scale: 1, duration: 0.2 });
+      });
+      // el `transform` en línea de GSAP anula el `:active { scale }` de CSS: el hundido al pulsar se hace aquí
+      btn.addEventListener('pointerdown', () => gsap.to(btn, { scale: 0.97, duration: 0.12, ease: 'power2.out' }));
+      btn.addEventListener('pointerup', () => gsap.to(btn, { scale: 1, duration: 0.25, ease: 'power2.out' }));
     });
   }
 });

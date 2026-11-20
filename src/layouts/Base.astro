@@ -95,9 +95,20 @@ const agency = {
     <slot name="head" />
   </head>
   <body>
+    <!-- Pantalla de carga (403 + 607): el recuadro del hero se abre por el corte y deja ver el logo. Las imágenes son fondos CSS (solo se piden con `html.intro`). -->
     {path === '/' && (
-      <div class="curtain" aria-hidden="true">
+      <div
+        class="curtain"
+        aria-hidden="true"
+        style={`--cur-logo:url('${u('/brand/wordmark-curtain-600.webp')}');--cur-plate-s:url('${u('/media/hero/chip-filo-480.webp')}');--cur-plate-l:url('${u('/media/hero/chip-filo-720.webp')}')`}
+      >
         <div class="curtain__sheet"></div>
+        <div class="curtain__stage">
+          <span class="curtain__logo"></span>
+          <span class="curtain__plate curtain__plate--a"></span>
+          <span class="curtain__plate curtain__plate--b"></span>
+          <span class="curtain__cut"></span>
+        </div>
         <span class="curtain__line"></span>
       </div>
     )}

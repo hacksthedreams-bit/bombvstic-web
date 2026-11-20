@@ -345,7 +345,10 @@ main[tabindex='-1']:focus {
   transform: scale(0.97);
 }
 /* El botón magnético lo mueve GSAP: sin transición CSS de transform, que lo haría arrastrarse (ficha 104) */
-.btn[data-magnetic] {
+/* Desde la ficha 607 el movimiento magnético y el filo están en TODOS los botones principales y en «Quiero algo así», no solo en el hero */
+.btn[data-magnetic],
+.btn--primary,
+.feature__link {
   transition-property: background, color, border-color, box-shadow;
 }
 .btn__arrow {
@@ -541,21 +544,11 @@ main[tabindex='-1']:focus {
 .hero__title {
   margin: 0;
   font-weight: 600;
-  font-size: clamp(2.35rem, 7.3vw, 8.4rem);
+  font-size: clamp(2.35rem, 6.8vw, 8.2rem); /* «SE VEA, SE NOTE» es la línea más larga: en escritorio queda a la izquierda del emblema (607) */
   line-height: 0.92;
   letter-spacing: -0.035em;
   text-transform: uppercase;
   color: var(--ivory);
-}
-/* Escalonado editorial: cada línea con su sangría (se reduce en móvil para no desbordar) */
-.line--2 {
-  padding-left: 0.5em;
-}
-.line--3 {
-  padding-left: 0.18em;
-}
-.line--4 {
-  padding-left: 0.85em;
 }
 .hero__title .accent {
   text-transform: none;
@@ -691,8 +684,8 @@ main[tabindex='-1']:focus {
   contain: layout paint style; /* el movimiento de la cinta no obliga a recalcular el resto del hero */
   border-block: 1px solid var(--line);
   padding-block: 0.5rem;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--hero-pl) - 0.5rem), #000 calc(var(--hero-pl) + 9vw), #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent calc(var(--hero-pl) - 0.5rem), #000 calc(var(--hero-pl) + 9vw), #000 90%, transparent); /* el borde izquierdo queda vacío bajo el riel de capítulos (607): con relleno sólido las cifras del riel perdían contraste */
 }
 .marquee__track {
   display: flex;
@@ -716,9 +709,25 @@ main[tabindex='-1']:focus {
   -webkit-text-stroke: 1px rgb(216 217 227 / 0.5);
   white-space: nowrap;
 }
-.marquee__word--solid {
+/* Franja viva (607): las tres palabras con relleno propio. Estrategia = plata que se enciende en violeta claro, Diseño = marfil, Tecnología = violeta claro que se apaga en plata (el violeta puro #7a00ff sobre el fondo no llega a 3:1).
+   El trazo fino queda solo como contorno de luz; el relleno va con degradado recortado al texto (se pinta una vez: la pista se mueve con transform). */
+.marquee__word--a,
+.marquee__word--c {
+  -webkit-text-stroke: 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.06em; /* la cursiva/sombra del último trazo no se corta al recortar el fondo */
+}
+.marquee__word--a {
+  background-image: linear-gradient(100deg, var(--silver) 5%, var(--lavender) 55%, var(--interactive) 100%);
+}
+.marquee__word--b {
   color: var(--ivory);
   -webkit-text-stroke: 0;
+}
+.marquee__word--c {
+  background-image: linear-gradient(100deg, var(--interactive) 0%, var(--lavender) 45%, var(--silver) 95%);
 }
 .marquee i {
   font-style: normal;
@@ -728,12 +737,17 @@ main[tabindex='-1']:focus {
   color: var(--violet);
   text-shadow: 0 0 28px rgb(122 0 255 / 0.9);
 }
-/* La palabra clave del titular brilla como metal cada tanto */
+/* La palabra clave del titular («venda.», en marfil y no en púrpura: ficha 607) brilla como metal cada tanto */
 .hero__title .accent {
-  background: linear-gradient(100deg, var(--lavender) 38%, #ffffff 50%, var(--lavender) 62%) 0 0 / 260% 100% no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--ivory);
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero__title .accent {
+    background: linear-gradient(100deg, var(--ivory) 38%, #ffffff 50%, var(--ivory) 62%) 0 0 / 260% 100% no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
 /* El destello lo dispara motion.ts de vez en cuando (solo escritorio): animar texto con recorte de fondo cuesta
    pintado en cada fotograma, así que no corre de forma continua. */
@@ -896,7 +910,7 @@ main[tabindex='-1']:focus {
     right: max(var(--gutter), calc((100% - var(--maxw)) / 2));
     top: 46%;
     translate: 0 -56%;
-    width: min(34vw, 31rem);
+    width: min(31vw, 29rem);
     margin: 0;
   }
 }
@@ -3442,16 +3456,7 @@ html:not(.js) .closing__lead {
     margin-bottom: 0.5rem;
   }
   .hero__title {
-    font-size: clamp(2rem, 10.2vw, 3.4rem);
-  }
-  .line--2 {
-    padding-left: 0.3em;
-  }
-  .line--3 {
-    padding-left: 0.1em;
-  }
-  .line--4 {
-    padding-left: 0.5em;
+    font-size: clamp(1.7rem, 10vw, 3.4rem);
   }
   .hchip {
     width: 1.75em;
@@ -3471,12 +3476,14 @@ html:not(.js) .closing__lead {
 }
 
 /* ───── El corte pasa por los botones principales (ficha 202): un filo de 1,5 px a −31°, una sola pasada, por detrás del texto ───── */
-.btn--primary {
+.btn--primary,
+.feature__link {
   position: relative;
   isolation: isolate;
   overflow: hidden;
 }
-.btn--primary::after {
+.btn--primary::after,
+.feature__link::after {
   content: '';
   position: absolute;
   z-index: -1;
@@ -3490,18 +3497,22 @@ html:not(.js) .closing__lead {
   pointer-events: none;
 }
 .btn--primary:focus-visible::after,
-.btn--primary.is-cut::after {
+.btn--primary.is-cut::after,
+.feature__link:focus-visible::after,
+.feature__link.is-cut::after {
   transform: translateX(45%) rotate(-31deg);
   transition: transform var(--t-slow) var(--ease-cut);
 }
 @media (hover: hover) {
-  .btn--primary:hover::after {
+  .btn--primary:hover::after,
+  .feature__link:hover::after {
     transform: translateX(45%) rotate(-31deg);
     transition: transform var(--t-slow) var(--ease-cut);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn--primary::after {
+  .btn--primary::after,
+  .feature__link::after {
     display: none;
   }
 }
@@ -4021,9 +4032,13 @@ html.dock-on {
   }
 }
 
-/* ───── Cortina de entrada (ficha 403) ─────
-   El corte de −31° (tan 31° = 0,6009 → 60,09vw de caída en todo el ancho) barre la pantalla una sola vez por sesión. Animación de CSS puro:
-   no espera al programa y el hero ya está pintado debajo (404). No bloquea clics ni foco. Solo existe si el script del <head> puso `html.intro`. */
+/* ───── Pantalla de carga (fichas 403 y 607) ─────
+   Una sola vez por sesión, CSS puro (no espera al programa; el hero ya está pintado debajo: 404). Secuencia de 2,0 s:
+   1) aparece el recuadro de titanio cortado por luz violeta (la misma pieza que lleva el titular junto a «marca»);
+   2) un filo de luz a −31° lo parte en dos mitades que se abren por la diagonal y dejan ver el logo BOMBVSTIC;
+   3) el logo se sostiene un instante y el telón completo sube por el corte de −31° (tan 31° = 0,6009 → 60,09vw de caída) y descubre el hero.
+   No bloquea clics ni foco. Solo existe si el script del <head> puso `html.intro`; las imágenes son fondos CSS que únicamente se piden en ese caso.
+   Con movimiento reducido no existe. Tocar, teclear o girar la rueda la salta (`.intro-skip`). */
 .curtain {
   display: none;
 }
@@ -4037,13 +4052,86 @@ html.dock-on {
   height: calc(100lvh + 60.09vw);
   z-index: 1000;
   pointer-events: none;
-  animation: curtain-sweep 1050ms var(--ease-cut) both;
+  animation: curtain-sweep 2000ms var(--ease-cut) both;
 }
 .curtain__sheet {
   position: absolute;
   inset: 0;
   background: #0b0b0e;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 60.09vw), 0 100%);
+}
+.curtain__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  overflow: hidden;
+  display: grid;
+  place-items: center; /* las cuatro piezas se apilan en el centro (sin `transform` de centrado: `translate` y `scale` quedan libres para animar) */
+}
+.curtain__logo,
+.curtain__plate,
+.curtain__cut {
+  grid-area: 1 / 1;
+}
+.curtain__logo,
+.curtain__plate {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+/* El logo es una copia con transparencia real (sin fondo negro): no depende de `mix-blend-mode`, que en Safari antiguo puede fallar.
+   Tamaños: cada pieza queda bien por debajo del área del emblema del hero (elemento del LCP), porque los fondos CSS también son candidatos al LCP. */
+.curtain__logo {
+  width: min(66vw, 28rem);
+  aspect-ratio: 600 / 240;
+  background-image: var(--cur-logo);
+  background-size: contain;
+  animation: curtain-logo 2000ms var(--ease-cut) both;
+}
+.curtain__plate {
+  width: min(75vw, 19.5rem);
+  aspect-ratio: 720 / 305;
+  background-image: var(--cur-plate-s);
+}
+@media (min-width: 520px) {
+  .curtain__plate {
+    width: min(94vw, 36rem);
+  }
+}
+@media (min-width: 900px) {
+  .curtain__plate {
+    width: min(36rem, 40vw);
+  }
+  .curtain__logo {
+    width: min(28rem, 36vw);
+  }
+}
+/* Mismo archivo que elige el <img> del titular (480 w con densidad baja, 720 w con densidad alta): una sola descarga del recuadro */
+@media (min-resolution: 2.5dppx), (min-width: 900px) and (min-resolution: 1.7dppx) {
+  .curtain__plate {
+    background-image: var(--cur-plate-l);
+  }
+}
+/* Las dos mitades comparten el corte de −31° que pasa por el centro del recuadro (líneas de 14,7 % a 85,3 % del ancho; 0,3 % de traslape sin rendija) */
+.curtain__plate--a {
+  clip-path: polygon(0 0, 85.6% 0, 15% 100%, 0 100%);
+  animation: curtain-plate-a 2000ms var(--ease-cut) both;
+}
+.curtain__plate--b {
+  clip-path: polygon(85.3% 0, 100% 0, 100% 100%, 14.7% 100%);
+  animation: curtain-plate-b 2000ms var(--ease-cut) both;
+}
+.curtain__cut {
+  width: min(96vw, 42rem);
+  height: 2px;
+  rotate: -31deg;
+  background: linear-gradient(90deg, transparent, rgb(173 139 250 / 0.9) 25%, rgb(245 241 234) 50%, rgb(173 139 250 / 0.9) 75%, transparent);
+  box-shadow: 0 0 22px 2px rgb(139 92 246 / 0.7);
+  opacity: 0;
+  animation: curtain-cut 2000ms var(--ease-cut) both;
 }
 /* el trazo de luz va fuera del recorte: lo mismo que la línea del escenario, sobre el borde exacto */
 .curtain__line {
@@ -4057,15 +4145,80 @@ html.dock-on {
   background: linear-gradient(90deg, transparent, rgb(173 139 250 / 0.9) 25%, rgb(245 241 234) 50%, rgb(173 139 250 / 0.9) 75%, transparent);
   box-shadow: 0 0 22px 2px rgb(139 92 246 / 0.7);
 }
+/* Sin `rotate`/`scale`/`translate` individuales ni `aspect-ratio` (Safari < 15) el filo saldría horizontal y las piezas sin altura: no hay pantalla de carga */
+@supports not ((rotate: 1deg) and (aspect-ratio: 1)) {
+  .curtain {
+    display: none !important;
+  }
+}
 @keyframes curtain-sweep {
   0%,
-  24% {
+  62% {
     transform: translateY(0);
     visibility: visible;
   }
   100% {
     transform: translateY(-100%);
     visibility: hidden;
+  }
+}
+/* perpendicular al corte, hacia arriba-izquierda: (−sen 31°, −cos 31°) = (−0,515; −0,857) */
+@keyframes curtain-plate-a {
+  0%,
+  11% {
+    translate: 0 0;
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  44%,
+  100% {
+    translate: calc(-0.515 * 80vmax) calc(-0.857 * 80vmax);
+    opacity: 0;
+  }
+}
+@keyframes curtain-plate-b {
+  0%,
+  11% {
+    translate: 0 0;
+    opacity: 1;
+  }
+  40% {
+    opacity: 1;
+  }
+  44%,
+  100% {
+    translate: calc(0.515 * 80vmax) calc(0.857 * 80vmax);
+    opacity: 0;
+  }
+}
+@keyframes curtain-logo {
+  0%,
+  11% {
+    scale: 0.94;
+  }
+  40%,
+  100% {
+    scale: 1;
+  }
+}
+@keyframes curtain-cut {
+  0% {
+    opacity: 0;
+    scale: 0 1;
+  }
+  8% {
+    opacity: 1;
+    scale: 1 1;
+  }
+  34% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+    scale: 1 1;
   }
 }
 .intro-skip .curtain {
