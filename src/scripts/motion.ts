@@ -137,14 +137,12 @@ if (!finePointer && 'IntersectionObserver' in window && window.matchMedia('(pref
 // Navegación compacta al bajar + hilo de progreso de lectura (indicador, no animación decorativa)
 const nav = $('[data-nav]');
 const thumb = $('[data-cutthumb]');
-const atmoRoot = $('[data-atmo-root]');
 const syncNav = () => {
   nav?.classList.toggle('is-scrolled', window.scrollY > 24);
   if (thumb) {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const p = String(max > 0 ? Math.min(1, window.scrollY / max) : 0);
     thumb.style.setProperty('--p', p); // solo variable: nada se deforma
-    atmoRoot?.style.setProperty('--p', p); // la base púrpura sube despacio con el scroll (608); solo en .atmo, no en :root
   }
 };
 syncNav();
@@ -680,16 +678,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     });
   }
 
-  // Muro de servicios: la fila que cruza el centro de la pantalla se enciende; el resto baja de volumen
-  const wallEl = $('.wall');
-  if (wallEl) {
-    wallEl.classList.add('has-spot');
-    $$('[data-row]', wallEl).forEach((row) => {
-      ScrollTrigger.create({ trigger: row, start: 'top 57%', end: 'bottom 43%', toggleClass: { targets: row, className: 'is-center' } });
-    });
-  }
-
-  // Muro de servicios: cada fila entra al aparecer
+  // «Todo lo que hacemos» (tarjetas): cada una entra al aparecer
   $$('[data-row]').forEach((row) => {
     gsap.fromTo(
       row,

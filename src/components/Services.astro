@@ -11,8 +11,8 @@ const cards = [
     n: '01',
     title: 'Publicidad',
     accent: 'y campañas',
-    lead: 'Campañas y videos hechos para Meta Ads, pensados para vender y no solo para gustar.',
-    items: ['Gestión de campañas publicitarias', 'Videos publicitarios para Meta Ads', 'Medición y ajustes constantes'],
+    lead: 'Campañas en Meta Ads pensadas para vender: creatividades que se notan y resultados que se miden.',
+    items: ['Estrategia y gestión de campañas', 'Videos para Meta Ads', 'Medición y ajustes constantes'],
     img: 'publicidad',
     pos: '15% 50%',
     r: '-2.2deg',
@@ -24,14 +24,14 @@ const cards = [
     n: '02',
     title: 'Marca',
     accent: 'y contenido',
-    lead: 'Una identidad clara y contenido constante para que te reconozcan y te elijan.',
-    items: ['Branding e identidad completa', 'Creación de contenido', 'Gestión de redes sociales'],
-    img: 'marca-dss',
-    ws: [640, 720],
+    lead: 'Identidad con criterio y contenido constante: que te reconozcan a la primera y te elijan a la segunda.',
+    items: ['Identidad de marca completa', 'Contenido para redes: reels, historias y piezas', 'Gestión y crecimiento de redes'],
+    img: 'marca-casos',
+    ws: [640, 960],
     pos: '50% 50%',
-    tag: 'Caso real · Digital Sneakers Shop',
+    tag: 'Casos reales',
     r: '1.4deg',
-    alt: 'Historia de Instagram del caso Digital Sneakers Shop: el logo renovado con dos versiones horizontales y un sello circular',
+    alt: 'Tres historias de Instagram de casos reales: la identidad de Digital Sneakers Shop y la identidad y el contenido de La Terraza de Lupita',
     need: 1,
     topic: 'Marca y contenido',
   },
@@ -39,40 +39,40 @@ const cards = [
     n: '03',
     title: 'IA',
     accent: 'y software',
-    lead: 'Páginas web, dashboards, asistentes de IA y sistemas hechos a la medida de cómo trabaja tu negocio.',
-    items: ['Páginas web', 'Dashboards y apps a medida', 'Asistentes de IA y sistemas para empresas'],
-    img: 'ia-demo',
+    lead: 'Páginas web, asistentes de IA, dashboards y sistemas hechos a la medida de cómo trabaja tu negocio.',
+    items: ['Páginas web', 'Asistentes de IA para atender', 'Dashboards, apps y sistemas'],
+    img: 'ia-lupita',
     ws: [640, 960],
-    pos: '50% 0%',
-    tag: 'Ejemplo ilustrativo',
+    pos: '50% 50%',
+    tag: 'Caso real · La Terraza de Lupita',
     r: '-1.2deg',
-    alt: 'Captura de la demostración de esta página: el interruptor en «Personas + IA» y los primeros pasos de un restaurante, cada uno con la etiqueta «Asistente»',
+    alt: 'Extracto de una conversación real de WhatsApp: el cliente pide papas fritas individuales y el asistente de IA de La Terraza de Lupita responde con el precio y pregunta por la cantidad',
     need: 2,
     topic: 'IA y software',
   },
 ];
 
-const wall = [
+const all = [
   {
     group: 'Growth y Marca',
     items: [
-      { t: 'Estrategia de marketing digital', need: 0 },
-      { t: 'Branding e identidad', need: 1 },
-      { t: 'Creación de contenido', need: 1 },
-      { t: 'Gestión de redes sociales', need: 1 },
-      { t: 'Campañas publicitarias', need: 0 },
-      { t: 'Videos para Meta Ads', need: 0 },
-      { t: 'Asesoría para vender cursos y comunidades', need: 4 },
+      { t: 'Estrategia de marketing digital', d: 'Un plan claro: a quién le hablas, por dónde y con qué mensaje.', need: 0 },
+      { t: 'Branding e identidad', d: 'Nombre, logo, colores y voz para que te reconozcan.', need: 1 },
+      { t: 'Creación de contenido', d: 'Reels, historias y piezas que muestran lo que haces.', need: 1 },
+      { t: 'Gestión de redes sociales', d: 'Publicamos, respondemos y cuidamos tu comunidad.', need: 1 },
+      { t: 'Campañas publicitarias', d: 'Anuncios en Meta pensados para generar consultas y ventas.', need: 0 },
+      { t: 'Videos para Meta Ads', d: 'Piezas en video pensadas para anunciar.', need: 0 },
+      { t: 'Asesoría para vender cursos y comunidades', d: 'Cómo ordenar tu oferta y vender conocimiento en línea.', need: 4 },
     ],
   },
   {
     group: 'IA y Software',
     items: [
-      { t: 'Páginas web', need: 2 },
-      { t: 'Dashboards a medida', need: 2 },
-      { t: 'Asistentes de IA', need: 3 },
-      { t: 'Apps a la medida', need: 2 },
-      { t: 'Sistemas para empresas', need: 3 },
+      { t: 'Páginas web', d: 'Claras, ordenadas y pensadas para que te contacten.', need: 2 },
+      { t: 'Dashboards a medida', d: 'Tus números en una sola pantalla, sin planillas.', need: 2 },
+      { t: 'Asistentes de IA', d: 'Atienden por WhatsApp y ayudan a tomar pedidos mientras tu equipo trabaja.', need: 3 },
+      { t: 'Apps a la medida', d: 'Herramientas hechas como trabaja tu negocio.', need: 2 },
+      { t: 'Sistemas para empresas', d: 'Procesos manuales que pasan a un sistema hecho a tu medida.', need: 3 },
     ],
   },
 ];
@@ -81,9 +81,9 @@ const wall = [
 <section class="section services" id="servicios" data-atmo-on="indigo" data-section="servicios" aria-labelledby="titulo-servicios">
   <div class="section__inner">
     <p class="section__label"><b>02</b> — Servicios</p>
-    <h2 class="services__title" id="titulo-servicios">Tres frentes. Un mismo <span class="accent">resultado.</span></h2>
+    <h2 class="services__title" id="titulo-servicios">Tres frentes. Un objetivo: que te <span class="accent">elijan.</span></h2>
     <p class="services__lead" data-reveal>
-      Publicidad que trae clientes, una marca que se recuerda y tecnología que ordena la operación. Todo bajo el mismo equipo.
+      Atraemos a las personas correctas con publicidad que se mide, las convencemos con una marca que se recuerda y ordenamos tu operación con tecnología a tu medida.
     </p>
 
     <div class="svc-grid">
@@ -141,25 +141,26 @@ const wall = [
       ))}
     </div>
 
-    <div class="wall" aria-labelledby="titulo-muro">
+    <section class="tiles" aria-labelledby="titulo-muro">
       <h3 class="section__label" id="titulo-muro">Todo lo que hacemos</h3>
-      {wall.map((g, gi) => (
-        <div class="wall__group">
-          <p class="wall__group-name">{String.fromCharCode(65 + gi)} — {g.group}</p>
-          <ul class="wall__list">
+      {all.map((g, gi) => (
+        <div class="tiles__group">
+          <p class="tiles__group-name">{String.fromCharCode(65 + gi)} — {g.group}</p>
+          <ul class="tiles__list">
             {g.items.map((item, i) => (
-              <li class="wall__row" data-row>
+              <li class="tile" data-row>
                 <a href="#contacto" data-need={item.need} data-topic={item.t} data-cta="servicio-muro">
-                  <span class="wall__idx">{String.fromCharCode(65 + gi)}.{String(i + 1).padStart(2, '0')}</span>
-                  <span class="wall__text">{item.t}</span>
-                  <span class="wall__go" aria-hidden="true" set:html={arrow} />
+                  <span class="tile__idx">{String.fromCharCode(65 + gi)}.{String(i + 1).padStart(2, '0')}</span>
+                  <span class="tile__name">{item.t}</span>
+                  <span class="tile__desc">{item.d}</span>
+                  <span class="tile__go" aria-hidden="true"><span set:html={arrow} /> Lo quiero</span>
                 </a>
               </li>
             ))}
           </ul>
         </div>
       ))}
-    </div>
+    </section>
   </div>
 </section>
 

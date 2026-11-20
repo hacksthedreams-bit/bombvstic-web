@@ -44,7 +44,7 @@
   --ivory: #f5f1ea;
   --muted: #b8b4c2;
   --silver: #d8d9e3;
-  --silver-dark: #a0a2b0; /* 608: más claro (antes #8c8e9c) para mantener 4,5:1 sobre la base púrpura */
+  --silver-dark: #8c8e9c;
   --violet: #7a00ff;
   --interactive: #8b5cf6;
   --lavender: #ad8bfa;
@@ -53,8 +53,8 @@
   --violet-on-ivory: #603a90;
 
   /* atmósfera por capítulo (ficha 101): tonos de la familia de marca; el violeta cálido está en 282° (violeta de marca ≈ 269°). Sin magenta. */
-  --atmo-indigo: 74 38 200;
-  --atmo-ink: 139 92 246; /* IA en acción (608): de azul a violeta claro, dentro de la paleta de marca */
+  --atmo-indigo: 62 44 214;
+  --atmo-ink: 52 104 224;
   --atmo-warm: 168 0 240;
   --t-atmo: 2400ms;
   --t-atmo-slow: 3200ms;
@@ -198,24 +198,6 @@ main[tabindex='-1']:focus {
 .atmo__layer--ink {
   transition-duration: var(--t-atmo-slow);
 }
-/* Base púrpura continua (608): siempre encendida debajo de las capas por capítulo; sube despacio con el scroll (`--p` lo fija motion.ts solo en .atmo)
-   para que el fondo se sienta una sola superficie de color y no parches. Sin `data-atmo`: el script de capítulos no la apaga. */
-.atmo__layer--base {
-  opacity: 1;
-  background:
-    radial-gradient(90% 60% at 82% 12%, rgb(98 40 220 / 0.3), transparent 70%),
-    radial-gradient(80% 60% at 8% 80%, rgb(76 28 190 / 0.26), transparent 72%),
-    linear-gradient(180deg, rgb(34 15 88 / 0.42), rgb(22 10 58 / 0.42));
-  transform: translate3d(0, calc(var(--p, 0) * -14%), 0);
-  transition: none;
-  will-change: transform;
-}
-@media (prefers-reduced-motion: reduce) {
-  .atmo__layer--base {
-    transform: none; /* con movimiento reducido el fondo no se desplaza con el scroll */
-    will-change: auto;
-  }
-}
 .atmo__layer--violet {
   background:
     radial-gradient(60% 50% at 78% 30%, rgb(122 0 255 / 0.15), transparent 70%),
@@ -227,19 +209,15 @@ main[tabindex='-1']:focus {
     radial-gradient(58% 48% at 16% 80%, rgb(216 217 227 / 0.15), transparent 70%),
     radial-gradient(42% 36% at 84% 22%, rgb(174 200 232 / 0.09), transparent 70%);
 }
-/* Servicios y Proyectos (608): superficie púrpura pareja (degradado vertical) con focos suaves sobre el eje del corte */
 .atmo__layer--indigo {
   background:
-    radial-gradient(75% 60% at 38% 62%, rgb(var(--atmo-indigo) / 0.3), transparent 72%),
-    radial-gradient(40% 34% at 90% 14%, rgb(122 0 255 / 0.2), transparent 70%),
-    linear-gradient(180deg, rgb(52 24 138 / 0.34), rgb(40 18 112 / 0.3));
+    radial-gradient(75% 60% at 38% 62%, rgb(var(--atmo-indigo) / 0.26), transparent 72%),
+    radial-gradient(36% 30% at 90% 14%, rgb(122 0 255 / 0.16), transparent 70%);
 }
-/* IA en acción (608): menos sobrio y en la paleta violeta: dos focos de luz a lo largo del corte sobre un fondo de violeta profundo */
 .atmo__layer--ink {
   background:
-    radial-gradient(56% 62% at 88% 22%, rgb(var(--atmo-ink) / 0.3), transparent 70%),
-    radial-gradient(60% 52% at 8% 88%, rgb(122 0 255 / 0.3), transparent 70%),
-    linear-gradient(180deg, rgb(58 26 150 / 0.3), rgb(34 14 96 / 0.3));
+    radial-gradient(46% 62% at 92% 20%, rgb(var(--atmo-ink) / 0.28), transparent 70%),
+    radial-gradient(50% 40% at 6% 92%, rgb(174 200 232 / 0.1), transparent 70%);
 }
 .atmo__layer--warm {
   background:
@@ -984,7 +962,7 @@ main[tabindex='-1']:focus {
 .section--surface {
   /* semitransparente: deja ver la plata del capítulo. Prohibido añadir backdrop-filter, filter o transform aquí:
      contendrían el pin del Método. */
-  background: rgb(20 13 40 / 0.58);
+  background: rgb(18 18 22 / 0.62);
 }
 .section__inner {
   max-width: var(--maxw);
@@ -1141,6 +1119,8 @@ main[tabindex='-1']:focus {
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  max-width: calc(100% - 1.8rem); /* 610: las etiquetas largas («Caso real · La Terraza de Lupita») pasan a dos líneas y no se recortan */
+  line-height: 1.25;
 }
 .svc:nth-child(2) .svc__tag {
   left: auto;
@@ -1394,103 +1374,121 @@ html:not(.js) .svc__media picture {
 }
 }
 
-/* Muro tipográfico: la línea que pasa por el centro de la pantalla se enciende */
-.wall.has-spot .wall__text {
-  opacity: 0.55; /* texto apagado pero legible: ≥ 4,5:1 también bajo 572 px, donde no cuenta como texto grande */
-}
-.wall.has-spot .wall__row.is-center .wall__text {
-  opacity: 1;
-}
-.wall.has-spot .wall__row.is-center .wall__idx {
-  /* índice en la serif cursiva de la marca, como el resto de los índices */
-  font: italic 500 1rem/1 var(--serif);
-  color: var(--muted);
-}
-.wall.has-spot .wall__idx {
-  transition: color var(--t-base);
-}
-
-/* Muro tipográfico */
-.wall {
+/* «Todo lo que hacemos» como tarjetas (ficha 610): reemplaza al muro tipográfico. Cada tarjeta es un enlace entero (≥ 44 px) al diagnóstico con el servicio marcado */
+.tiles {
   margin-top: clamp(5rem, 10vw, 9rem);
 }
-.wall .section__label {
+.tiles .section__label {
   margin-bottom: 0.5rem;
 }
-.wall__group {
+.tiles__group {
   margin-top: 3rem;
 }
-.wall__group-name {
+.tiles__group-name {
   margin: 0 0 1rem;
   font-size: 0.78rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--lavender);
 }
-.wall__list {
+.tiles__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--line);
 }
-.wall__row {
-  border-bottom: 1px solid var(--line);
+@media (min-width: 640px) {
+  .tiles__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
-.wall__row a {
+@media (min-width: 1000px) {
+  .tiles__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.tile a {
+  position: relative;
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr) 1.75rem;
-  align-items: center;
-  gap: 1rem;
-  padding: clamp(0.9rem, 1.6vw, 1.4rem) 0;
-  text-decoration: none;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.55rem;
+  height: 100%;
+  min-height: 11rem;
+  padding: 1.35rem 1.4rem 1.2rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgb(98 40 220 / 0.18), rgb(20 13 40 / 0.6));
   color: var(--ivory);
+  text-decoration: none;
+  transition: border-color var(--t-base) var(--ease-out), background var(--t-base) var(--ease-out), transform var(--t-slow) var(--ease-out);
 }
-.wall__idx {
+/* el corte: una diagonal de luz muy tenue cruza la tarjeta */
+.tile a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(149deg, transparent 49.6%, rgb(173 139 250 / 0.2) 50%, transparent 50.4%);
+  pointer-events: none;
+}
+.tile__idx {
   font-size: 0.75rem;
   letter-spacing: 0.14em;
-  color: var(--silver-dark);
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
-.wall__text {
+.tile__name {
   font-weight: 600;
-  font-size: clamp(1.6rem, 5.4vw, 4.4rem); /* muro tipográfico (ficha 301): desde 1,6 rem ya es texto grande en todos los anchos */
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  transition: transform var(--t-slow) var(--ease-out), color var(--t-base), opacity var(--t-base);
+  font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
-.wall__go {
-  width: 1.6rem;
-  height: 1.6rem;
-  color: var(--lavender);
-  opacity: 0;
-  transform: translateX(-10px);
-  transition: opacity var(--t-base), transform var(--t-slow) var(--ease-out);
+.tile__desc {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
 }
-
-.wall__row a:focus-visible .wall__text {
-  transform: translateX(0.9rem);
+.tile__go {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
   color: var(--lavender);
+}
+.tile__go svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform var(--t-slow) var(--ease-out);
+}
+.tile a:focus-visible {
+  border-color: rgb(173 139 250 / 0.7);
+  background: linear-gradient(160deg, rgb(98 40 220 / 0.3), rgb(20 13 40 / 0.6));
+}
+.tile a:focus-visible .tile__go svg {
+  transform: translateX(3px) rotate(-45deg);
 }
 @media (hover: hover) and (pointer: fine) {
-.wall__row a:hover .wall__text {
-  transform: translateX(0.9rem);
-  color: var(--lavender);
+  .tile a:hover {
+    border-color: rgb(173 139 250 / 0.7);
+    background: linear-gradient(160deg, rgb(98 40 220 / 0.3), rgb(20 13 40 / 0.6));
+    transform: translateY(-3px);
+  }
+  .tile a:hover .tile__go svg {
+    transform: translateX(3px) rotate(-45deg);
+  }
 }
+.tile a:active {
+  border-color: rgb(173 139 250 / 0.7);
 }
-
-.wall__row a:focus-visible .wall__go {
-  opacity: 1;
-  transform: translateX(0) rotate(-45deg);
-}
-@media (hover: hover) and (pointer: fine) {
-.wall__row a:hover .wall__go {
-  opacity: 1;
-  transform: translateX(0) rotate(-45deg);
-}
-}
-@media (hover: hover) {
-  .wall__list:hover .wall__row:not(:hover) .wall__text {
-    opacity: 0.55;
+@media (prefers-reduced-motion: reduce) {
+  .tile a,
+  .tile__go svg {
+    transition: none;
+    transform: none !important;
   }
 }
 
@@ -1500,7 +1498,7 @@ html:not(.js) .svc__media picture {
   background:
     radial-gradient(60% 34% at 85% 4%, rgb(122 0 255 / 0.2), transparent 70%),
     radial-gradient(50% 30% at 8% 62%, rgb(139 92 246 / 0.1), transparent 70%),
-    rgb(15 11 28 / 0.8); /* semitransparente (608): deja pasar la base púrpura */
+    #0e0d13;
 }
 .projects__title {
   margin: 0;
@@ -4027,8 +4025,7 @@ html.dock-on {
 /* Acuse del toque (ficha 605): en táctil el :hover ya no se pega, así que estos elementos responden mientras se pulsan */
 .svc__link:active,
 .qa summary:active,
-.nav__panel ul a:active,
-.wall__row a:active .wall__text {
+.nav__panel ul a:active {
   color: var(--lavender);
 }
 .footer__cols a:active,
@@ -4297,14 +4294,9 @@ html.dock-on {
   }
 }
 
-/* Atmósfera y accesibilidad (608): con colores forzados no hay fondo de color; con contraste alto la base queda a media intensidad */
+/* Atmósfera y accesibilidad (608): con colores forzados no hay fondo de color */
 @media (forced-colors: active) {
   .atmo {
     display: none;
-  }
-}
-@media (prefers-contrast: more) {
-  .atmo__layer--base {
-    opacity: 0.5;
   }
 }

@@ -5,8 +5,26 @@ import { u } from '../lib/url';
 const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
 
 const upcoming = [
-  { name: 'ElMostaShop', kind: 'E-commerce', did: 'Marca completa y redes' },
-  { name: 'La Terraza de Lupita', kind: 'Restaurante', did: 'Redes y crecimiento' },
+  { name: 'ElMostaShop', kind: 'E-commerce de productos digitales', did: 'Marca completa y redes' },
+];
+
+// Caso La Terraza de Lupita (ficha 609): seis historias en video entregadas por la agencia (carpeta BOMBVSTIC_Lupita_Historias_01_a_06).
+// OJO — antes de publicar en el dominio definitivo: confirmar el permiso formal de La Terraza de Lupita para mostrar su nombre, su marca y la conversación de la historia 05.
+// Los textos de `did` y `alt` salen de las propias historias; sin cifras.
+const lupita = [
+  { n: '01', title: 'Apertura', alt: 'Historia de Instagram en video: «Dos marcas. Una cocina con historia.» Los logos de La Terraza de Lupita y platos de comida chileno-mexicana sobre vitrinas doradas.' },
+  { n: '02', title: 'Identidad', alt: 'Historia de Instagram en video: «Un restaurante. Dos historias. Una identidad.» El antes y el después del logo y de las piezas de La Terraza de Lupita.' },
+  { n: '03', title: 'Carta y catálogo', alt: 'Historia de Instagram en video: «El sabor entra por los ojos. La marca también.» La carta física y el catálogo de WhatsApp con la misma identidad.' },
+  { n: '04', title: 'Desarrollo web', alt: 'Historia de Instagram en video: «Dos cocinas. Una misma mesa.» La página web con la carta en imágenes y el pedido por WhatsApp.' },
+  { n: '05', title: 'Atención por WhatsApp', alt: 'Historia de Instagram en video: «Todo empieza con un hola.» Extracto de una conversación en la que el asistente de IA atiende al cliente y toma el pedido, y el equipo toma el relevo.' },
+  { n: '06', title: 'Contenido y redes', alt: 'Historia de Instagram en video: «El antojo empieza antes de llegar.» Reels y gestión de redes con la preparación de los platos.' },
+];
+const lupitaDid = [
+  'Refinamiento de identidad: dos marcas bajo una misma, La Terraza de Lupita by Mister Mechada',
+  'Carta física y catálogo de WhatsApp con la misma identidad',
+  'Página web con la carta en imágenes y pedidos por WhatsApp',
+  'Asistente de IA en WhatsApp que atiende y toma pedidos, con el equipo al relevo',
+  'Contenido y gestión de redes: reels con la preparación de los platos',
 ];
 
 // Caso Digital Sneakers Shop: cinco historias de Instagram (la 03 es video)
@@ -117,7 +135,66 @@ const did = [
       </a>
     </article>
 
-    <!-- Caso 02 · Calyzzo -->
+    <!-- Caso 02 · La Terraza de Lupita (restaurante): seis historias en video en un carrusel con botones -->
+    <article class="case case--reel" aria-labelledby="caso-lupita">
+      <header class="case__head">
+        <p class="feature__tag" data-reveal>Proyecto · Restaurante</p>
+        <h3 class="case__name" id="caso-lupita" data-reveal>La Terraza de Lupita</h3>
+        <p class="case__lead" data-reveal>Dos marcas. Una cocina con historia.</p>
+        <ul class="case__did" data-reveal>
+          {lupitaDid.map((d) => <li>{d}</li>)}
+        </ul>
+      </header>
+
+      <div class="reel" data-reel>
+        <ol class="stories stories--reel" role="list" data-reel-track tabindex="0" aria-label="Las seis historias del caso en video, desliza o usa los botones para verlas">
+          {lupita.map((s) => (
+            <li class="story">
+              <figure>
+                <div class="story__frame">
+                  <img
+                    class="story__poster"
+                    src={u(`/media/proyectos/lupita-${s.n}-720.webp`)}
+                    srcset={`${u(`/media/proyectos/lupita-${s.n}-480.webp`)} 480w, ${u(`/media/proyectos/lupita-${s.n}-720.webp`)} 720w`}
+                    sizes="(min-width: 900px) 17rem, 72vw"
+                    width="720"
+                    height="1280"
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <video class="story__video" data-reel-video muted loop playsinline preload="none" width="720" height="1280" aria-label={s.alt}>
+                    <source src={u(`/media/proyectos/lupita-${s.n}.mp4`)} type="video/mp4" />
+                  </video>
+                  <button class="story__toggle" type="button" data-reel-toggle aria-label={`Reproducir la historia ${s.n}`} aria-pressed="false">
+                    <span class="story__icon" aria-hidden="true"></span>
+                  </button>
+                </div>
+                <figcaption><span>{s.n}</span> {s.title}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ol>
+        <div class="reel__nav">
+          <button class="reel__btn" type="button" data-reel-prev aria-label="Historia anterior" aria-disabled="true">
+            <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+          </button>
+          <p class="reel__count" aria-hidden="true"><b data-reel-count>01</b> / 06</p>
+          <p class="sr-only" role="status" aria-live="polite" data-reel-status>Historia 1 de 6</p>
+          <button class="reel__btn reel__btn--next" type="button" data-reel-next aria-label="Historia siguiente">
+            <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+          </button>
+        </div>
+      </div>
+
+      <a class="feature__link" href="#contacto" data-topic="Un proyecto como La Terraza de Lupita" data-cta="caso" data-reveal>
+        Quiero algo así
+        <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+      </a>
+    </article>
+
+    <!-- Caso 03 · Calyzzo -->
     <article class="feature feature--second">
       <div class="feature__media" data-cut-reveal>
         <picture>
@@ -152,7 +229,7 @@ const did = [
       <ul class="upcoming__list">
         {upcoming.map((c, i) => (
           <li class="upcoming__row" data-row>
-            <span class="upcoming__idx">{String(i + 3).padStart(2, '0')}</span>
+            <span class="upcoming__idx">{String(i + 4).padStart(2, '0')}</span>
             <span class="upcoming__name">{c.name}</span>
             <span class="upcoming__meta">{c.kind} · {c.did}</span>
             <span class="upcoming__chip">En preparación</span>
@@ -219,5 +296,143 @@ const did = [
       ).observe(video);
     }
     sync();
+  }
+</script>
+
+<script>
+  // Caso La Terraza de Lupita (ficha 609): carrusel de seis historias en video.
+  // - Los pósters son imágenes perezosas dentro de una pista horizontal: al acercarse la pista se pasan a `eager` (igual que en el caso anterior, ficha 602).
+  // - Solo se reproduce UNA historia a la vez, la que está al centro, en silencio y solo si la persona no pidió menos movimiento ni ahorro de datos.
+  // - Botones anterior/siguiente (clic y teclado) y contador; la pista también se desliza con el dedo, el trackpad o las flechas.
+  const reel = document.querySelector<HTMLElement>('[data-reel]');
+  const track = reel?.querySelector<HTMLElement>('[data-reel-track]');
+  if (reel && track) {
+    const posters = [...track.querySelectorAll<HTMLImageElement>('.story__poster')];
+    const items = [...track.querySelectorAll<HTMLElement>('.story')];
+    const prev = reel.querySelector<HTMLButtonElement>('[data-reel-prev]');
+    const next = reel.querySelector<HTMLButtonElement>('[data-reel-next]');
+    const count = reel.querySelector<HTMLElement>('[data-reel-count]');
+    const status = reel.querySelector<HTMLElement>('[data-reel-status]');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    const saveData = !!conn?.saveData;
+
+    if ('IntersectionObserver' in window) {
+      const near = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          posters.forEach((p) => (p.loading = 'eager'));
+          near.disconnect();
+        },
+        { rootMargin: '1200px 0px' },
+      );
+      near.observe(track);
+    }
+
+    // ── reproducción ──
+    // Una sola historia suena: la más cercana al centro de la pista, mientras la pista se vea. Sin reproducción automática con «reducir movimiento»,
+    // ahorro de datos o conexión 2G/3G (el botón de cada historia la inicia igual).
+    const slow = !!conn?.effectiveType && /(^|slow-)(2g|3g)$/.test(conn.effectiveType);
+    type Cell = { video: HTMLVideoElement; btn: HTMLButtonElement; paused: boolean };
+    const cells: Cell[] = items.map((li) => ({
+      video: li.querySelector<HTMLVideoElement>('[data-reel-video]')!,
+      btn: li.querySelector<HTMLButtonElement>('[data-reel-toggle]')!,
+      paused: reduce.matches || saveData || slow,
+    }));
+    const sync = (c: Cell) => {
+      const playing = !c.video.paused;
+      c.btn.setAttribute('aria-pressed', String(playing)); // una sola señal: el botón conserva su nombre y cambia su estado
+      c.btn.classList.toggle('is-playing', playing);
+    };
+    const play = (c: Cell) => {
+      c.video.preload = 'auto';
+      c.video.play().then(() => sync(c)).catch(() => sync(c));
+    };
+    const only = (keep: number) =>
+      cells.forEach((c, j) => {
+        if (j !== keep && !c.video.paused) {
+          c.video.pause();
+          sync(c);
+        }
+      });
+    cells.forEach((c, i) => {
+      c.btn.addEventListener('click', () => {
+        if (c.video.paused) {
+          c.paused = false;
+          only(i);
+          play(c);
+        } else {
+          c.paused = true;
+          c.video.pause();
+          sync(c);
+        }
+      });
+      c.video.addEventListener('play', () => sync(c));
+      c.video.addEventListener('pause', () => sync(c));
+      // los videos arrancan con el escenario vacío: hasta que pasan los primeros 0,3 s se ve el póster, que ya muestra la historia completa
+      c.video.addEventListener('timeupdate', () => c.video.classList.toggle('is-started', c.video.currentTime > 0.3));
+    });
+    let trackVisible = false;
+    const centered = () => {
+      const r = track.getBoundingClientRect();
+      const mid = r.left + r.width / 2;
+      let best = 0;
+      let dist = Infinity;
+      items.forEach((li, i) => {
+        const b = li.getBoundingClientRect();
+        const d = Math.abs(b.left + b.width / 2 - mid);
+        if (d < dist) {
+          dist = d;
+          best = i;
+        }
+      });
+      return best;
+    };
+    let settle = 0;
+    const settleSoon = () => {
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        const i = centered();
+        if (status) status.textContent = `Historia ${i + 1} de ${items.length}`;
+        if (!trackVisible) return;
+        only(i);
+        if (!cells[i].paused && cells[i].video.paused) play(cells[i]);
+      }, 160);
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        ([e]) => {
+          trackVisible = e.isIntersecting;
+          if (!trackVisible) cells.forEach((c) => !c.video.paused && c.video.pause());
+          else settleSoon();
+        },
+        { threshold: 0.35 },
+      ).observe(track);
+    }
+
+    // ── botones y contador ──
+    const step = () => (items[1] ? items[1].offsetLeft - items[0].offsetLeft : track.clientWidth);
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      const idx = Math.min(items.length, Math.max(1, Math.round(track.scrollLeft / step()) + 1));
+      const atEnd = track.scrollLeft >= max - 2;
+      if (count) count.textContent = String(atEnd ? items.length : idx).padStart(2, '0');
+      // `aria-disabled` y no `disabled`: si el botón se apaga con el foco encima, el foco no se pierde
+      prev?.setAttribute('aria-disabled', String(track.scrollLeft <= 2));
+      next?.setAttribute('aria-disabled', String(atEnd));
+    };
+    const go = (dir: number) => track.scrollBy({ left: dir * step(), behavior: reduce.matches ? 'auto' : 'smooth' });
+    prev?.addEventListener('click', () => prev.getAttribute('aria-disabled') !== 'true' && go(-1));
+    next?.addEventListener('click', () => next.getAttribute('aria-disabled') !== 'true' && go(1));
+    track.addEventListener(
+      'scroll',
+      () => {
+        update();
+        settleSoon();
+      },
+      { passive: true },
+    );
+    window.addEventListener('resize', update, { passive: true });
+    update();
   }
 </script>
