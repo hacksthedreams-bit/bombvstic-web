@@ -450,10 +450,14 @@ main[tabindex='-1']:focus {
   transition: color var(--t-base);
 }
 .chapters a::before {
+  /* el guion del riel es el corte: diagonal de −31° (613) */
   content: '';
-  width: 0.5rem;
+  flex: none;
+  width: 0.7rem;
   height: 1px;
   background: currentColor;
+  transform: rotate(-31deg);
+  transform-origin: left center;
   transition: width var(--t-base) var(--ease-out);
 }
 .chapters .num {
@@ -737,13 +741,14 @@ main[tabindex='-1']:focus {
 .marquee__word--c {
   background-image: linear-gradient(100deg, var(--interactive) 0%, var(--lavender) 45%, var(--silver) 95%);
 }
-.marquee i {
-  font-style: normal;
-  font-weight: 300;
-  font-size: clamp(3rem, 8vw, 7rem);
-  line-height: 1;
-  color: var(--violet);
-  text-shadow: 0 0 28px rgb(122 0 255 / 0.9);
+/* La B de la marca (con su rayo violeta) como separador de la cinta (613): reemplaza a la barra «/» */
+.marquee__b {
+  flex: none;
+  width: clamp(2rem, 4.2vw, 3.6rem);
+  height: auto;
+  aspect-ratio: 1;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 10px rgb(122 0 255 / 0.4));
 }
 /* La palabra clave del titular («venda.», en marfil y no en púrpura: ficha 607) brilla como metal cada tanto */
 .hero__title .accent {
@@ -981,7 +986,7 @@ main[tabindex='-1']:focus {
   color: var(--muted);
 }
 .section__label::before {
-  /* el corte en miniatura: 1 px × 1,5 rem a −31° */
+  /* el corte en miniatura: 1 px × 1,5 rem a −31° (los títulos sin número lo conservan así) */
   content: '';
   flex: none;
   width: 1.5rem;
@@ -990,9 +995,43 @@ main[tabindex='-1']:focus {
   background: var(--lavender);
   transform: rotate(-31deg);
 }
+/* Índice numerado (613): número grande en la serif de la marca, el corte más largo y con luz, nombre en mayúsculas pequeñas.
+   Orden visual: número → corte → nombre (el ::before va después del número). */
 .section__label b {
-  color: var(--lavender);
-  font-weight: 500;
+  order: 1;
+  color: var(--ivory);
+  font: italic 500 clamp(2rem, 1.6rem + 1.4vw, 2.9rem) / 1 var(--serif);
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums;
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .section__label b {
+    background: linear-gradient(105deg, var(--ivory) 10%, var(--lavender) 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    padding-right: 0.08em; /* la cursiva del 7 y del 1 no se corta al recortar el fondo */
+  }
+}
+.section__label .section__name {
+  order: 3;
+  font: 600 0.78rem / 1 var(--sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--silver); /* --muted baja a ≈ 4,1:1 sobre los focos de la atmósfera (auditoría 613) */
+}
+.section__label:has(b)::before {
+  order: 2;
+  width: clamp(2.4rem, 2rem + 1.2vw, 3.2rem);
+  height: 1.5px;
+  margin-inline: 0.15rem 0.2rem;
+  background: linear-gradient(90deg, rgb(173 139 250 / 0), var(--lavender) 45%, var(--ivory));
+  box-shadow: 0 0 12px 1px rgb(139 92 246 / 0.55);
+  border-radius: 1px;
+}
+.section__label:has(b) {
+  gap: 0.8rem;
 }
 
 /* ───── Manifiesto ───── */
@@ -4449,4 +4488,96 @@ html.dock-on {
 
 .terreno__list:focus-visible {
   outline-offset: -4px; /* `overflow-x: clip` de .team recortaría el contorno hacia afuera */
+}
+
+/* ───── Ola H (613): riel, titular del cierre, la B ───── */
+.chapters a.is-active {
+  color: var(--ivory);
+}
+.chapters a.is-active::before {
+  width: 2rem;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--lavender), var(--ivory));
+  box-shadow: 0 0 10px 1px rgb(139 92 246 / 0.6);
+}
+.chapters a.is-active .num {
+  text-shadow: 0 0 14px rgb(173 139 250 / 0.7);
+}
+
+/* Titular del cierre todo en marfil; el púrpura queda en un trazo de luz (el corte) bajo «note» */
+.closing__title .accent {
+  position: relative;
+  color: var(--ivory);
+}
+.closing__title .accent::after {
+  /* trazo de luz bajo la palabra (decorativo; ≤ 1,2 em; hereda la opacidad de la palabra) */
+  content: '';
+  position: absolute;
+  left: 4%;
+  bottom: -0.02em;
+  width: 92%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--lavender) 30%, var(--lavender) 70%, transparent);
+  box-shadow: 0 0 14px 1px rgb(139 92 246 / 0.6);
+  pointer-events: none;
+}
+.closing__title .nb {
+  display: inline;
+}
+@media (min-width: 900px) {
+  .closing__title {
+    max-width: none;
+  }
+  .closing__title .nb {
+    display: block;
+  }
+}
+
+/* La B como sello del mensaje armado y en «Volver arriba» */
+.diag__seal {
+  display: block;
+  width: 3.5rem;
+  height: auto;
+  aspect-ratio: 1;
+  margin: 0 0 1rem;
+  filter: drop-shadow(0 0 18px rgb(122 0 255 / 0.6));
+}
+@media (prefers-reduced-motion: no-preference) {
+  .diag__done:not([hidden]) .diag__seal {
+    animation: seal-in 900ms var(--ease-cut) both;
+  }
+}
+@keyframes seal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.footer__b {
+  flex: none;
+  width: 1.6rem;
+  height: auto;
+  aspect-ratio: 1;
+  margin-right: 0.55rem;
+}
+
+/* Colores forzados (Windows): el texto con fondo recortado y color transparente desaparecería (auditoría 613) */
+@media (forced-colors: active) {
+  .section__label b,
+  .hero__title .accent,
+  .marquee__word--a,
+  .marquee__word--c {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: currentColor;
+  }
+  .closing__title .accent::after,
+  .section__label::before {
+    background: CanvasText;
+    box-shadow: none;
+  }
 }

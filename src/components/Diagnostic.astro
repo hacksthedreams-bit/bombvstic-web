@@ -21,8 +21,8 @@ const kinds = ['Restaurante o local', 'Centro de eventos', 'E-commerce', 'Creado
   <img class="closing__mark" data-closing-mark src={u('/brand/emblema-960.webp')} alt="" width="960" height="960" loading="lazy" decoding="async" aria-hidden="true" />
   <div class="closing__cutwrap" aria-hidden="true"><div class="closing__cut" data-closing-cut></div></div>
   <div class="section__inner">
-    <p class="section__label closing__label"><b>08</b> — Contacto</p>
-    <h2 class="closing__title" id="titulo-cierre" data-scrub-words>¿Qué quieres que se <span class="accent">note</span> en tu negocio?</h2>
+    <p class="section__label closing__label"><b>08</b>{' '}<span class="section__name">Contacto</span></p>
+    <h2 class="closing__title" id="titulo-cierre" data-scrub-words data-scrub-end="bottom 62%"><span class="nb">¿Qué quieres que </span><span class="nb">se <span class="accent">note</span> en tu negocio?</span></h2>
     <p class="closing__lead">Cuéntanos en tres pasos y abrimos la conversación.</p>
 
     <p class="diag__topic" data-diag-topic hidden>
@@ -111,6 +111,7 @@ const kinds = ['Restaurante o local', 'Centro de eventos', 'E-commerce', 'Creado
     </form>
 
     <div class="diag__done" data-diag-done hidden tabindex="-1" data-wa={wa?.base}>
+      <img class="diag__seal" src={u('/brand/emblema-nav-160.webp')} alt="" width="160" height="160" loading="lazy" decoding="async" aria-hidden="true" />
       <h3>Listo: tu mensaje está armado.</h3>
       <p>Se abrió tu correo para que lo envíes. Si no ocurrió, copia el mensaje y mándalo a <a href="mailto:bombvstic@gmail.com">bombvstic@gmail.com</a>.</p>
       <pre class="diag__preview" data-diag-preview></pre>

@@ -600,7 +600,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
         opacity: 1,
         ease: 'none',
         stagger: 0.12,
-        scrollTrigger: { trigger: manifesto, start: 'top 78%', end: 'bottom 48%', scrub: 0.4 },
+        scrollTrigger: { trigger: manifesto, start: 'top 78%', end: manifesto.dataset.scrubEnd ?? 'bottom 48%', scrub: 0.4 },
       },
     );
   });
