@@ -5,6 +5,16 @@ import { u } from '../lib/url';
 
 // Detecta las fotos que existan en public/media/equipo (sin depender del directorio de trabajo)
 const photos = Object.keys(import.meta.glob('/public/media/equipo/*-720.webp'));
+// Fotos de trabajo en terreno (ficha 611): se registran aquí UNA POR UNA, con su descripción (`alt`), y deben existir los dos archivos
+// `public/media/terreno/<slug>-480.webp` y `<slug>-720.webp` (4:3; sin EXIF ni GPS; hechas por Bombvstic y con consentimiento de quien aparezca).
+// Una foto sin descripción o sin sus dos archivos no se publica. Sin fotos registradas, la franja no existe.
+const terrenoDefs: Array<{ slug: string; alt: string }> = [
+  // { slug: 'grabacion-lupita', alt: 'Allan y Martina grabando los platos de La Terraza de Lupita en la cocina del local' },
+];
+const slugsDe = (m: Record<string, unknown>, sufijo: string) => new Set(Object.keys(m).map((k) => k.split('/').pop()!.replace(sufijo, '')));
+const en480 = slugsDe(import.meta.glob('/public/media/terreno/*-480.webp'), '-480.webp');
+const en720 = slugsDe(import.meta.glob('/public/media/terreno/*-720.webp'), '-720.webp');
+const terreno = terrenoDefs.filter((d) => /^[a-z0-9-]+$/.test(d.slug) && d.alt.trim() && en480.has(d.slug) && en720.has(d.slug));
 const team = [
   { slug: 'allan', name: 'Allan', role: '', line: '' },
   { slug: 'martina', name: 'Martina', role: '', line: '' },
@@ -19,7 +29,7 @@ const team = [
   <div class="section__inner team__grid">
     <div class="team__intro">
       <p class="section__label"><b>06</b> — Equipo</p>
-      <h2 class="team__title" id="titulo-equipo">Detrás de cada proyecto hay <span class="accent">personas.</span></h2>
+      <h2 class="team__title" id="titulo-equipo">Detrás de cada proyecto hay un <span class="accent">equipo.</span></h2>
       <p class="team__lead" data-reveal>Un mismo equipo para pensar la estrategia y construirla, desde Santiago de Chile.</p>
     </div>
 
@@ -51,5 +61,27 @@ const team = [
         </li>
       ))}
     </ul>
+
+    {terreno.length > 0 && (
+      <div class="terreno">
+        <h3 class="section__label" id="titulo-terreno">En terreno</h3>
+        <ul class="terreno__list" tabindex="0" role="list" aria-labelledby="titulo-terreno">
+          {terreno.map(({ slug, alt }) => (
+            <li class="terreno__item">
+              <img
+                src={u(`/media/terreno/${slug}-720.webp`)}
+                srcset={`${u(`/media/terreno/${slug}-480.webp`)} 480w, ${u(`/media/terreno/${slug}-720.webp`)} 720w`}
+                sizes="(min-width: 900px) 22rem, 78vw"
+                width="720"
+                height="540"
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
   </div>
 </section>

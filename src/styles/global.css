@@ -4300,3 +4300,153 @@ html.dock-on {
     display: none;
   }
 }
+
+/* Equipo (ficha 611): «equipo» en marfil (el púrpura queda para donde corresponde) y franja «En terreno» cuando hay fotos */
+.team__title .accent {
+  color: var(--ivory);
+}
+.terreno {
+  grid-column: 1 / -1;
+  margin-top: clamp(1rem, 3vw, 2.5rem);
+}
+.terreno .section__label {
+  margin-bottom: 1rem;
+}
+.terreno__list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(78vw, 20rem);
+  gap: clamp(0.8rem, 1.6vw, 1.4rem);
+  margin: 0;
+  padding: 0 0 1rem;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--lavender) transparent;
+}
+@media (min-width: 900px) {
+  .terreno__list {
+    grid-auto-columns: clamp(18rem, 24vw, 22rem);
+  }
+}
+.terreno__item {
+  scroll-snap-align: start;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.6rem), calc(100% - 2.6rem) 100%, 0 100%); /* la esquina cortada a −31° */
+}
+.terreno__item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+/* ───── Caso en video: La Terraza de Lupita (fichas 609 y 610) ─────
+   Carrusel de seis historias con snap en todos los anchos (en escritorio no se fija ni se vuelve rejilla), botones anterior/siguiente y contador. */
+.stories.stories--reel {
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  grid-auto-columns: min(72vw, 15.5rem);
+  gap: clamp(0.8rem, 1.6vw, 1.4rem);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+@media (min-width: 900px) {
+  .stories.stories--reel {
+    grid-auto-columns: clamp(14rem, 17vw, 17rem);
+    margin-inline: 0;
+    padding-inline: 0;
+    scroll-padding-inline: 0;
+  }
+  .stories--reel .story:nth-child(even) {
+    margin-top: 0;
+  }
+}
+.reel__nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+.reel__btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgb(245 241 234 / 0.3);
+  border-radius: 50%;
+  background: rgb(11 11 14 / 0.6);
+  color: var(--ivory);
+  cursor: pointer;
+  transition: background var(--t-base), border-color var(--t-base), opacity var(--t-base);
+}
+.reel__btn .btn__arrow {
+  background: transparent;
+}
+.reel__btn:not(.reel__btn--next) .btn__arrow svg {
+  transform: rotate(180deg);
+}
+.reel__btn[aria-disabled='true'] {
+  opacity: 0.35;
+  cursor: default;
+}
+@media (hover: hover) and (pointer: fine) {
+  .reel__btn:not([aria-disabled='true']):hover {
+    background: var(--violet);
+    border-color: var(--violet);
+  }
+}
+.reel__count {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.reel__count b {
+  color: var(--ivory);
+  font-weight: 500;
+}
+.stories--reel .story__video {
+  opacity: 0;
+}
+.stories--reel .story__video.is-started {
+  opacity: 1;
+}
+/* Botones de reproducir sobre video del carrusel de Lupita: sin `backdrop-filter` (seis desenfoques sobre video cuestan pintado en celular) */
+.stories--reel .story__toggle {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: rgb(11 11 14 / 0.85);
+}
+
+/* IA en acción (610): una línea de prueba real bajo la bajada, con enlace al caso */
+.ai__proof {
+  max-width: 34rem;
+  margin: 1rem 0 0;
+  color: var(--silver);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+.ai__proof a {
+  display: inline-block;
+  min-height: 2.75rem;
+  line-height: 2.75rem;
+  color: var(--lavender);
+  font-weight: 600;
+  text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .ai__proof a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.terreno__list:focus-visible {
+  outline-offset: -4px; /* `overflow-x: clip` de .team recortaría el contorno hacia afuera */
+}
