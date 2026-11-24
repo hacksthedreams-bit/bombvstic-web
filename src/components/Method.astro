@@ -38,6 +38,18 @@ const steps = [
     <h2 class="method__title" id="titulo-metodo">Cuatro movimientos. <span class="accent">Cero</span> improvisación.</h2>
     <p class="method__lead" data-reveal>Así trabajamos, de la primera conversación a los resultados.</p>
 
+    <svg class="method__defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="mg-silver" gradientUnits="userSpaceOnUse" x1="0" y1="68" x2="96" y2="0">
+          <stop offset="0" stop-color="#8c8e9c" />
+          <stop offset="1" stop-color="#f5f1ea" />
+        </linearGradient>
+        <linearGradient id="mg-violet" gradientUnits="userSpaceOnUse" x1="0" y1="68" x2="96" y2="0">
+          <stop offset="0" stop-color="#8b5cf6" />
+          <stop offset="1" stop-color="#c9b4ff" />
+        </linearGradient>
+      </defs>
+    </svg>
     <div class="method__stage" data-method-stage>
     <p class="method__ghost" aria-hidden="true" data-method-ghost>01</p>
     <ol class="method__list" data-method>
@@ -48,29 +60,39 @@ const steps = [
           <svg class="step__icon" viewBox="0 0 96 68" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             {s.icon === 'descubrir' && (
               <>
-                <path pathLength="1" d="M18 34H78M48 4V64" stroke="#75707F" stroke-width="1.5" />
-                <circle pathLength="1" cx="48" cy="34" r="21" stroke="#d8d9e3" stroke-width="2" />
-                <circle cx="48" cy="34" r="4" fill="#ad8bfa" class="step__fill" />
+                <path pathLength="1" d="M19 30a21 21 0 1 0 42 0a21 21 0 1 0 -42 0Z" stroke="url(#mg-silver)" stroke-width="2.2" />
+                <path pathLength="1" d="M55.5 45.5L77 64" stroke="url(#mg-violet)" stroke-width="3.2" />
+                <path pathLength="1" d="M27 24A14 14 0 0 1 38 16" stroke="url(#mg-violet)" stroke-width="1.6" />
+                <circle cx="40" cy="30" r="3.2" fill="#ad8bfa" class="step__fill" />
               </>
             )}
             {s.icon === 'definir' && (
               <>
-                <path pathLength="1" d="M20 12L76 12L62 56L34 56Z" stroke="#d8d9e3" stroke-width="2" />
-                <path pathLength="1" d="M34 34H62" stroke="#ad8bfa" stroke-width="2" />
+                <path pathLength="1" d="M14 10H82L56 38V58L40 52V38Z" stroke="url(#mg-silver)" stroke-width="2.2" />
+                <path pathLength="1" d="M28 22H68" stroke="url(#mg-violet)" stroke-width="1.6" />
+                <path pathLength="1" d="M48 40V54" stroke="url(#mg-violet)" stroke-width="3" />
+                <circle cx="48" cy="63" r="2.6" fill="#ad8bfa" class="step__fill" />
               </>
             )}
             {s.icon === 'construir' && (
               <>
-                <rect pathLength="1" x="20" y="12" width="36" height="36" rx="2" stroke="#d8d9e3" stroke-width="2" />
-                <rect pathLength="1" x="40" y="30" width="36" height="28" rx="2" fill="#20182e" stroke="#ad8bfa" stroke-width="2" />
+                <path pathLength="1" d="M14 32H40Q42 32 42 34V56Q42 58 40 58H14Q12 58 12 56V34Q12 32 14 32Z" stroke="url(#mg-silver)" stroke-width="2.2" />
+                <path pathLength="1" d="M32 12H58Q60 12 60 14V36Q60 38 58 38H32Q30 38 30 36V14Q30 12 32 12Z" stroke="url(#mg-silver)" stroke-width="2.2" />
+                <path pathLength="1" d="M52 30H82Q84 30 84 32V56Q84 58 82 58H52Q50 58 50 56V32Q50 30 52 30Z" fill="#20182e" stroke="url(#mg-violet)" stroke-width="2.4" />
               </>
             )}
             {s.icon === 'evolucionar' && (
               <>
-                <path pathLength="1" d="M18 54L36 36L52 44L78 16" stroke="#d8d9e3" stroke-width="2" />
-                <path pathLength="1" d="M59 16H78V35" stroke="#ad8bfa" stroke-width="2" />
+                <path pathLength="1" d="M18 58V48" stroke="url(#mg-silver)" stroke-width="5" />
+                <path pathLength="1" d="M38 58V40" stroke="url(#mg-silver)" stroke-width="5" />
+                <path pathLength="1" d="M58 58V32" stroke="url(#mg-silver)" stroke-width="5" />
+                <path pathLength="1" d="M78 58V22" stroke="url(#mg-silver)" stroke-width="5" />
+                <path pathLength="1" d="M14 38L36 26L50 32L80 8" stroke="url(#mg-violet)" stroke-width="2.4" />
+                <path pathLength="1" d="M64 8H80V24" stroke="url(#mg-violet)" stroke-width="2.4" />
               </>
             )}
+            {/* el corte de la marca (−31°) cruza los cuatro íconos como firma */}
+            <path pathLength="1" d="M6 60L90 10" stroke="url(#mg-violet)" stroke-width="1" stroke-opacity="0.55" />
           </svg>
           <div class="step__head">
             <p class="step__num">{s.n}</p>

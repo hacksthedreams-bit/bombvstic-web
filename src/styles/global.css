@@ -2541,7 +2541,7 @@ html:not(.js) .svc__media picture {
   transition-delay: 0s;
 }
 .is-pinned .step__icon {
-  width: 5.5rem;
+  width: 7rem;
   opacity: 1;
   transform: none;
 }
@@ -2567,7 +2567,7 @@ html:not(.js) .svc__media picture {
 }
 /* Los íconos se dibujan solos al entrar su paso */
 .is-pinned .step__icon :is(path, circle, rect):not(.step__fill) {
-  stroke-dasharray: 1;
+  stroke-dasharray: 1 2; /* hueco de 2: con 1 solo, el extremo redondeado del trazo oculto se pintaba como un punto (auditoría 615) */
   stroke-dashoffset: 1;
   transition: stroke-dashoffset 1.3s var(--ease-out) 0.25s;
 }
@@ -4516,5 +4516,32 @@ html.dock-on {
   .section__label::before {
     background: CanvasText;
     box-shadow: none;
+  }
+}
+
+/* Íconos del Método (615): degradados compartidos (el svg de definiciones no ocupa lugar), luz suave en el paso activo y colores forzados */
+.method__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+@media (min-width: 900px) {
+  .is-pinned .step.is-active .step__icon {
+    filter: drop-shadow(0 0 14px rgb(122 0 255 / 0.4));
+  }
+}
+@media (forced-colors: active) {
+  .step__icon :is(path, circle, rect) {
+    stroke: CanvasText;
+  }
+  .step__icon .step__fill {
+    fill: CanvasText;
+  }
+  .step__icon path {
+    fill: none;
+  }
+  .step__icon {
+    filter: none !important;
   }
 }
