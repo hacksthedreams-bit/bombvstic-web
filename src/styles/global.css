@@ -4461,12 +4461,14 @@ html.dock-on {
 .closing__title .nb {
   display: inline;
 }
+@media (min-width: 480px) {
+  .closing__title .nb {
+    display: block; /* «¿Qué quieres que» / «se note en tu negocio?» también en tablet */
+  }
+}
 @media (min-width: 900px) {
   .closing__title {
     max-width: none;
-  }
-  .closing__title .nb {
-    display: block;
   }
 }
 
@@ -4544,4 +4546,44 @@ html.dock-on {
   .step__icon {
     filter: none !important;
   }
+}
+
+/* Correcciones de la revisión (616) */
+.closing__direct .nw {
+  display: inline-block;
+  white-space: nowrap; /* el grupo «· enlace» no se parte */
+}
+.closing__direct .nw a,
+.closing__direct .nw span {
+  margin-inline-start: 0; /* la regla general de .closing__direct daba margen también a lo anidado */
+}
+.closing__direct .nw > span[aria-hidden] {
+  margin-inline-end: 0.5em;
+}
+.closing__direct .sr-only {
+  margin: 0;
+}
+@media (max-width: 519px) {
+  /* en celular los grupos pasan de renglón: sin el «·» (decorativo) no queda un punto huérfano al comienzo ni al final de una línea */
+  .closing__direct .nw > span[aria-hidden],
+  .hero__proof i {
+    display: none;
+  }
+  .closing__direct .nw {
+    margin-inline-start: 0.9em;
+  }
+}
+/* sin JS el acento es un inline: el trazo bajo la palabra se medía contra la caja de la fuente y caía sobre el párrafo siguiente */
+.closing__title .accent {
+  display: inline-block;
+}
+/* anclas nativas (movimiento reducido, sin JS): el título no queda bajo la barra fija */
+html {
+  scroll-padding-top: 5rem;
+}
+.footer__top {
+  gap: 0.35rem; /* en un contenedor flex el espacio de «Volver arriba ↑» se pierde */
+}
+.footer__b {
+  margin-right: 0.2rem;
 }
