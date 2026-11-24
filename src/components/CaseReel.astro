@@ -1,0 +1,230 @@
+---
+// Caso con carrusel de historias en video (fichas 609 y 614): La Terraza de Lupita y Elmostashop comparten este bloque.
+// Los videos viven en /media/proyectos/<slug>-NN.mp4 (720×1280, sin audio) y sus pósters en <slug>-NN-480/-720.webp. Nada se descarga hasta acercarse.
+import { u } from '../lib/url';
+interface Story {
+  n: string;
+  title: string;
+  alt: string;
+}
+interface Props {
+  slug: string; // «lupita» | «mosta»
+  name: string;
+  tag: string;
+  lead: string;
+  did: string[];
+  stories: Story[];
+  words: string; // «seis», «cuatro»: para el nombre accesible de la pista
+  topic: string; // «Un proyecto como …»: precarga el formulario de contacto
+}
+const { slug, name, tag, lead, did, stories, words, topic } = Astro.props;
+const total = String(stories.length).padStart(2, '0');
+const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>`;
+---
+
+<article class="case case--reel" aria-labelledby={`caso-${slug}`}>
+  <header class="case__head">
+    <p class="feature__tag" data-reveal>{tag}</p>
+    <h3 class="case__name" id={`caso-${slug}`} data-reveal>{name}</h3>
+    <p class="case__lead" data-reveal>{lead}</p>
+    <ul class="case__did" data-reveal>
+      {did.map((d) => <li>{d}</li>)}
+    </ul>
+    <a class="feature__link" href="#contacto" data-topic={topic} data-cta={`caso-${slug}`} data-reveal>
+      Quiero algo así<span class="sr-only"> como {name}</span>
+      <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+    </a>
+  </header>
+
+  <div class="reel" data-reel>
+    <ol class="stories stories--reel" role="list" data-reel-track tabindex="0" aria-label={`Las ${words} historias del caso en video, desliza o usa los botones para verlas`}>
+      {stories.map((s) => (
+        <li class="story">
+          <figure>
+            <div class="story__frame">
+              <img
+                class="story__poster"
+                src={u(`/media/proyectos/${slug}-${s.n}-720.webp`)}
+                srcset={`${u(`/media/proyectos/${slug}-${s.n}-480.webp`)} 480w, ${u(`/media/proyectos/${slug}-${s.n}-720.webp`)} 720w`}
+                sizes="(min-width: 900px) 17rem, 72vw"
+                width="720"
+                height="1280"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+              />
+              <video class="story__video" data-reel-video muted loop playsinline preload="none" width="720" height="1280" aria-label={s.alt}>
+                <source src={u(`/media/proyectos/${slug}-${s.n}.mp4`)} type="video/mp4" />
+              </video>
+              <button class="story__toggle" type="button" data-reel-toggle aria-label={`Reproducir la historia ${s.n}`} aria-pressed="false">
+                <span class="story__icon" aria-hidden="true"></span>
+              </button>
+            </div>
+            <figcaption><span>{s.n}</span> {s.title}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ol>
+    <div class="reel__nav">
+      <button class="reel__btn" type="button" data-reel-prev aria-label="Historia anterior" aria-disabled="true">
+        <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+      </button>
+      <p class="reel__count" aria-hidden="true"><b data-reel-count>01</b> / {total}</p>
+      <p class="sr-only" role="status" aria-live="polite" data-reel-status>Historia 1 de {stories.length}</p>
+      <button class="reel__btn reel__btn--next" type="button" data-reel-next aria-label="Historia siguiente">
+        <span class="btn__arrow" aria-hidden="true" set:html={arrow} />
+      </button>
+    </div>
+  </div>
+</article>
+
+<script>
+  // Carrusel de historias en video (ficha 609, generalizado en la 614 para varios casos en la página).
+  // - Los pósters son imágenes perezosas dentro de una pista horizontal: al acercarse la pista se pasan a `eager` (ficha 602).
+  // - Solo se reproduce UNA historia a la vez en TODA la página: la que está al centro de su pista, en silencio y solo si la persona no pidió menos movimiento ni ahorro de datos.
+  // - Botones anterior/siguiente (clic y teclado) y contador; la pista también se desliza con el dedo, el trackpad o las flechas.
+  type Cell = { video: HTMLVideoElement; btn: HTMLButtonElement; paused: boolean };
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  const saveData = !!conn?.saveData;
+  // Sin reproducción automática con «reducir movimiento», ahorro de datos o conexión 2G/3G (el botón de cada historia la inicia igual).
+  const slow = !!conn?.effectiveType && /(^|slow-)(2g|3g)$/.test(conn.effectiveType);
+  const everyCell: Cell[] = [];
+  reduce.addEventListener('change', () => {
+    if (reduce.matches) {
+      everyCell.forEach((c) => {
+        c.paused = true;
+        if (!c.video.paused) c.video.pause();
+      });
+    }
+  });
+  const sync = (c: Cell) => {
+    const playing = !c.video.paused;
+    c.btn.setAttribute('aria-pressed', String(playing)); // una sola señal: el botón conserva su nombre y cambia su estado
+    c.btn.classList.toggle('is-playing', playing);
+  };
+  const play = (c: Cell) => {
+    c.video.preload = 'auto';
+    c.video.play().then(() => sync(c)).catch(() => sync(c));
+  };
+  // pausa todas las historias de la página menos la indicada (entre carruseles también)
+  const only = (keep: Cell | null) =>
+    everyCell.forEach((c) => {
+      if (c !== keep && !c.video.paused) {
+        c.video.pause();
+        sync(c);
+      }
+    });
+
+  document.querySelectorAll<HTMLElement>('[data-reel]').forEach((reel) => {
+    const track = reel.querySelector<HTMLElement>('[data-reel-track]');
+    if (!track) return;
+    const posters = [...track.querySelectorAll<HTMLImageElement>('.story__poster')];
+    const items = [...track.querySelectorAll<HTMLElement>('.story')];
+    const prev = reel.querySelector<HTMLButtonElement>('[data-reel-prev]');
+    const next = reel.querySelector<HTMLButtonElement>('[data-reel-next]');
+    const count = reel.querySelector<HTMLElement>('[data-reel-count]');
+    const status = reel.querySelector<HTMLElement>('[data-reel-status]');
+    const nav = reel.querySelector<HTMLElement>('.reel__nav');
+
+    if ('IntersectionObserver' in window) {
+      const near = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          posters.forEach((p) => (p.loading = 'eager'));
+          near.disconnect();
+        },
+        { rootMargin: '1200px 0px' },
+      );
+      near.observe(track);
+    }
+
+    const cells: Cell[] = items.map((li) => ({
+      video: li.querySelector<HTMLVideoElement>('[data-reel-video]')!,
+      btn: li.querySelector<HTMLButtonElement>('[data-reel-toggle]')!,
+      paused: reduce.matches || saveData || slow,
+    }));
+    everyCell.push(...cells);
+    cells.forEach((c) => {
+      c.btn.addEventListener('click', () => {
+        if (c.video.paused) {
+          c.paused = false;
+          only(c);
+          play(c);
+        } else {
+          c.paused = true;
+          c.video.pause();
+          sync(c);
+        }
+      });
+      c.video.addEventListener('play', () => sync(c));
+      c.video.addEventListener('pause', () => sync(c));
+      // los videos arrancan con el escenario vacío: hasta que pasan los primeros 0,3 s se ve el póster, que ya muestra la historia completa
+      c.video.addEventListener('timeupdate', () => c.video.classList.toggle('is-started', c.video.currentTime > 0.3));
+    });
+    let trackVisible = false;
+    const centered = () => {
+      const r = track.getBoundingClientRect();
+      const mid = r.left + r.width / 2;
+      let best = 0;
+      let dist = Infinity;
+      items.forEach((li, i) => {
+        const b = li.getBoundingClientRect();
+        const d = Math.abs(b.left + b.width / 2 - mid);
+        if (d < dist) {
+          dist = d;
+          best = i;
+        }
+      });
+      return best;
+    };
+    let settle = 0;
+    const settleSoon = () => {
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        const i = centered();
+        if (status) status.textContent = `Historia ${i + 1} de ${items.length}`;
+        if (!trackVisible) return;
+        only(cells[i]);
+        if (!cells[i].paused && cells[i].video.paused) play(cells[i]);
+      }, 160);
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        ([e]) => {
+          trackVisible = e.isIntersecting;
+          if (!trackVisible) cells.forEach((c) => !c.video.paused && c.video.pause());
+          else settleSoon();
+        },
+        { threshold: 0.35 },
+      ).observe(track);
+    }
+
+    // ── botones y contador ──
+    const step = () => (items[1] ? items[1].offsetLeft - items[0].offsetLeft : track.clientWidth);
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      const idx = Math.min(items.length, Math.max(1, Math.round(track.scrollLeft / step()) + 1));
+      const atEnd = track.scrollLeft >= max - 2;
+      if (nav) nav.hidden = max <= 2; // si todas las historias caben, los botones y el contador sobran
+      if (count) count.textContent = String(atEnd ? items.length : idx).padStart(2, '0');
+      // `aria-disabled` y no `disabled`: si el botón se apaga con el foco encima, el foco no se pierde
+      prev?.setAttribute('aria-disabled', String(track.scrollLeft <= 2));
+      next?.setAttribute('aria-disabled', String(atEnd));
+    };
+    const go = (dir: number) => track.scrollBy({ left: dir * step(), behavior: reduce.matches ? 'auto' : 'smooth' });
+    prev?.addEventListener('click', () => prev.getAttribute('aria-disabled') !== 'true' && go(-1));
+    next?.addEventListener('click', () => next.getAttribute('aria-disabled') !== 'true' && go(1));
+    track.addEventListener(
+      'scroll',
+      () => {
+        update();
+        settleSoon();
+      },
+      { passive: true },
+    );
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  });
+</script>

@@ -1916,8 +1916,10 @@ html:not(.js) .svc__media picture {
   transform-origin: left;
   transform: scaleX(0.2);
 }
-.case > .feature__link {
-  margin-top: 1rem;
+/* «Quiero algo así» vive en el encabezado de cada caso (ficha 614), no al final de la galería */
+.case__head .feature__link {
+  justify-self: start;
+  margin-top: 0.75rem;
 }
 
 /* Calyzzo: pieza con resplandor cálido propio */
@@ -1982,71 +1984,6 @@ html:not(.js) .svc__media picture {
     grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
     gap: clamp(2.5rem, 5vw, 5rem);
     align-items: end;
-  }
-}
-
-/* Próximos casos */
-.upcoming {
-  margin-top: clamp(4rem, 8vw, 7rem);
-}
-.upcoming__label {
-  margin: 0 0 1rem;
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--silver-dark);
-}
-.upcoming__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--line);
-}
-.upcoming__row {
-  display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1fr);
-  gap: 0.35rem 1rem;
-  align-items: baseline;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid var(--line);
-}
-.upcoming__idx {
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  color: var(--silver-dark);
-  font-variant-numeric: tabular-nums;
-}
-.upcoming__name {
-  font-weight: 600;
-  font-size: clamp(1.5rem, 3.6vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-}
-.upcoming__meta {
-  grid-column: 2;
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-.upcoming__chip {
-  grid-column: 2;
-  justify-self: start;
-  padding: 0.3rem 0.8rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--silver-dark);
-}
-@media (min-width: 900px) {
-  .upcoming__row {
-    grid-template-columns: 3rem minmax(0, 1.1fr) minmax(0, 1fr) auto;
-    align-items: center;
-  }
-  .upcoming__meta,
-  .upcoming__chip {
-    grid-column: auto;
   }
 }
 
