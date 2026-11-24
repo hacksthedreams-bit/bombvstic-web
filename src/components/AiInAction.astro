@@ -131,7 +131,7 @@ const scenes = [
       <p class="ai__label">Ejemplo ilustrativo: así se repartiría el trabajo. No es un cliente ni un sistema en funcionamiento.</p>
 
       <!-- Las pestañas solo existen con JS: el script quita hidden. Sin JS se ven los tres escenarios apilados, cada uno con su título. -->
-      <div class="ai__tabs" role="tablist" aria-label="Rubro del ejemplo" data-ai-tabs hidden>
+      <div class="ai__tabs" role="tablist" aria-label="Rubro del ejemplo" data-ai-tabs data-dock-yield hidden>
         {scenes.map((s) => (
           <button type="button" class="ai__tab" role="tab" id={`ai-tab-${s.id}`} aria-controls={`ai-pane-${s.id}`} aria-selected="false" tabindex="-1">
             {s.name}
@@ -139,7 +139,7 @@ const scenes = [
         ))}
       </div>
 
-      <div class="ai__bar">
+      <div class="ai__bar" data-dock-yield>
         <label class="switch">
           <span class="switch__text switch__text--off">Solo personas</span>
           <input class="switch__input" type="checkbox" role="switch" />

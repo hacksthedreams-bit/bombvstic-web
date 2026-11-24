@@ -27,7 +27,7 @@ const cards = [
     lead: 'Identidad con criterio y contenido constante: que te reconozcan a la primera y te elijan a la segunda.',
     items: ['Identidad de marca completa', 'Contenido para redes: reels, historias y piezas', 'Gestión y crecimiento de redes'],
     img: 'marca-casos',
-    ws: [640, 960],
+    ws: [640, 960, 1280, 1440],
     pos: '50% 50%',
     tag: 'Casos reales',
     r: '1.4deg',
@@ -42,7 +42,7 @@ const cards = [
     lead: 'Páginas web, asistentes de IA, dashboards y sistemas hechos a la medida de cómo trabaja tu negocio.',
     items: ['Páginas web', 'Asistentes de IA para atender', 'Dashboards, apps y sistemas'],
     img: 'ia-lupita',
-    ws: [640, 960],
+    ws: [640, 960, 1280, 1440],
     pos: '50% 50%',
     tag: 'Caso real · La Terraza de Lupita',
     r: '-1.2deg',
@@ -71,7 +71,7 @@ const all = [
       { t: 'Páginas web', d: 'Claras, ordenadas y pensadas para que te contacten.', need: 2 },
       { t: 'Dashboards a medida', d: 'Tus números en una sola pantalla, sin planillas.', need: 2 },
       { t: 'Asistentes de IA', d: 'Atienden por WhatsApp y ayudan a tomar pedidos mientras tu equipo trabaja.', need: 3 },
-      { t: 'Apps a la medida', d: 'Herramientas hechas como trabaja tu negocio.', need: 2 },
+      { t: 'Apps a la medida', d: 'Herramientas hechas a la medida de cómo trabaja tu negocio.', need: 2 },
       { t: 'Sistemas para empresas', d: 'Procesos manuales que pasan a un sistema hecho a tu medida.', need: 3 },
     ],
   },
@@ -98,7 +98,7 @@ const all = [
                     src={PIXEL}
                     data-lazy-src={u(`/media/servicios/${c.img}-${(c.ws ?? [640, 960])[1]}.webp`)}
                     data-lazy-srcset={(c.ws ?? [640, 960]).map((w) => `${u(`/media/servicios/${c.img}-${w}.webp`)} ${w}w`).join(', ')}
-                    sizes="(min-width: 900px) 30vw, 92vw"
+                    sizes="(min-width: 1600px) 760px, (min-width: 900px) 44vw, 98vw"
                     width="960"
                     height={c.ws ? '960' : '720'}
                     alt={c.alt}
@@ -110,7 +110,7 @@ const all = [
                   <img
                     src={u(`/media/servicios/${c.img}-${(c.ws ?? [640, 960])[1]}.webp`)}
                     srcset={(c.ws ?? [640, 960]).map((w) => `${u(`/media/servicios/${c.img}-${w}.webp`)} ${w}w`).join(', ')}
-                    sizes="(min-width: 900px) 30vw, 92vw"
+                    sizes="(min-width: 1600px) 760px, (min-width: 900px) 44vw, 98vw"
                     width="960"
                     height={c.ws ? '960' : '720'}
                     alt={c.alt}

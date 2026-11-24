@@ -141,7 +141,7 @@ const arrow = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke
 
   <footer class="footer">
     <div class="footer__inner">
-      <img class="footer__wordmark" data-wordmark src={u('/brand/wordmark-web-600.webp')} alt="Bombvstic" width="600" height="240" loading="lazy" decoding="async" />
+      <img class="footer__wordmark" data-wordmark src={u('/brand/wordmark-web-600.webp')} srcset={`${u('/brand/wordmark-web-600.webp')} 600w, ${u('/brand/wordmark-web-1200.webp')} 1200w`} sizes="min(100vw - 3rem, 38rem)" alt="Bombvstic" width="600" height="240" loading="lazy" decoding="async" />
       <div class="footer__cols">
         <div>
           <h2>Escríbenos</h2>

@@ -100,8 +100,9 @@ if (dock && hero && 'IntersectionObserver' in window) {
   const root = document.documentElement;
   let leftAbove = false;
   let inEnd = false;
+  let nearControl = false; // un control (rubro e interruptor de IA) está en la franja de abajo, donde cae la pastilla
   const sync = () => {
-    const on = leftAbove && !inEnd && !menu?.open;
+    const on = leftAbove && !inEnd && !nearControl && !menu?.open;
     dock.classList.toggle('is-shown', on);
     root.classList.toggle('dock-on', on);
     if (on) root.classList.add('has-dock');
@@ -117,6 +118,39 @@ if (dock && hero && 'IntersectionObserver' in window) {
   });
   $$('#contacto, .footer').forEach((el) => endIo.observe(el));
   menu?.addEventListener('toggle', sync);
+  // La pastilla cede su lugar mientras un control marcado con data-dock-yield esté en los ~110 px de abajo (alto de la pastilla + margen):
+  // así no tapa el interruptor de IA al detenerse el desplazamiento ahí. La franja se recalcula si cambia el alto de la ventana.
+  const yielders = $$('[data-dock-yield]');
+  if (yielders.length) {
+    let band: IntersectionObserver | null = null;
+    let builtH = 0;
+    let back = 0;
+    const build = () => {
+      builtH = window.innerHeight;
+      band?.disconnect();
+      band = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => ((e.target as HTMLElement).dataset.band = e.isIntersecting ? '1' : ''));
+          window.clearTimeout(back);
+          if (yielders.some((el) => el.dataset.band === '1')) {
+            nearControl = true; // se esconde de inmediato
+            sync();
+          } else {
+            // vuelve con 250 ms de calma: el selector de rubro y el interruptor están a decenas de píxeles y, al pasar rápido, la pastilla parpadeaba
+            back = window.setTimeout(() => {
+              nearControl = false;
+              sync();
+            }, 250);
+          }
+        },
+        { rootMargin: `-${Math.max(0, window.innerHeight - 110)}px 0px 0px 0px` },
+      );
+      yielders.forEach((el) => band!.observe(el));
+    };
+    build();
+    // la barra de direcciones del celular también dispara `resize`: solo se recalcula si el alto cambió de verdad (≥ 40 px)
+    window.addEventListener('resize', () => Math.abs(window.innerHeight - builtH) >= 40 && build(), { passive: true });
+  }
 }
 
 // El corte en los botones (ficha 202), versión táctil: sin cursor, el filo cruza cada botón principal UNA vez por carga,
